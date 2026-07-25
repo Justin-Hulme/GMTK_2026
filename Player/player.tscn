@@ -10,6 +10,7 @@
 [ext_resource type="Theme" uid="uid://bledfm0mcnnu4" path="res://Assets/main_theme.tres" id="8_od3ui"]
 [ext_resource type="Texture2D" uid="uid://dxkph3152qen" path="res://Assets/Money/Coin_HUD.png" id="8_x3vf3"]
 [ext_resource type="Texture2D" uid="uid://ci5f88onsf0dh" path="res://Assets/Money/Debt_HUD.png" id="10_apopc"]
+[ext_resource type="PackedScene" uid="uid://drgikraumu8sr" path="res://Player/HUD/floor_indicator.tscn" id="11_apopc"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ab854"]
 animations = [{
@@ -55,15 +56,15 @@ animations = [{
 radius = 22.0
 height = 56.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_e76su"]
+radius = 80.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_od3ui"]
 bg_color = Color(0.1593911, 0.1593911, 0.1593911, 0.8784314)
 corner_radius_top_left = 20
 corner_radius_top_right = 20
 corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_e76su"]
-radius = 80.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1632784472]
 script = ExtResource("1_fhl08")
@@ -83,6 +84,11 @@ rotation = 1.5707964
 scale = Vector2(0.99999994, 0.99999994)
 shape = SubResource("CapsuleShape2D_47aoe")
 
+[node name="Area2D" type="Area2D" parent="." unique_id=1845861263 groups=["magnet"]]
+
+[node name="Magnet" type="CollisionShape2D" parent="Area2D" unique_id=762164634 groups=["magnet"]]
+shape = SubResource("CircleShape2D_e76su")
+
 [node name="HUD" type="CanvasLayer" parent="." unique_id=720606449]
 script = ExtResource("7_od3ui")
 
@@ -101,23 +107,25 @@ anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -320.0
 offset_right = 320.0
-offset_bottom = 47.0
+offset_bottom = 31.0
 grow_horizontal = 2
-theme_override_constants/margin_top = 20
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 20
 
 [node name="PanelContainer" type="PanelContainer" parent="HUD/Control/coin_to_debt" unique_id=1594216253]
 layout_mode = 2
+size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_od3ui")
 
 [node name="MarginContainer" type="MarginContainer" parent="HUD/Control/coin_to_debt/PanelContainer" unique_id=958554934]
 layout_mode = 2
 theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 10
+theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_bottom = 5
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HUD/Control/coin_to_debt/PanelContainer/MarginContainer" unique_id=1601822267]
-custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
 
 [node name="Coin_H" type="HBoxContainer" parent="HUD/Control/coin_to_debt/PanelContainer/MarginContainer/HBoxContainer" unique_id=1949122056]
@@ -161,22 +169,24 @@ horizontal_alignment = 2
 [node name="Debt_HUD" type="TextureRect" parent="HUD/Control/coin_to_debt/PanelContainer/MarginContainer/HBoxContainer/Debt_H" unique_id=319811104]
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
+size_flags_vertical = 4
 texture = ExtResource("10_apopc")
 expand_mode = 4
 
 [node name="floor_indicator" type="MarginContainer" parent="HUD/Control" unique_id=1488577774]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-grow_vertical = 0
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -10.0
+offset_right = 20.0
+offset_bottom = 10.0
+grow_vertical = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_bottom = 20
 
 [node name="floor_stack" type="VBoxContainer" parent="HUD/Control/floor_indicator" unique_id=362747833]
 layout_mode = 2
 
-[node name="Area2D" type="Area2D" parent="." unique_id=1845861263 groups=["magnet"]]
-
-[node name="Magnet" type="CollisionShape2D" parent="Area2D" unique_id=762164634 groups=["magnet"]]
-shape = SubResource("CircleShape2D_e76su")
+[node name="FloorIndicator" parent="HUD/Control/floor_indicator/floor_stack" unique_id=189943130 instance=ExtResource("11_apopc")]
+floor_number = 0

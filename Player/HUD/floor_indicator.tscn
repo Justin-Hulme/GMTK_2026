@@ -1,5 +1,8 @@
 [gd_scene format=3 uid="uid://drgikraumu8sr"]
 
+[ext_resource type="Theme" uid="uid://bledfm0mcnnu4" path="res://Assets/main_theme.tres" id="1_rtsqu"]
+[ext_resource type="Script" uid="uid://cqttutwh6y885" path="res://Player/HUD/floor_indicator.gd" id="1_vjsmj"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a0n2m"]
 bg_color = Color(0.25490198, 0.23529412, 0.23137255, 1)
 border_width_left = 2
@@ -32,19 +35,81 @@ corner_detail = 2
 shadow_color = Color(0.25490198, 0.23529412, 0.23137255, 1)
 anti_aliasing = false
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vjsmj"]
+bg_color = Color(0.36862746, 0.32941177, 0.3254902, 1)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.94509804, 0.827451, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+corner_detail = 2
+shadow_color = Color(0.9764706, 0.92156863, 0.80784315, 0.39215687)
+shadow_size = 2
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_srkg7"]
+bg_color = Color(1, 0.94509804, 0.827451, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.25490198, 0.23529412, 0.23137255, 1)
+corner_radius_top_left = 10
+corner_radius_bottom_left = 10
+corner_detail = 1
+shadow_color = Color(1, 0.94509804, 0.827451, 1)
+
 [node name="FloorIndicator" type="Node2D" unique_id=189943130]
+script = ExtResource("1_vjsmj")
 
-[node name="floor" type="MarginContainer" parent="." unique_id=575012495]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1485297203]
+offset_right = 40.0
+offset_bottom = 40.0
 
-[node name="floor_shadow" type="Panel" parent="floor" unique_id=829096709]
+[node name="floor" type="MarginContainer" parent="HBoxContainer" unique_id=575012495]
+layout_mode = 2
+
+[node name="floor_shadow" type="Panel" parent="HBoxContainer/floor" unique_id=829096709]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_a0n2m")
 
-[node name="floor_background" type="Panel" parent="floor" unique_id=1135391371]
+[node name="floor_background" type="Panel" parent="HBoxContainer/floor" unique_id=1135391371]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_rtsqu")
 
-[node name="floor_number" type="Label" parent="floor" unique_id=1463455057]
+[node name="is_active" type="CanvasGroup" parent="HBoxContainer/floor" unique_id=383642403]
+
+[node name="floor_background_active" type="Panel" parent="HBoxContainer/floor/is_active" unique_id=1187072666]
+custom_minimum_size = Vector2(40, 40)
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_vjsmj")
+
+[node name="floor_number" type="Label" parent="HBoxContainer/floor" unique_id=1463455057]
 layout_mode = 2
+theme = ExtResource("1_rtsqu")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 2
+theme_override_font_sizes/font_size = 30
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer" unique_id=1845811275]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-8, 0)
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="active_arrow" type="Panel" parent="HBoxContainer/MarginContainer" unique_id=1817989932]
+custom_minimum_size = Vector2(15, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_srkg7")
