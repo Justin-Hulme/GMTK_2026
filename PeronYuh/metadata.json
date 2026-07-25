@@ -1,0 +1,103 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "62aee3db-256e-4fd6-b00c-c5c5532edeee",
+        "name": "A teenager with a backpack",
+        "prompt": "A teenager with a backpack and a flashlight in his hand",
+        "size": {
+          "width": 64,
+          "height": 64
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-07-25T03:41:01.112910+00:00"
+      },
+      "folder": "A_teenager_with_a_backpack",
+      "frames": {
+        "rotations": {
+          "south": "A_teenager_with_a_backpack/rotations/south.png",
+          "south-east": "A_teenager_with_a_backpack/rotations/south-east.png",
+          "east": "A_teenager_with_a_backpack/rotations/east.png",
+          "north-east": "A_teenager_with_a_backpack/rotations/north-east.png",
+          "north": "A_teenager_with_a_backpack/rotations/north.png",
+          "north-west": "A_teenager_with_a_backpack/rotations/north-west.png",
+          "west": "A_teenager_with_a_backpack/rotations/west.png",
+          "south-west": "A_teenager_with_a_backpack/rotations/south-west.png"
+        },
+        "animations": {
+          "Walk": {
+            "south-west": [
+              "A_teenager_with_a_backpack/animations/Walk/south-west/frame_000.png",
+              "A_teenager_with_a_backpack/animations/Walk/south-west/frame_001.png",
+              "A_teenager_with_a_backpack/animations/Walk/south-west/frame_002.png",
+              "A_teenager_with_a_backpack/animations/Walk/south-west/frame_003.png",
+              "A_teenager_with_a_backpack/animations/Walk/south-west/frame_004.png",
+              "A_teenager_with_a_backpack/animations/Walk/south-west/frame_005.png"
+            ],
+            "south": [
+              "A_teenager_with_a_backpack/animations/Walk/south/frame_000.png",
+              "A_teenager_with_a_backpack/animations/Walk/south/frame_001.png",
+              "A_teenager_with_a_backpack/animations/Walk/south/frame_002.png",
+              "A_teenager_with_a_backpack/animations/Walk/south/frame_003.png",
+              "A_teenager_with_a_backpack/animations/Walk/south/frame_004.png",
+              "A_teenager_with_a_backpack/animations/Walk/south/frame_005.png"
+            ],
+            "east": [
+              "A_teenager_with_a_backpack/animations/Walk/east/frame_000.png",
+              "A_teenager_with_a_backpack/animations/Walk/east/frame_001.png",
+              "A_teenager_with_a_backpack/animations/Walk/east/frame_002.png",
+              "A_teenager_with_a_backpack/animations/Walk/east/frame_003.png",
+              "A_teenager_with_a_backpack/animations/Walk/east/frame_004.png",
+              "A_teenager_with_a_backpack/animations/Walk/east/frame_005.png"
+            ],
+            "north-west": [
+              "A_teenager_with_a_backpack/animations/Walk/north-west/frame_000.png",
+              "A_teenager_with_a_backpack/animations/Walk/north-west/frame_001.png",
+              "A_teenager_with_a_backpack/animations/Walk/north-west/frame_002.png",
+              "A_teenager_with_a_backpack/animations/Walk/north-west/frame_003.png",
+              "A_teenager_with_a_backpack/animations/Walk/north-west/frame_004.png",
+              "A_teenager_with_a_backpack/animations/Walk/north-west/frame_005.png"
+            ],
+            "north-east": [
+              "A_teenager_with_a_backpack/animations/Walk/north-east/frame_000.png",
+              "A_teenager_with_a_backpack/animations/Walk/north-east/frame_001.png",
+              "A_teenager_with_a_backpack/animations/Walk/north-east/frame_002.png",
+              "A_teenager_with_a_backpack/animations/Walk/north-east/frame_003.png",
+              "A_teenager_with_a_backpack/animations/Walk/north-east/frame_004.png",
+              "A_teenager_with_a_backpack/animations/Walk/north-east/frame_005.png"
+            ],
+            "south-east": [
+              "A_teenager_with_a_backpack/animations/Walk/south-east/frame_000.png",
+              "A_teenager_with_a_backpack/animations/Walk/south-east/frame_001.png",
+              "A_teenager_with_a_backpack/animations/Walk/south-east/frame_002.png",
+              "A_teenager_with_a_backpack/animations/Walk/south-east/frame_003.png",
+              "A_teenager_with_a_backpack/animations/Walk/south-east/frame_004.png",
+              "A_teenager_with_a_backpack/animations/Walk/south-east/frame_005.png"
+            ],
+            "north": [
+              "A_teenager_with_a_backpack/animations/Walk/north/frame_000.png",
+              "A_teenager_with_a_backpack/animations/Walk/north/frame_001.png",
+              "A_teenager_with_a_backpack/animations/Walk/north/frame_002.png",
+              "A_teenager_with_a_backpack/animations/Walk/north/frame_003.png",
+              "A_teenager_with_a_backpack/animations/Walk/north/frame_004.png",
+              "A_teenager_with_a_backpack/animations/Walk/north/frame_005.png"
+            ],
+            "west": [
+              "A_teenager_with_a_backpack/animations/Walk/west/frame_000.png",
+              "A_teenager_with_a_backpack/animations/Walk/west/frame_001.png",
+              "A_teenager_with_a_backpack/animations/Walk/west/frame_002.png",
+              "A_teenager_with_a_backpack/animations/Walk/west/frame_003.png",
+              "A_teenager_with_a_backpack/animations/Walk/west/frame_004.png",
+              "A_teenager_with_a_backpack/animations/Walk/west/frame_005.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.1",
+  "export_date": "2026-07-25T03:52:50.496808"
+}
