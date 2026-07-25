@@ -8,8 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://cfjjw5bxnixok" path="res://Player/Character/Walking_5.png" id="6_apopc"]
 [ext_resource type="Script" uid="uid://7logwprssfvo" path="res://Player/HUD/HUD.gd" id="7_od3ui"]
 [ext_resource type="Theme" uid="uid://bledfm0mcnnu4" path="res://Assets/main_theme.tres" id="8_od3ui"]
-[ext_resource type="Texture2D" uid="uid://rvjwx2v4mue8" path="res://Assets/Money/Coin_HUD.png" id="8_x3vf3"]
-[ext_resource type="Texture2D" uid="uid://bng5ybr0gvvex" path="res://Assets/Money/Debt_HUD.png" id="10_apopc"]
+[ext_resource type="Texture2D" uid="uid://dxkph3152qen" path="res://Assets/Money/Coin_HUD.png" id="8_x3vf3"]
+[ext_resource type="Texture2D" uid="uid://ci5f88onsf0dh" path="res://Assets/Money/Debt_HUD.png" id="10_apopc"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ab854"]
 animations = [{

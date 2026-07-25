@@ -66,5 +66,5 @@ func add_score(amount: int) -> void:
 func get_score() -> int:
 	return score
 	
-func check_powerup(name: String):
-	return powerup_dict.get(name, 0)
+func check_powerup(powerup_name: String):
+	return powerup_dict.get(powerup_name, 0)

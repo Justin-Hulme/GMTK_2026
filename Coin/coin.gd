@@ -9,7 +9,7 @@ signal coin_picked_up(new_amount)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	body_entered.connect(_on_body_entered)
+	pass
 
 func _on_body_entered(body):
 	if body.is_in_group("player"):

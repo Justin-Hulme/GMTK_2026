@@ -13,7 +13,7 @@ func _ready() -> void:
 		spawn_coin()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 		
 func spawn_coin():
@@ -34,10 +34,10 @@ func spawn_coin():
 			
 			return
 
-func is_position_blocked(position: Vector2) -> bool:
+func is_position_blocked(target_pos: Vector2) -> bool:
 	var query = PhysicsShapeQueryParameters2D.new()
 	query.shape = coin_check_shape
-	query.transform = Transform2D(0, position)
+	query.transform = Transform2D(0, target_pos)
 	query.collision_mask = 1
 
 	var results = get_world_2d().direct_space_state.intersect_shape(query)
