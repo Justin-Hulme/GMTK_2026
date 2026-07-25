@@ -64,6 +64,23 @@ corner_radius_bottom_left = 20
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_e76su"]
 radius = 80.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x3vf3"]
+bg_color = Color(0.25490198, 0.23529412, 0.23137255, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.25490198, 0.23529412, 0.23137255, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+corner_detail = 2
+expand_margin_left = 2.0
+expand_margin_bottom = 3.0
+shadow_color = Color(0.25490198, 0.23529412, 0.23137255, 1)
+anti_aliasing = false
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_srkg7"]
 bg_color = Color(0.36862746, 0.32941177, 0.3254902, 1)
 border_width_left = 2
@@ -71,11 +88,13 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.5529412, 0.49411765, 0.48235294, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
 corner_detail = 2
+shadow_color = Color(0.25490198, 0.23529412, 0.23137255, 1)
+anti_aliasing = false
 
 [node name="Player" type="CharacterBody2D" unique_id=1632784472]
 script = ExtResource("1_fhl08")
@@ -192,10 +211,18 @@ theme_override_constants/margin_bottom = 20
 [node name="VBoxContainer" type="VBoxContainer" parent="HUD/Control/MarginContainer" unique_id=362747833]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="HUD/Control/MarginContainer/VBoxContainer" unique_id=581842733]
+[node name="floor" type="MarginContainer" parent="HUD/Control/MarginContainer/VBoxContainer" unique_id=581842733]
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="HUD/Control/MarginContainer/VBoxContainer/MarginContainer" unique_id=162938997]
-custom_minimum_size = Vector2(42, 30)
+[node name="floor_shadow" type="Panel" parent="HUD/Control/MarginContainer/VBoxContainer/floor" unique_id=409922614]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_x3vf3")
+
+[node name="floor_background" type="Panel" parent="HUD/Control/MarginContainer/VBoxContainer/floor" unique_id=162938997]
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_srkg7")
+
+[node name="Label" type="Label" parent="HUD/Control/MarginContainer/VBoxContainer/floor" unique_id=230278575]
+layout_mode = 2
