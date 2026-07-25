@@ -16,3 +16,7 @@ texture = ExtResource("2_mulpp")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=227931589]
 scale = Vector2(0.99999994, 0.99999994)
 shape = SubResource("CircleShape2D_e76su")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="area_exited" from="." to="." method="_on_area_exited"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

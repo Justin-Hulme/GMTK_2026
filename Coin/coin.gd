@@ -2,6 +2,9 @@ extends Area2D
 
 @export var value := 1
 
+var magnet_target: Node2D = null
+@export var magnet_speed := 500
+
 signal coin_picked_up(new_amount)
 
 # Called when the node enters the scene tree for the first time.
@@ -13,7 +16,19 @@ func _on_body_entered(body):
 		body.add_score(value)
 		coin_picked_up.emit(body.get_score())
 		queue_free()
+		
+func _on_area_entered(area):
+	if area.is_in_group("magnet"):
+		magnet_target = area
+
+func _on_area_exited(area):
+	if area.is_in_group("magnet"):
+		magnet_target = null
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	if magnet_target:
+		global_position  = global_position.move_toward(
+			magnet_target.global_position,
+			magnet_speed * delta
+		)
