@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://2c1gesmmik6q"]
 
 [ext_resource type="Script" uid="uid://cqgyq0ahsig01" path="res://Player/player.gd" id="1_fhl08"]
+[ext_resource type="Texture2D" uid="uid://caftd01t3musl" path="res://Assets/Flashlight(1).png" id="2_5htga"]
 [ext_resource type="Texture2D" uid="uid://che6jqmkaod7p" path="res://Player/Character/Walking_3.png" id="2_vtle1"]
 [ext_resource type="Texture2D" uid="uid://bebbly6tpndvy" path="res://Player/Character/Walking_1.png" id="3_od3ui"]
 [ext_resource type="Texture2D" uid="uid://b6hl4f2oxgd1n" path="res://Player/Character/Walking_2.png" id="4_00tjw"]
 [ext_resource type="Texture2D" uid="uid://by5y37xu3umjh" path="res://Player/Character/Walking_4.png" id="5_x3vf3"]
 [ext_resource type="Texture2D" uid="uid://cfjjw5bxnixok" path="res://Player/Character/Walking_5.png" id="6_apopc"]
-[ext_resource type="Texture2D" uid="uid://ci33xnrxp0pv1" path="res://Assets/Flashlight.png" id="7_5htga"]
 [ext_resource type="Script" uid="uid://7logwprssfvo" path="res://Player/HUD/HUD.gd" id="7_od3ui"]
 [ext_resource type="Theme" uid="uid://bledfm0mcnnu4" path="res://Assets/main_theme.tres" id="8_od3ui"]
 [ext_resource type="Texture2D" uid="uid://rjrp7edpnvgw" path="res://Assets/Money/Coin_HUD.png" id="8_x3vf3"]
@@ -76,8 +76,8 @@ scale = Vector2(1, 0.49609378)
 energy = 1.5
 blend_mode = 2
 shadow_enabled = true
-texture = ExtResource("7_5htga")
-offset = Vector2(0, -226)
+texture = ExtResource("2_5htga")
+offset = Vector2(20.265, -281.54)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1063348825]
 position = Vector2(0, -1)
