@@ -6,9 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://b6hl4f2oxgd1n" path="res://Player/Character/Walking_2.png" id="4_00tjw"]
 [ext_resource type="Texture2D" uid="uid://by5y37xu3umjh" path="res://Player/Character/Walking_4.png" id="5_x3vf3"]
 [ext_resource type="Texture2D" uid="uid://cfjjw5bxnixok" path="res://Player/Character/Walking_5.png" id="6_apopc"]
-[ext_resource type="Script" uid="uid://7logwprssfvo" path="res://Player/HUD.gd" id="7_od3ui"]
+[ext_resource type="Script" uid="uid://7logwprssfvo" path="res://Player/HUD/HUD.gd" id="7_od3ui"]
 [ext_resource type="Theme" uid="uid://bledfm0mcnnu4" path="res://Assets/main_theme.tres" id="8_od3ui"]
-[ext_resource type="Texture2D" uid="uid://rjrp7edpnvgw" path="res://Assets/Money/Coin_HUD.png" id="8_x3vf3"]
+[ext_resource type="Texture2D" uid="uid://rvjwx2v4mue8" path="res://Assets/Money/Coin_HUD.png" id="8_x3vf3"]
 [ext_resource type="Texture2D" uid="uid://bng5ybr0gvvex" path="res://Assets/Money/Debt_HUD.png" id="10_apopc"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ab854"]
@@ -61,38 +61,6 @@ corner_radius_top_left = 20
 corner_radius_top_right = 20
 corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x3vf3"]
-bg_color = Color(0.25490198, 0.23529412, 0.23137255, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.25490198, 0.23529412, 0.23137255, 1)
-corner_radius_top_left = 9
-corner_radius_top_right = 9
-corner_radius_bottom_right = 9
-corner_radius_bottom_left = 9
-corner_detail = 2
-expand_margin_left = 2.0
-expand_margin_bottom = 3.0
-shadow_color = Color(0.25490198, 0.23529412, 0.23137255, 1)
-anti_aliasing = false
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_srkg7"]
-bg_color = Color(0.36862746, 0.32941177, 0.3254902, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.5529412, 0.49411765, 0.48235294, 1)
-corner_radius_top_left = 9
-corner_radius_top_right = 9
-corner_radius_bottom_right = 9
-corner_radius_bottom_left = 9
-corner_detail = 2
-shadow_color = Color(0.25490198, 0.23529412, 0.23137255, 1)
-anti_aliasing = false
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_e76su"]
 radius = 80.0
@@ -196,7 +164,7 @@ layout_mode = 2
 texture = ExtResource("10_apopc")
 expand_mode = 4
 
-[node name="MarginContainer" type="MarginContainer" parent="HUD/Control" unique_id=1488577774]
+[node name="floor_indicator" type="MarginContainer" parent="HUD/Control" unique_id=1488577774]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -205,23 +173,7 @@ grow_vertical = 0
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HUD/Control/MarginContainer" unique_id=362747833]
-layout_mode = 2
-
-[node name="floor" type="MarginContainer" parent="HUD/Control/MarginContainer/VBoxContainer" unique_id=581842733]
-layout_mode = 2
-
-[node name="floor_shadow" type="Panel" parent="HUD/Control/MarginContainer/VBoxContainer/floor" unique_id=409922614]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_x3vf3")
-
-[node name="floor_background" type="Panel" parent="HUD/Control/MarginContainer/VBoxContainer/floor" unique_id=162938997]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_srkg7")
-
-[node name="Label" type="Label" parent="HUD/Control/MarginContainer/VBoxContainer/floor" unique_id=230278575]
+[node name="floor_stack" type="VBoxContainer" parent="HUD/Control/floor_indicator" unique_id=362747833]
 layout_mode = 2
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1845861263 groups=["magnet"]]

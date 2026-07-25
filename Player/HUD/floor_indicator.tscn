@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://drgikraumu8sr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a0n2m"]
+bg_color = Color(0.25490198, 0.23529412, 0.23137255, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.25490198, 0.23529412, 0.23137255, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+corner_detail = 2
+expand_margin_left = 2.0
+expand_margin_bottom = 3.0
+shadow_color = Color(0.25490198, 0.23529412, 0.23137255, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rtsqu"]
+bg_color = Color(0.36862746, 0.32941177, 0.3254902, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5529412, 0.49411765, 0.48235294, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+corner_detail = 2
+shadow_color = Color(0.25490198, 0.23529412, 0.23137255, 1)
+anti_aliasing = false
+
+[node name="FloorIndicator" type="Node2D" unique_id=189943130]
+
+[node name="floor" type="MarginContainer" parent="." unique_id=575012495]
+
+[node name="floor_shadow" type="Panel" parent="floor" unique_id=829096709]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_a0n2m")
+
+[node name="floor_background" type="Panel" parent="floor" unique_id=1135391371]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rtsqu")
+
+[node name="floor_number" type="Label" parent="floor" unique_id=1463455057]
+layout_mode = 2
