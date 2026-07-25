@@ -43,7 +43,7 @@ func is_position_blocked(position: Vector2) -> bool:
 	var results = get_world_2d().direct_space_state.intersect_shape(query)
 
 	for result in results:
-		if result.collider.is_in_group("wall"):
+		if result.collider.is_in_group("wall") || result.collider.is_in_group("magnet"):
 			return true
 
 	return false

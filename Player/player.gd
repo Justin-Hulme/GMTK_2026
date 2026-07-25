@@ -62,7 +62,6 @@ func _physics_process(delta: float) -> void:
 func add_score(amount: int) -> void:
 	score += amount
 	set_coin_total(score)
-	print("Score: ", score)
 	
 func get_score() -> int:
 	return score
