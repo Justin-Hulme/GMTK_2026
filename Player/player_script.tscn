@@ -1,56 +1,7 @@
 [gd_scene format=3 uid="uid://2hdxwigbbdoi"]
 
-[ext_resource type="Script" uid="uid://cqgyq0ahsig01" path="res://player.gd" id="1_ldmn1"]
 [ext_resource type="Texture2D" uid="uid://cikbuavn23afu" path="res://Floor_plan.png" id="1_tfqdf"]
-[ext_resource type="Texture2D" uid="uid://che6jqmkaod7p" path="res://Character/Walking_3.png" id="3_5ojf1"]
-[ext_resource type="Texture2D" uid="uid://bebbly6tpndvy" path="res://Character/Walking_1.png" id="4_f1mp0"]
-[ext_resource type="Texture2D" uid="uid://b6hl4f2oxgd1n" path="res://Character/Walking_2.png" id="5_qdd75"]
-[ext_resource type="Texture2D" uid="uid://by5y37xu3umjh" path="res://Character/Walking_4.png" id="6_32nbf"]
-[ext_resource type="Texture2D" uid="uid://cfjjw5bxnixok" path="res://Character/Walking_5.png" id="7_6cxov"]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_ab854"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("3_5ojf1")
-}],
-"loop": 1,
-"name": &"idle",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("4_f1mp0")
-}, {
-"duration": 1.0,
-"texture": ExtResource("5_qdd75")
-}, {
-"duration": 1.0,
-"texture": ExtResource("3_5ojf1")
-}, {
-"duration": 1.0,
-"texture": ExtResource("6_32nbf")
-}, {
-"duration": 1.0,
-"texture": ExtResource("7_6cxov")
-}, {
-"duration": 1.0,
-"texture": ExtResource("6_32nbf")
-}, {
-"duration": 1.0,
-"texture": ExtResource("3_5ojf1")
-}, {
-"duration": 1.0,
-"texture": ExtResource("5_qdd75")
-}],
-"loop": 1,
-"name": &"walking",
-"speed": 15.0
-}]
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_47aoe"]
-radius = 22.0
-height = 56.0
+[ext_resource type="PackedScene" uid="uid://2c1gesmmik6q" path="res://Player/player.tscn" id="2_ldmn1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_47aoe"]
 size = Vector2(371, 7)
@@ -76,24 +27,8 @@ size = Vector2(16, 1120)
 position = Vector2(0, -8)
 texture = ExtResource("1_tfqdf")
 
-[node name="Player" type="CharacterBody2D" parent="." unique_id=646259493]
+[node name="Player" parent="." unique_id=1632784472 instance=ExtResource("2_ldmn1")]
 position = Vector2(-3, -17)
-script = ExtResource("1_ldmn1")
-
-[node name="Camera2D" type="Camera2D" parent="Player" unique_id=764775230]
-position = Vector2(0, -1)
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player" unique_id=1860647249]
-scale = Vector2(0.4, 0.4)
-sprite_frames = SubResource("SpriteFrames_ab854")
-animation = &"walking"
-frame_progress = 0.39065647
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=1686806507]
-position = Vector2(0, -3)
-rotation = 1.5707964
-scale = Vector2(0.99999994, 0.99999994)
-shape = SubResource("CapsuleShape2D_47aoe")
 
 [node name="Node2D" type="Node2D" parent="." unique_id=902716936]
 

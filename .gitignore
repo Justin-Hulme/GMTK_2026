@@ -1,4 +1,5 @@
 # Godot 4+ specific ignores
+.o*
 .godot/
 /android/
 *.tmp
