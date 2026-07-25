@@ -13,6 +13,8 @@ signal coin_picked_up(amount)
 
 var debt_value = 500
 
+var powerup_dict = {"magnet": 1}
+
 var _coin_total := 0
 
 func set_coin_total(value: int) -> void:
@@ -64,3 +66,6 @@ func add_score(amount: int) -> void:
 	
 func get_score() -> int:
 	return score
+	
+func check_powerup(name: String):
+	return powerup_dict.get(name, 0)
