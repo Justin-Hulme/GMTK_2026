@@ -8,6 +8,22 @@ extends CharacterBody2D
 
 var score := 0
 
+# HUD Vars
+signal coin_picked_up(amount)
+
+var debt_value = 500
+
+var _coin_total := 0
+
+func set_coin_total(value: int) -> void:
+	score = value
+	_coin_total = value
+	coin_picked_up.emit(_coin_total)
+
+func get_coin_total() -> int:
+	return _coin_total
+
+
 func _physics_process(delta: float) -> void:
 	var mouse_position := get_global_mouse_position()
 	var direction := mouse_position - global_position
@@ -41,8 +57,9 @@ func _physics_process(delta: float) -> void:
 	else:
 		animated_sprite.play("idle")
 		
-func add_score(amount: int):
+func add_score(amount: int) -> void:
 	score += amount
+	set_coin_total(score)
 	print("Score: ", score)
 	
 func get_score() -> int:
