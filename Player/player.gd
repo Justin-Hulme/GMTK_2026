@@ -6,6 +6,8 @@ extends CharacterBody2D
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
+var score := 0
+
 func _physics_process(delta: float) -> void:
 	var mouse_position := get_global_mouse_position()
 	var direction := mouse_position - global_position
@@ -38,3 +40,10 @@ func _physics_process(delta: float) -> void:
 		animated_sprite.play("walking")
 	else:
 		animated_sprite.play("idle")
+		
+func add_score(amount: int):
+	score += amount
+	print("Score: ", score)
+	
+func get_score() -> int:
+	return score
