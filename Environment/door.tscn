@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://cr0sg61twglyh"]
+
+[ext_resource type="Script" uid="uid://sr5oe5f83fhi" path="res://Environment/door.gd" id="1_2b0o0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uvjlu"]
+size = Vector2(6.000001, 58.999996)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_e76su"]
+polygon = PackedVector2Array(-48.999996, 320, -48.999996, 261, -54.999996, 261, -54.999996, 320)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ab854"]
+size = Vector2(28.000011, 59)
+
+[node name="Door" type="Node2D" unique_id=2029678344]
+
+[node name="PhysicalDoor" type="Node2D" parent="." unique_id=2122015092 node_paths=PackedStringArray("interaction_area")]
+scale = Vector2(0.99999994, 1)
+script = ExtResource("1_2b0o0")
+open_angle = -180.0
+interaction_area = NodePath("../Area2D")
+
+[node name="ColorRect" type="ColorRect" parent="PhysicalDoor" unique_id=2068921870]
+offset_left = 0.29000092
+offset_top = -59.390015
+offset_right = 6.290001
+offset_bottom = -0.39001465
+color = Color(0.50407135, 0.25970092, 0, 1)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="PhysicalDoor" unique_id=328821137]
+position = Vector2(55, -320)
+scale = Vector2(1.0000001, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PhysicalDoor/StaticBody2D" unique_id=1283231572 groups=["wall"]]
+position = Vector2(-52, 290.5)
+scale = Vector2(0.99999964, 1)
+shape = SubResource("RectangleShape2D_uvjlu")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="PhysicalDoor/StaticBody2D" unique_id=2129218977]
+scale = Vector2(1.0000001, 1)
+occluder = SubResource("OccluderPolygon2D_e76su")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1678311769]
+position = Vector2(55, -320)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=324327396]
+position = Vector2(-52, 290.5)
+scale = Vector2(0.9999995, 1)
+shape = SubResource("RectangleShape2D_ab854")
+
+[connection signal="body_entered" from="Area2D" to="PhysicalDoor" method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="PhysicalDoor" method="_on_area_2d_body_exited"]

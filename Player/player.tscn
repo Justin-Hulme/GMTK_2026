@@ -6,10 +6,11 @@
 [ext_resource type="Texture2D" uid="uid://b6hl4f2oxgd1n" path="res://Player/Character/Walking_2.png" id="4_00tjw"]
 [ext_resource type="Texture2D" uid="uid://by5y37xu3umjh" path="res://Player/Character/Walking_4.png" id="5_x3vf3"]
 [ext_resource type="Texture2D" uid="uid://cfjjw5bxnixok" path="res://Player/Character/Walking_5.png" id="6_apopc"]
+[ext_resource type="Texture2D" uid="uid://ci33xnrxp0pv1" path="res://Assets/Flashlight.png" id="7_5htga"]
 [ext_resource type="Script" uid="uid://7logwprssfvo" path="res://Player/HUD/HUD.gd" id="7_od3ui"]
 [ext_resource type="Theme" uid="uid://bledfm0mcnnu4" path="res://Assets/main_theme.tres" id="8_od3ui"]
-[ext_resource type="Texture2D" uid="uid://dxkph3152qen" path="res://Assets/Money/Coin_HUD.png" id="8_x3vf3"]
-[ext_resource type="Texture2D" uid="uid://ci5f88onsf0dh" path="res://Assets/Money/Debt_HUD.png" id="10_apopc"]
+[ext_resource type="Texture2D" uid="uid://rjrp7edpnvgw" path="res://Assets/Money/Coin_HUD.png" id="8_x3vf3"]
+[ext_resource type="Texture2D" uid="uid://bng5ybr0gvvex" path="res://Assets/Money/Debt_HUD.png" id="10_apopc"]
 [ext_resource type="PackedScene" uid="uid://drgikraumu8sr" path="res://Player/HUD/floor_indicator.tscn" id="11_apopc"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ab854"]
@@ -68,6 +69,15 @@ corner_radius_bottom_left = 20
 
 [node name="Player" type="CharacterBody2D" unique_id=1632784472]
 script = ExtResource("1_fhl08")
+
+[node name="Flashlight" type="PointLight2D" parent="." unique_id=879736083]
+position = Vector2(0, -7.5101852e-06)
+scale = Vector2(1, 0.49609378)
+energy = 1.5
+blend_mode = 2
+shadow_enabled = true
+texture = ExtResource("7_5htga")
+offset = Vector2(0, -226)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1063348825]
 position = Vector2(0, -1)
