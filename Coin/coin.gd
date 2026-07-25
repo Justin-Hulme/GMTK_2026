@@ -5,6 +5,8 @@ extends Area2D
 var magnet_target: Node2D = null
 @export var magnet_speed := 500
 
+@onready var coin_shape = $CollisionShape2D.shape
+
 signal coin_picked_up(new_amount)
 
 # Called when the node enters the scene tree for the first time.
@@ -30,7 +32,24 @@ func _on_area_exited(area):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if magnet_target:
-		global_position  = global_position.move_toward(
+		var next_position = global_position.move_toward(
 			magnet_target.global_position,
 			magnet_speed * delta
 		)
+
+		if not is_position_blocked(next_position):
+			global_position = next_position
+			
+func is_position_blocked(position: Vector2) -> bool:
+	var query = PhysicsShapeQueryParameters2D.new()
+	query.shape = coin_shape
+	query.transform = Transform2D(global_rotation, position)
+	query.collision_mask = 1
+
+	var results = get_world_2d().direct_space_state.intersect_shape(query)
+
+	for result in results:
+		if result.collider.is_in_group("wall"):
+			return true
+
+	return false
