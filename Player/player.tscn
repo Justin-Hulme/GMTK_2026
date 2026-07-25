@@ -8,6 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://cfjjw5bxnixok" path="res://Player/Character/Walking_5.png" id="6_apopc"]
 [ext_resource type="Script" uid="uid://7logwprssfvo" path="res://Player/HUD.gd" id="7_od3ui"]
 [ext_resource type="Theme" uid="uid://bledfm0mcnnu4" path="res://Assets/main_theme.tres" id="8_od3ui"]
+[ext_resource type="Texture2D" uid="uid://rvjwx2v4mue8" path="res://Assets/Money/Coin_HUD.png" id="8_x3vf3"]
+[ext_resource type="Texture2D" uid="uid://bng5ybr0gvvex" path="res://Assets/Money/Debt_HUD.png" id="10_apopc"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ab854"]
 animations = [{
@@ -62,6 +64,18 @@ corner_radius_bottom_left = 20
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_e76su"]
 radius = 80.0
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_srkg7"]
+bg_color = Color(0.36862746, 0.32941177, 0.3254902, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5529412, 0.49411765, 0.48235294, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 2
 
 [node name="Player" type="CharacterBody2D" unique_id=1632784472]
 script = ExtResource("1_fhl08")
@@ -81,10 +95,10 @@ rotation = 1.5707964
 scale = Vector2(0.99999994, 0.99999994)
 shape = SubResource("CapsuleShape2D_47aoe")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=720606449]
+[node name="HUD" type="CanvasLayer" parent="." unique_id=720606449]
 script = ExtResource("7_od3ui")
 
-[node name="Control" type="Control" parent="CanvasLayer" unique_id=1357615170]
+[node name="Control" type="Control" parent="HUD" unique_id=1357615170]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -92,7 +106,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control" unique_id=1572308415]
+[node name="coin_to_debt" type="MarginContainer" parent="HUD/Control" unique_id=1572308415]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -103,35 +117,42 @@ offset_bottom = 47.0
 grow_horizontal = 2
 theme_override_constants/margin_top = 20
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Control/MarginContainer" unique_id=1594216253]
+[node name="PanelContainer" type="PanelContainer" parent="HUD/Control/coin_to_debt" unique_id=1594216253]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_od3ui")
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control/MarginContainer/PanelContainer" unique_id=958554934]
+[node name="MarginContainer" type="MarginContainer" parent="HUD/Control/coin_to_debt/PanelContainer" unique_id=958554934]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control/MarginContainer/PanelContainer/MarginContainer" unique_id=1601822267]
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/Control/coin_to_debt/PanelContainer/MarginContainer" unique_id=1601822267]
 custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control/MarginContainer/PanelContainer/MarginContainer/HBoxContainer" unique_id=1949122056]
+[node name="Coin_H" type="HBoxContainer" parent="HUD/Control/coin_to_debt/PanelContainer/MarginContainer/HBoxContainer" unique_id=1949122056]
 layout_mode = 2
 
-[node name="coin_total_value" type="Label" parent="CanvasLayer/Control/MarginContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer" unique_id=2038173855]
-custom_minimum_size = Vector2(100, 0)
+[node name="Coin_HUD" type="TextureRect" parent="HUD/Control/coin_to_debt/PanelContainer/MarginContainer/HBoxContainer/Coin_H" unique_id=428218093]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("8_x3vf3")
+expand_mode = 4
+
+[node name="coin_total_value" type="Label" parent="HUD/Control/coin_to_debt/PanelContainer/MarginContainer/HBoxContainer/Coin_H" unique_id=2038173855]
+custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 theme = ExtResource("8_od3ui")
-text = "$0"
+text = "0"
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control/MarginContainer/PanelContainer/MarginContainer/HBoxContainer" unique_id=1707168567]
+[node name="MarginContainer" type="MarginContainer" parent="HUD/Control/coin_to_debt/PanelContainer/MarginContainer/HBoxContainer" unique_id=1707168567]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="coin_to_debt_ratio" type="ProgressBar" parent="CanvasLayer/Control/MarginContainer/PanelContainer/MarginContainer/HBoxContainer/MarginContainer" unique_id=628406801]
+[node name="coin_to_debt_ratio" type="ProgressBar" parent="HUD/Control/coin_to_debt/PanelContainer/MarginContainer/HBoxContainer/MarginContainer" unique_id=628406801]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 size_flags_vertical = 4
@@ -139,14 +160,42 @@ theme = ExtResource("8_od3ui")
 value = 0.54
 show_percentage = false
 
-[node name="debt_amount_value" type="Label" parent="CanvasLayer/Control/MarginContainer/PanelContainer/MarginContainer/HBoxContainer" unique_id=2088289480]
-custom_minimum_size = Vector2(100, 0)
+[node name="Debt_H" type="HBoxContainer" parent="HUD/Control/coin_to_debt/PanelContainer/MarginContainer/HBoxContainer" unique_id=1569553929]
+layout_mode = 2
+
+[node name="debt_amount_value" type="Label" parent="HUD/Control/coin_to_debt/PanelContainer/MarginContainer/HBoxContainer/Debt_H" unique_id=2088289480]
+custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 theme = ExtResource("8_od3ui")
-text = "$0"
+text = "0"
 horizontal_alignment = 2
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1845861263 groups=["magnet"]]
 
 [node name="Magnet" type="CollisionShape2D" parent="Area2D" unique_id=762164634 groups=["magnet"]]
 shape = SubResource("CircleShape2D_e76su")
+[node name="Debt_HUD" type="TextureRect" parent="HUD/Control/coin_to_debt/PanelContainer/MarginContainer/HBoxContainer/Debt_H" unique_id=319811104]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+texture = ExtResource("10_apopc")
+expand_mode = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD/Control" unique_id=1488577774]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/Control/MarginContainer" unique_id=362747833]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD/Control/MarginContainer/VBoxContainer" unique_id=581842733]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="HUD/Control/MarginContainer/VBoxContainer/MarginContainer" unique_id=162938997]
+custom_minimum_size = Vector2(42, 30)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_srkg7")

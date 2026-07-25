@@ -11,7 +11,7 @@ var score := 0
 # HUD Vars
 signal coin_picked_up(amount)
 
-var debt_value = 500
+var debt_value = 5000
 
 var powerup_dict = {"magnet": 1}
 
