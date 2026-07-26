@@ -3,6 +3,7 @@ extends Node
 @onready var music_player: AudioStreamPlayer = $MusicPlayer
 
 func _ready():
+	music_player.volume_db = -20
 	music_player.play()
 
 func play_music(stream: AudioStream):

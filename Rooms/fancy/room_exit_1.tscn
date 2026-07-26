@@ -7,8 +7,12 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_srkg7"]
 size = Vector2(32, 32)
 
-[node name="room_exit_1" type="Node2D" unique_id=1463528751]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e76su"]
+size = Vector2(27, 12)
+
+[node name="room_exit_1" type="Node2D" unique_id=1463528751 node_paths=PackedStringArray("money_area")]
 script = ExtResource("1_tbfm5")
+money_area = NodePath("MoneyArea")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1060477885]
 tile_map_data = PackedByteArray("AAABAAEAAAAEAAAAAAAGAAYAAAAFAAEAAAAGAAUAAAAAAAEAAAAGAAQAAAAAAAEAAAAGAAMAAAAAAAEAAAAGAAIAAAAAAAEAAAAGAAEAAAAFAAAAAAAGAAAAAAABAAAAAAAFAAYAAAABAAAAAAAFAAEAAAABAAIAAAAFAAAAAAABAAAAAAAEAAYAAAABAAAAAAAEAAEAAAAEAAAAAAAEAAAAAAAEAAEAAAADAAYAAAABAAAAAAADAAEAAAAFAAAAAAADAAAAAAAFAAEAAAACAAYAAAABAAAAAAACAAEAAAABAAIAAAACAAAAAAABAAAAAAABAAYAAAAEAAEAAAABAAIAAAACAAEAAAABAAAAAAABAAAAAAAAAAYAAAAAAAEAAAAAAAUAAAAAAAEAAAAAAAQAAAAAAAEAAAAAAAMAAAAAAAEAAAAAAAIAAAAAAAEAAAAAAAEAAAAAAAEAAAAAAAAAAAAAAAAAAAAHAAcAAAACAAIAAAAHAAYAAAADAAEAAQAHAAUAAAACAAEAAAAHAAQAAAACAAEAAAAHAAMAAAACAAEAAAAHAAIAAAACAAEAAAAHAAEAAAACAAEAAAAHAAAAAAACAAAAAAAGAAcAAAABAAIAAAAFAAcAAAABAAIAAAAEAAcAAAABAAIAAAADAAcAAAABAAIAAAACAAcAAAABAAIAAAABAAcAAAABAAIAAAAAAAcAAAAAAAIAAAABAAMAAAACAAEAAAABAAQAAAACAAEAAAABAAUAAAACAAEAAAADAAQAAAAGAAIAAAADAAMAAAAGAAEAAAAEAAMAAAAHAAEAAAAEAAQAAAAHAAIAAAADAAIAAAAEAAIAAAAEAAIAAAAFAAIAAAA=")
@@ -30,3 +34,31 @@ position = Vector2(64, 0)
 [node name="Exit" type="CollisionShape2D" parent="Area2D" unique_id=1183068770]
 position = Vector2(64, 64)
 shape = SubResource("RectangleShape2D_srkg7")
+
+[node name="MoneyArea" type="Area2D" parent="." unique_id=2078896214]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MoneyArea" unique_id=279192590]
+position = Vector2(64, 24)
+shape = SubResource("RectangleShape2D_e76su")
+
+[node name="Label" type="Node2D" parent="." unique_id=34048165]
+visible = false
+
+[node name="Panel" type="Panel" parent="Label" unique_id=163838652]
+offset_left = 17.0
+offset_top = 10.0
+offset_right = 116.0
+offset_bottom = 25.0
+
+[node name="Label" type="Label" parent="Label" unique_id=1465028347]
+offset_left = -7.0
+offset_top = 5.0
+offset_right = 141.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 10
+text = "Not Enough Money"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="body_entered" from="MoneyArea" to="." method="_on_money_area_body_entered"]
+[connection signal="body_exited" from="MoneyArea" to="." method="_on_money_area_body_exited"]

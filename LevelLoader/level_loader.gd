@@ -15,12 +15,12 @@ const COIN_COPPER_VALUE := 10.0
 const COIN_GOLD_WEIGHT := 10.0
 const COIN_SILVER_WEIGHT := 30.0
 const COIN_COPPER_WEIGHT := 60.0
-const MAX_NUM_SAFES := 2
+const MAX_NUM_SAFES := 4
 const SAFE_MARGIN := 25
 const SAFE_TARGETS := {
-	"easy": 1,
-	"medium": 1,
-	"hard": 2,
+	"easy": 20,
+	"medium": 20,
+	"hard": 40,
 }
 
 var floor_container: Node2D

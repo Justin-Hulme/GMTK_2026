@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://kdqcl4uyxwhe" path="res://Safe/safe.gd" id="1_lfkv6"]
 [ext_resource type="Texture2D" uid="uid://cbltlmddqhjk" path="res://Assets/Furniture_Office_Equipment_Set/safe_closed.png" id="2_1o67c"]
 [ext_resource type="Texture2D" uid="uid://dbae03ebuopyv" path="res://Assets/Furniture_Office_Equipment_Set/safe_open.png" id="2_bgj2f"]
+[ext_resource type="AudioStream" uid="uid://fwcyogcg1a1j" path="res://Safe/hasin2004-key-lock-sound-247454.mp3" id="4_10ygw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e76su"]
 size = Vector2(23, 9)
@@ -12,6 +13,9 @@ size = Vector2(17, 19)
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_h8ivj"]
 polygon = PackedVector2Array(-48.99999, 324, -48.99999, 318, -48.99999, 305, -65.999985, 305, -65.999985, 324)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bgj2f"]
+bg_color = Color(0.86736614, 0.07794253, 0, 1)
 
 [node name="Safe" type="Node2D" unique_id=791682041]
 scale = Vector2(2, 2)
@@ -39,3 +43,38 @@ shape = SubResource("RectangleShape2D_uvjlu")
 [node name="LightOccluder2D" type="LightOccluder2D" parent="StaticBody2D" unique_id=1918847329]
 scale = Vector2(1.0000001, 1)
 occluder = SubResource("OccluderPolygon2D_h8ivj")
+
+[node name="Label" type="Node2D" parent="." unique_id=1566370071]
+visible = false
+
+[node name="Panel" type="Panel" parent="Label" unique_id=286505222]
+offset_left = -26.0
+offset_top = -30.5
+offset_right = 27.5
+offset_bottom = -15.5
+
+[node name="Label" type="Label" parent="Label" unique_id=1851611972]
+offset_left = -49.0
+offset_top = -34.0
+offset_right = 51.0
+offset_bottom = -11.0
+theme_override_font_sizes/font_size = 8
+text = "No Lock Pick"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Timer" type="Timer" parent="." unique_id=352260805]
+wait_time = 5.0
+one_shot = true
+
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=1903155321]
+offset_left = -28.5
+offset_top = -21.5
+offset_right = 25.0
+offset_bottom = -17.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_bgj2f")
+show_percentage = false
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=259163496]
+stream = ExtResource("4_10ygw")
+volume_db = -21.351

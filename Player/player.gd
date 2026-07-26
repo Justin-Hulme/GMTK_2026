@@ -21,7 +21,7 @@ var _coin_total := 0
 
 var mouse_movement_enabled := true
 
-var lockpick_speed = 0;
+var lockpick_speed = -1;
 
 var _has_switched := false
 
