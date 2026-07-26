@@ -10,6 +10,7 @@ script = ExtResource("1_04ryc")
 value = 10
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1436478721]
+visible = false
 scale = Vector2(0.3125, 0.3125)
 texture = ExtResource("2_mulpp")
 

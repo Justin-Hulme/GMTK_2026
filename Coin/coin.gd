@@ -24,10 +24,15 @@ func _on_area_entered(area):
 		var player = area.get_parent()
 		if player.check_powerup("magnet") > 0:
 			magnet_target = area
+	if area.is_in_group("flashlight"):
+		var player = area.get_parent()
+		check_flashlight(player)
 
 func _on_area_exited(area):
 	if area.is_in_group("magnet"):
 		magnet_target = null
+	if area.is_in_group("flashlight"):
+		$Sprite2D.visible = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -53,3 +58,21 @@ func is_position_blocked(position: Vector2) -> bool:
 			return true
 
 	return false
+	
+func check_flashlight(player):
+	var space_state = get_world_2d().direct_space_state
+
+	var query = PhysicsRayQueryParameters2D.create(
+		global_position,
+		player.global_position
+	)
+
+	query.collision_mask = 1
+	query.exclude = [player]
+
+	var result = space_state.intersect_ray(query)
+
+	if result.is_empty():
+		$Sprite2D.visible = true
+	else:
+		$Sprite2D.visible = false
