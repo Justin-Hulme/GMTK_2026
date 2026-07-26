@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://b2s7qnkclpbcq" path="res://Player/HUD/upgrade.tscn" id="3_elce8"]
 [ext_resource type="Script" uid="uid://dc78ii1vthtuh" path="res://Upgrades/upgrade_resource.gd" id="4_8f8it"]
 [ext_resource type="Texture2D" uid="uid://c8r48t042apti" path="res://Assets/Money/Coin_silver.png" id="5_238ts"]
-[ext_resource type="Texture2D" path="res://Assets/shoe3.png" id="6_5l76c"]
+[ext_resource type="Texture2D" path="res://Assets/max_icon.png" id="6_5l76c"]
 [ext_resource type="Texture2D" uid="uid://bng5ybr0gvvex" path="res://Assets/Money/Debt_HUD.png" id="6_8g1fl"]
 [ext_resource type="Texture2D" uid="uid://bbb0nr87co55e" path="res://Assets/Money/Coin_copper.png" id="6_bi2uf"]
 [ext_resource type="Texture2D" uid="uid://b8mxc65u3mt6e" path="res://Assets/Furniture_Office_Equipment_Set/Papers.png" id="8_bi2uf"]

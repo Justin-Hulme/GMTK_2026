@@ -5,7 +5,7 @@ extends CharacterBody2D
 @export var deceleration := 1500.0
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var phone_screen: Control = $HUD/Control/PhoneScreen
+@onready var phone_screen: Control = $HUD/Control/PhoneIcon/PhoneScreen
 @onready var flashlight: PointLight2D = $Flashlight
 
 var score := 0
@@ -26,6 +26,7 @@ var lockpick_speed = 0;
 @onready var phone_icon = $HUD/Control/PhoneIcon
 
 func _ready():
+	add_to_group("player")
 	phone_icon.phone_opened.connect(disable_movement)
 	phone_icon.phone_closed.connect(enable_movement)
 	

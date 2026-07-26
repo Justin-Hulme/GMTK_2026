@@ -1,8 +1,9 @@
 extends RefCounted
 
-const GRID_WIDTH := 14
-const GRID_HEIGHT := 8
+const GRID_WIDTH := 10
+const GRID_HEIGHT := 6
 const MAX_ATTEMPTS := 50
+const MIN_EXIT_DISTANCE := 6
 
 var rng: RandomNumberGenerator
 var grid: Array[Array] = []
@@ -347,7 +348,7 @@ func _place_spawn_exit(placed_count: int, target_count: int) -> int:
 		spawn_grid_pos.y = spawn_pos["y"]
 		placed_count += 1
 	
-	var exit_pos = _find_position_for_tile(exit_def, placed_count + 1)
+	var exit_pos = _find_position_for_tile(exit_def, placed_count + 1, spawn_grid_pos)
 	if exit_pos != null:
 		grid[exit_pos["x"]][exit_pos["y"]] = placed_count + 1
 		cell_file_paths[exit_pos["x"]][exit_pos["y"]] = exit_def.file_path
@@ -364,7 +365,7 @@ func _place_spawn_exit(placed_count: int, target_count: int) -> int:
 	return placed_count
 
 
-func _find_position_for_tile(tile_def: Dictionary, next_id: int) -> Variant:
+func _find_position_for_tile(tile_def: Dictionary, next_id: int, origin_pos: Vector2i = Vector2i(-1, -1)) -> Variant:
 	# Find a position where this tile's doors face ONLY empty cells (0).
 	# Also ensure no neighbor has a door facing THIS position.
 	
@@ -372,6 +373,10 @@ func _find_position_for_tile(tile_def: Dictionary, next_id: int) -> Variant:
 		for y in range(GRID_HEIGHT):
 			if grid[x][y] != 0:
 				continue
+
+			if origin_pos != Vector2i(-1, -1):
+				if abs(x - origin_pos.x) + abs(y - origin_pos.y) < MIN_EXIT_DISTANCE:
+					continue
 			
 			var valid = true
 			

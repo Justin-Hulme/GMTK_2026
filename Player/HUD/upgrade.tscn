@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b2s7qnkclpbcq"]
 
 [ext_resource type="Script" uid="uid://vo1lro3o0aot" path="res://Player/HUD/upgrade.gd" id="1_cwdgf"]
-[ext_resource type="Texture2D" uid="uid://bbbe3aumuoxrx" path="res://Build/GMTK_2026.icon.png" id="1_jdxk5"]
+[ext_resource type="Texture2D" path="res://Assets/max_icon.png" id="1_jdxk5"]
 [ext_resource type="Texture2D" uid="uid://b04lcvm58kkas" path="res://Assets/max_icon.png" id="2_55dnm"]
 [ext_resource type="Theme" uid="uid://bledfm0mcnnu4" path="res://Assets/main_theme.tres" id="2_cwdgf"]
 

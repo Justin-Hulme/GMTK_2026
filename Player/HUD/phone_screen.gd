@@ -1,7 +1,6 @@
 extends Control
 
 @onready var screen_content: Control = $ScreenContent
-@onready var header: Label = $ScreenContent/Header
 @onready var player = find_parent("Player")
 
 signal phone_toggled(is_open: bool)
