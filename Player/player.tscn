@@ -200,3 +200,8 @@ layout_mode = 2
 
 [node name="FloorIndicator" parent="HUD/Control/floor_indicator/floor_stack" unique_id=189943130 instance=ExtResource("11_apopc")]
 floor_number = 0
+
+[node name="Area2D2" type="Area2D" parent="." unique_id=2013848637 groups=["flashlight"]]
+
+[node name="FlashlightArea" type="CollisionPolygon2D" parent="Area2D2" unique_id=70352983 groups=["flashlight"]]
+polygon = PackedVector2Array(18, -9, 135, -236, -84, -236)
