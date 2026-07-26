@@ -111,7 +111,7 @@ static func _collect_candidates(cells: Array, floor_layer: TileMapLayer, footpri
 	return candidates
 
 
-static func _try_place_prop(prop_layer: TileMapLayer, floor_layer: TileMapLayer, cells: Array, occupied: Array, prop_pool: Array, rng: RandomNumberGenerator) -> bool:
+static func _try_place_prop(prop_layer: TileMapLayer, floor_layer: TileMapLayer, cells: Array, occupied: Array, prop_pool: Array, _rng: RandomNumberGenerator) -> bool:
 	if prop_pool.is_empty():
 		return false
 	var shuffled_props := prop_pool.duplicate()
