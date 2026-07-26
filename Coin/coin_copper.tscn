@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://bvletmgjg31uk"]
+
+[ext_resource type="Script" uid="uid://fwjsq7wtbfb1" path="res://Coin/coin.gd" id="1_04ryc"]
+[ext_resource type="Texture2D" uid="uid://bbb0nr87co55e" path="res://Assets/Money/Coin_copper.png" id="2_mulpp"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_e76su"]
+
+[node name="Coin_copper" type="Area2D" unique_id=789190111]
+script = ExtResource("1_04ryc")
+value = 10
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1436478721]
+visible = false
+scale = Vector2(0.3125, 0.3125)
+texture = ExtResource("2_mulpp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=227931589]
+scale = Vector2(0.99999994, 0.99999994)
+shape = SubResource("CircleShape2D_e76su")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="area_exited" from="." to="." method="_on_area_exited"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

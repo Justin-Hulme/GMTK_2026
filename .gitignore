@@ -1,8 +1,25 @@
 # Godot 4+ specific ignores
+.o*
 .godot/
-/android/
-*.tmp
-*.log
+.import/
+*.import
+*.zip
 export.cfg
 export_presets.cfg
-addons/
+export_credentials.cfg
+android/
+Build/
+
+# Godot 4.2+ specific ignores
+~*.dll
+
+# General ignores
+.nomedia
+*.tmp
+*.log
+*.translation
+
+# Mono-specific ignores
+.mono/
+data_*/
+mono_crash.*.json

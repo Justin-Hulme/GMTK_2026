@@ -1,0 +1,17 @@
+[gd_scene format=4 uid="uid://bh0qfxmk5rkjo"]
+
+[ext_resource type="Script" uid="uid://da1j4m485ktha" path="res://Rooms/room_data.gd" id="1_pynr1"]
+[ext_resource type="TileSet" uid="uid://crlyl1ooicq2e" path="res://Assets/Sprites/floor_plan_1.tres" id="2_80d3t"]
+
+[node name="room_corridor_3_3" type="Node2D" unique_id=1463528751]
+script = ExtResource("1_pynr1")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1060477885]
+tile_map_data = PackedByteArray("AAAFAAUAAAAEAAAAAAAFAAQAAAABAAEAAAAFAAMAAAABAAEAAAAFAAIAAAABAAAAAAAEAAUAAAABAAEAAAAEAAQAAAABAAEAAAAEAAMAAAABAAEAAAAEAAIAAAABAAAAAAADAAUAAAABAAEAAAADAAQAAAABAAEAAAADAAMAAAABAAEAAAADAAIAAAABAAAAAAACAAUAAAAAAAEAAAACAAQAAAAAAAEAAAACAAMAAAAAAAEAAAACAAIAAAAAAAAAAAACAAYAAAAAAAEAAAACAAcAAAAAAAEAAAADAAcAAAABAAEAAAAEAAcAAAABAAEAAAAEAAYAAAABAAEAAAADAAYAAAABAAEAAAAFAAYAAAACAAEAAAAFAAcAAAACAAEAAAAGAAUAAAABAAIAAAAHAAUAAAABAAIAAAAHAAQAAAABAAEAAAAGAAQAAAABAAEAAAAGAAMAAAABAAEAAAAHAAMAAAABAAEAAAAGAAIAAAABAAAAAAAHAAIAAAABAAAAAAA=")
+tile_set = ExtResource("2_80d3t")
+
+[node name="door_S" type="Marker2D" parent="." unique_id=433236812]
+position = Vector2(64, 128)
+
+[node name="door_E" type="Marker2D" parent="." unique_id=1459326157]
+position = Vector2(128, 64)

@@ -1,0 +1,99 @@
+[gd_scene format=3 uid="uid://2hdxwigbbdoi"]
+
+[ext_resource type="Texture2D" uid="uid://cikbuavn23afu" path="res://Floor_plan.png" id="1_tfqdf"]
+[ext_resource type="PackedScene" uid="uid://2c1gesmmik6q" path="res://Player/player.tscn" id="2_ldmn1"]
+[ext_resource type="Script" uid="uid://ctw2vrg5bkpg6" path="res://Coin/coin_spawner.gd" id="3_51c63"]
+[ext_resource type="PackedScene" uid="uid://cqw7qj266ts4" path="res://Environment/cubicals.tscn" id="3_ptln8"]
+[ext_resource type="PackedScene" uid="uid://lmb4ufx2bl8" path="res://Coin/coin_gold.tscn" id="4_3621h"]
+[ext_resource type="PackedScene" uid="uid://bujt665eb1nbm" path="res://Coin/coin_silver.tscn" id="5_ubb4l"]
+[ext_resource type="PackedScene" uid="uid://bvletmgjg31uk" path="res://Coin/coin_copper.tscn" id="6_ptln8"]
+[ext_resource type="PackedScene" uid="uid://cr0sg61twglyh" path="res://Environment/door.tscn" id="8_p20uq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4v7c7"]
+size = Vector2(2225, 14.75)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qqlvx"]
+size = Vector2(16, 1120)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_u4qph"]
+radius = 14.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e76su"]
+size = Vector2(2226, 1150)
+
+[node name="Node2D" type="Node2D" unique_id=1825110433]
+
+[node name="Background" type="Sprite2D" parent="." unique_id=1928843057]
+texture = ExtResource("1_tfqdf")
+
+[node name="Player" parent="." unique_id=1632784472 groups=["player"] instance=ExtResource("2_ldmn1")]
+position = Vector2(-3, -17)
+
+[node name="Boundaries" type="Node2D" parent="." unique_id=902716936 groups=["wall"]]
+position = Vector2(0, 8)
+
+[node name="Walls" type="StaticBody2D" parent="Boundaries" unique_id=69485667 groups=["wall"]]
+position = Vector2(0, -8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Boundaries/Walls" unique_id=1759181916 groups=["wall"]]
+position = Vector2(-0.5, 559.375)
+shape = SubResource("RectangleShape2D_4v7c7")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Boundaries/Walls" unique_id=606038847 groups=["wall"]]
+position = Vector2(-0.5, -575.25)
+shape = SubResource("RectangleShape2D_4v7c7")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Boundaries/Walls" unique_id=1339826016 groups=["wall"]]
+position = Vector2(-1105, -8)
+shape = SubResource("RectangleShape2D_qqlvx")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Boundaries/Walls" unique_id=802752406 groups=["wall"]]
+position = Vector2(1104, -8)
+shape = SubResource("RectangleShape2D_qqlvx")
+
+[node name="Cubicals" type="Node2D" parent="Boundaries" unique_id=1166280215]
+
+[node name="Cubicals6" parent="Boundaries/Cubicals" unique_id=1508164361 instance=ExtResource("3_ptln8")]
+position = Vector2(0, -2)
+
+[node name="Cubicals5" parent="Boundaries/Cubicals" unique_id=106058435 instance=ExtResource("3_ptln8")]
+position = Vector2(435, 212)
+
+[node name="Cubicals4" parent="Boundaries/Cubicals" unique_id=486872267 instance=ExtResource("3_ptln8")]
+position = Vector2(129, 355)
+rotation = -3.1415925
+
+[node name="Cubicals3" parent="Boundaries/Cubicals" unique_id=220196495 instance=ExtResource("3_ptln8")]
+position = Vector2(0, 212)
+
+[node name="Cubicals9" parent="Boundaries/Cubicals" unique_id=1397332482 instance=ExtResource("3_ptln8")]
+position = Vector2(-306, 355)
+rotation = -3.1415925
+
+[node name="Cubicals8" parent="Boundaries/Cubicals" unique_id=2042945761 instance=ExtResource("3_ptln8")]
+position = Vector2(435, 0)
+
+[node name="CoinSpawner" type="Area2D" parent="." unique_id=269872716]
+script = ExtResource("3_51c63")
+coin_scenes = Array[PackedScene]([ExtResource("4_3621h"), ExtResource("5_ubb4l"), ExtResource("6_ptln8")])
+coin_weights = Array[int]([10, 30, 60])
+amount = 100
+coin_check_shape = SubResource("CircleShape2D_u4qph")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CoinSpawner" unique_id=53913744]
+visible = false
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_e76su")
+debug_color = Color(0.6830656, 0.38283992, 0.83194107, 0.41960785)
+
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1518456803]
+visible = false
+color = Color(0.23753911, 0.23753914, 0.23753911, 1)
+
+[node name="Door" parent="." unique_id=2029678344 instance=ExtResource("8_p20uq")]
+position = Vector2(26, 142)
+
+[node name="Door2" parent="." unique_id=1727143813 instance=ExtResource("8_p20uq")]
+position = Vector2(103, 142)
+rotation = 3.1415927
+scale = Vector2(1, -1)
