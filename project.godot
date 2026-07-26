@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="GMTK_2026"
-run/main_scene="uid://2hdxwigbbdoi"
+run/main_scene="uid://d2k8f3x9p1q7w"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+LevelManager="*res://Level/level_manager.gd"
 
 [display]
 
@@ -22,6 +26,7 @@ window/size/viewport_height=480
 window/size/window_width_override=1280
 window/size/window_height_override=960
 window/stretch/mode="viewport"
+window/stretch/aspect="expand"
 window/size/width=1280
 window/size/height=960
 
@@ -29,6 +34,11 @@ window/size/height=960
 
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
+
+[global_group]
+
+flashlight=""
+magnet=""
 
 [input]
 

@@ -3,21 +3,11 @@
 [ext_resource type="Texture2D" uid="uid://cikbuavn23afu" path="res://Floor_plan.png" id="1_tfqdf"]
 [ext_resource type="PackedScene" uid="uid://2c1gesmmik6q" path="res://Player/player.tscn" id="2_ldmn1"]
 [ext_resource type="Script" uid="uid://ctw2vrg5bkpg6" path="res://Coin/coin_spawner.gd" id="3_51c63"]
+[ext_resource type="PackedScene" uid="uid://cqw7qj266ts4" path="res://Environment/cubicals.tscn" id="3_ptln8"]
 [ext_resource type="PackedScene" uid="uid://lmb4ufx2bl8" path="res://Coin/coin_gold.tscn" id="4_3621h"]
 [ext_resource type="PackedScene" uid="uid://bujt665eb1nbm" path="res://Coin/coin_silver.tscn" id="5_ubb4l"]
 [ext_resource type="PackedScene" uid="uid://bvletmgjg31uk" path="res://Coin/coin_copper.tscn" id="6_ptln8"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_47aoe"]
-size = Vector2(371, 7)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_f43go"]
-size = Vector2(7, 91.5)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_6e4uc"]
-size = Vector2(57, 208)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_srib0"]
-size = Vector2(149, 58)
+[ext_resource type="PackedScene" uid="uid://cr0sg61twglyh" path="res://Environment/door.tscn" id="8_p20uq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4v7c7"]
 size = Vector2(2225, 14.75)
@@ -39,232 +29,49 @@ texture = ExtResource("1_tfqdf")
 [node name="Player" parent="." unique_id=1632784472 groups=["player"] instance=ExtResource("2_ldmn1")]
 position = Vector2(-3, -17)
 
-[node name="Walls" type="Node2D" parent="." unique_id=902716936 groups=["wall"]]
+[node name="Boundaries" type="Node2D" parent="." unique_id=902716936 groups=["wall"]]
 position = Vector2(0, 8)
 
-[node name="Cubicals" type="StaticBody2D" parent="Walls" unique_id=1847774204 groups=["wall"]]
-
-[node name="Cubicals5" type="StaticBody2D" parent="Walls/Cubicals" unique_id=1814420516 groups=["wall"]]
-position = Vector2(-307, 355)
-rotation = -3.1415925
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals5" unique_id=1622234553 groups=["wall"]]
-position = Vector2(-153, -140)
-shape = SubResource("RectangleShape2D_47aoe")
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals5" unique_id=1357713147 groups=["wall"]]
-position = Vector2(-335, -32)
-shape = SubResource("RectangleShape2D_f43go")
-
-[node name="CollisionShape2D7" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals5" unique_id=402942406 groups=["wall"]]
-position = Vector2(-123, -34)
-rotation = 3.1415927
-shape = SubResource("RectangleShape2D_6e4uc")
-
-[node name="CollisionShape2D6" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals5" unique_id=38255018 groups=["wall"]]
-position = Vector2(-43, 42)
-rotation = 3.1415927
-shape = SubResource("RectangleShape2D_srib0")
-
-[node name="CollisionShape2D5" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals5" unique_id=101058549 groups=["wall"]]
-position = Vector2(28, -33)
-rotation = 3.1415927
-shape = SubResource("RectangleShape2D_f43go")
-
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals5" unique_id=216612139 groups=["wall"]]
-position = Vector2(-181.5, -33)
-shape = SubResource("RectangleShape2D_6e4uc")
-
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals5" unique_id=1146600683 groups=["wall"]]
-position = Vector2(-263.5, 42)
-shape = SubResource("RectangleShape2D_srib0")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Cubicals" unique_id=543006024 groups=["wall"]]
-position = Vector2(-153, -140)
-shape = SubResource("RectangleShape2D_47aoe")
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls/Cubicals" unique_id=1663911035 groups=["wall"]]
-position = Vector2(-335.5, -90.75)
-shape = SubResource("RectangleShape2D_f43go")
-
-[node name="CollisionShape2D7" type="CollisionShape2D" parent="Walls/Cubicals" unique_id=810994964 groups=["wall"]]
-position = Vector2(-123, -34)
-rotation = 3.1415927
-shape = SubResource("RectangleShape2D_6e4uc")
-
-[node name="CollisionShape2D6" type="CollisionShape2D" parent="Walls/Cubicals" unique_id=1054323038 groups=["wall"]]
-position = Vector2(-42, 43)
-rotation = 3.1415927
-shape = SubResource("RectangleShape2D_srib0")
-
-[node name="CollisionShape2D5" type="CollisionShape2D" parent="Walls/Cubicals" unique_id=167207450 groups=["wall"]]
-position = Vector2(29, -91)
-rotation = 3.1415927
-shape = SubResource("RectangleShape2D_f43go")
-
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls/Cubicals" unique_id=98725684 groups=["wall"]]
-position = Vector2(-181.5, -33)
-shape = SubResource("RectangleShape2D_6e4uc")
-
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls/Cubicals" unique_id=917425904 groups=["wall"]]
-position = Vector2(-263.5, 42)
-shape = SubResource("RectangleShape2D_srib0")
-
-[node name="Cubicals" type="StaticBody2D" parent="Walls/Cubicals" unique_id=702740752 groups=["wall"]]
-position = Vector2(435, -1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals" unique_id=432554963 groups=["wall"]]
-position = Vector2(-153, -140)
-shape = SubResource("RectangleShape2D_47aoe")
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals" unique_id=1505720643 groups=["wall"]]
-position = Vector2(-335.5, -90.75)
-shape = SubResource("RectangleShape2D_f43go")
-
-[node name="CollisionShape2D7" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals" unique_id=1680005202 groups=["wall"]]
-position = Vector2(-123, -34)
-rotation = 3.1415927
-shape = SubResource("RectangleShape2D_6e4uc")
-
-[node name="CollisionShape2D6" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals" unique_id=1194683133 groups=["wall"]]
-position = Vector2(-42, 43)
-rotation = 3.1415927
-shape = SubResource("RectangleShape2D_srib0")
-
-[node name="CollisionShape2D5" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals" unique_id=1034059354 groups=["wall"]]
-position = Vector2(29, -91)
-rotation = 3.1415927
-shape = SubResource("RectangleShape2D_f43go")
-
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals" unique_id=1430846797 groups=["wall"]]
-position = Vector2(-181.5, -33)
-shape = SubResource("RectangleShape2D_6e4uc")
-
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals" unique_id=269596394 groups=["wall"]]
-position = Vector2(-263.5, 42)
-shape = SubResource("RectangleShape2D_srib0")
-
-[node name="Cubicals2" type="StaticBody2D" parent="Walls/Cubicals" unique_id=1395391555 groups=["wall"]]
-position = Vector2(435, 211)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals2" unique_id=825819351 groups=["wall"]]
-position = Vector2(-153, -140)
-shape = SubResource("RectangleShape2D_47aoe")
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals2" unique_id=1762553888 groups=["wall"]]
-position = Vector2(-335, -32)
-shape = SubResource("RectangleShape2D_f43go")
-
-[node name="CollisionShape2D7" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals2" unique_id=133153416 groups=["wall"]]
-position = Vector2(-123, -34)
-rotation = 3.1415927
-shape = SubResource("RectangleShape2D_6e4uc")
-
-[node name="CollisionShape2D6" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals2" unique_id=1823756217 groups=["wall"]]
-position = Vector2(-43, 42)
-rotation = 3.1415927
-shape = SubResource("RectangleShape2D_srib0")
-
-[node name="CollisionShape2D5" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals2" unique_id=1609664813 groups=["wall"]]
-position = Vector2(28, -33)
-rotation = 3.1415927
-shape = SubResource("RectangleShape2D_f43go")
-
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals2" unique_id=1224352709 groups=["wall"]]
-position = Vector2(-181.5, -33)
-shape = SubResource("RectangleShape2D_6e4uc")
-
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals2" unique_id=1678145936 groups=["wall"]]
-position = Vector2(-263.5, 42)
-shape = SubResource("RectangleShape2D_srib0")
-
-[node name="Cubicals3" type="StaticBody2D" parent="Walls/Cubicals" unique_id=2079842896 groups=["wall"]]
-position = Vector2(128, 354)
-rotation = 3.1415927
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals3" unique_id=1944963957 groups=["wall"]]
-position = Vector2(-153, -140)
-shape = SubResource("RectangleShape2D_47aoe")
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals3" unique_id=1142871559 groups=["wall"]]
-position = Vector2(-335, -32)
-shape = SubResource("RectangleShape2D_f43go")
-
-[node name="CollisionShape2D7" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals3" unique_id=2104303424 groups=["wall"]]
-position = Vector2(-123, -34)
-rotation = 3.1415927
-shape = SubResource("RectangleShape2D_6e4uc")
-
-[node name="CollisionShape2D6" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals3" unique_id=1907894719 groups=["wall"]]
-position = Vector2(-43, 42)
-rotation = 3.1415927
-shape = SubResource("RectangleShape2D_srib0")
-
-[node name="CollisionShape2D5" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals3" unique_id=1108407140 groups=["wall"]]
-position = Vector2(28, -33)
-rotation = 3.1415927
-shape = SubResource("RectangleShape2D_f43go")
-
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals3" unique_id=1673766617 groups=["wall"]]
-position = Vector2(-181.5, -33)
-shape = SubResource("RectangleShape2D_6e4uc")
-
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals3" unique_id=1749625873 groups=["wall"]]
-position = Vector2(-263.5, 42)
-shape = SubResource("RectangleShape2D_srib0")
-
-[node name="Cubicals4" type="StaticBody2D" parent="Walls/Cubicals" unique_id=872742847 groups=["wall"]]
-position = Vector2(0, 212)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals4" unique_id=1755642796 groups=["wall"]]
-position = Vector2(-153, -140)
-shape = SubResource("RectangleShape2D_47aoe")
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals4" unique_id=1513849719 groups=["wall"]]
-position = Vector2(-335, -32)
-shape = SubResource("RectangleShape2D_f43go")
-
-[node name="CollisionShape2D7" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals4" unique_id=2038605809 groups=["wall"]]
-position = Vector2(-123, -34)
-rotation = 3.1415927
-shape = SubResource("RectangleShape2D_6e4uc")
-
-[node name="CollisionShape2D6" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals4" unique_id=854656625 groups=["wall"]]
-position = Vector2(-43, 42)
-rotation = 3.1415927
-shape = SubResource("RectangleShape2D_srib0")
-
-[node name="CollisionShape2D5" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals4" unique_id=602912427 groups=["wall"]]
-position = Vector2(28, -33)
-rotation = 3.1415927
-shape = SubResource("RectangleShape2D_f43go")
-
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals4" unique_id=1928914814 groups=["wall"]]
-position = Vector2(-181.5, -33)
-shape = SubResource("RectangleShape2D_6e4uc")
-
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls/Cubicals/Cubicals4" unique_id=577538839 groups=["wall"]]
-position = Vector2(-263.5, 42)
-shape = SubResource("RectangleShape2D_srib0")
-
-[node name="Walls" type="StaticBody2D" parent="Walls" unique_id=69485667 groups=["wall"]]
+[node name="Walls" type="StaticBody2D" parent="Boundaries" unique_id=69485667 groups=["wall"]]
 position = Vector2(0, -8)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Walls" unique_id=1759181916 groups=["wall"]]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Boundaries/Walls" unique_id=1759181916 groups=["wall"]]
 position = Vector2(-0.5, 559.375)
 shape = SubResource("RectangleShape2D_4v7c7")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls/Walls" unique_id=606038847 groups=["wall"]]
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Boundaries/Walls" unique_id=606038847 groups=["wall"]]
 position = Vector2(-0.5, -575.25)
 shape = SubResource("RectangleShape2D_4v7c7")
 
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls/Walls" unique_id=1339826016 groups=["wall"]]
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Boundaries/Walls" unique_id=1339826016 groups=["wall"]]
 position = Vector2(-1105, -8)
 shape = SubResource("RectangleShape2D_qqlvx")
 
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls/Walls" unique_id=802752406 groups=["wall"]]
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Boundaries/Walls" unique_id=802752406 groups=["wall"]]
 position = Vector2(1104, -8)
 shape = SubResource("RectangleShape2D_qqlvx")
+
+[node name="Cubicals" type="Node2D" parent="Boundaries" unique_id=1166280215]
+
+[node name="Cubicals6" parent="Boundaries/Cubicals" unique_id=1508164361 instance=ExtResource("3_ptln8")]
+position = Vector2(0, -2)
+
+[node name="Cubicals5" parent="Boundaries/Cubicals" unique_id=106058435 instance=ExtResource("3_ptln8")]
+position = Vector2(435, 212)
+
+[node name="Cubicals4" parent="Boundaries/Cubicals" unique_id=486872267 instance=ExtResource("3_ptln8")]
+position = Vector2(129, 355)
+rotation = -3.1415925
+
+[node name="Cubicals3" parent="Boundaries/Cubicals" unique_id=220196495 instance=ExtResource("3_ptln8")]
+position = Vector2(0, 212)
+
+[node name="Cubicals9" parent="Boundaries/Cubicals" unique_id=1397332482 instance=ExtResource("3_ptln8")]
+position = Vector2(-306, 355)
+rotation = -3.1415925
+
+[node name="Cubicals8" parent="Boundaries/Cubicals" unique_id=2042945761 instance=ExtResource("3_ptln8")]
+position = Vector2(435, 0)
 
 [node name="CoinSpawner" type="Area2D" parent="." unique_id=269872716]
 script = ExtResource("3_51c63")
@@ -278,3 +85,15 @@ visible = false
 position = Vector2(0, -8)
 shape = SubResource("RectangleShape2D_e76su")
 debug_color = Color(0.6830656, 0.38283992, 0.83194107, 0.41960785)
+
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1518456803]
+visible = false
+color = Color(0.23753911, 0.23753914, 0.23753911, 1)
+
+[node name="Door" parent="." unique_id=2029678344 instance=ExtResource("8_p20uq")]
+position = Vector2(26, 142)
+
+[node name="Door2" parent="." unique_id=1727143813 instance=ExtResource("8_p20uq")]
+position = Vector2(103, 142)
+rotation = 3.1415927
+scale = Vector2(1, -1)

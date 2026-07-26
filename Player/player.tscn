@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://2c1gesmmik6q"]
 
 [ext_resource type="Script" uid="uid://cqgyq0ahsig01" path="res://Player/player.gd" id="1_fhl08"]
+[ext_resource type="Texture2D" uid="uid://67styg0gyepx" path="res://Assets/Flashlight(1).png" id="2_5htga"]
 [ext_resource type="Texture2D" uid="uid://che6jqmkaod7p" path="res://Player/Character/Walking_3.png" id="2_vtle1"]
 [ext_resource type="Texture2D" uid="uid://bebbly6tpndvy" path="res://Player/Character/Walking_1.png" id="3_od3ui"]
 [ext_resource type="Texture2D" uid="uid://b6hl4f2oxgd1n" path="res://Player/Character/Walking_2.png" id="4_00tjw"]
@@ -55,11 +56,11 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_47aoe"]
-radius = 22.0
-height = 56.0
+radius = 8.8
+height = 29.9
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_e76su"]
-radius = 80.0
+radius = 35.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_od3ui"]
 bg_color = Color(0.1593911, 0.1593911, 0.1593911, 0.8784314)
@@ -71,17 +72,25 @@ corner_radius_bottom_left = 20
 [node name="Player" type="CharacterBody2D" unique_id=1632784472]
 script = ExtResource("1_fhl08")
 
+[node name="Flashlight" type="PointLight2D" parent="." unique_id=879736083]
+position = Vector2(0, -7.5101852e-06)
+scale = Vector2(1, 0.49609378)
+energy = 1.5
+blend_mode = 2
+shadow_enabled = true
+texture = ExtResource("2_5htga")
+offset = Vector2(20.265, -281.54)
+
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1063348825]
 position = Vector2(0, -1)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=728315925]
-scale = Vector2(0.4, 0.4)
+scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_ab854")
 animation = &"walking"
 frame_progress = 0.39065647
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1967341823]
-position = Vector2(0, -3)
 rotation = 1.5707964
 scale = Vector2(0.99999994, 0.99999994)
 shape = SubResource("CapsuleShape2D_47aoe")
@@ -196,3 +205,9 @@ floor_number = 0
 [node name="PhoneScreen" parent="HUD/Control" instance=ExtResource("12_phone")]
 
 [node name="PhoneIcon" parent="HUD/Control" instance=ExtResource("13_phone")]
+
+[node name="Area2D2" type="Area2D" parent="." unique_id=2013848637 groups=["flashlight"]]
+
+[node name="FlashlightArea" type="CollisionPolygon2D" parent="Area2D2" unique_id=70352983 groups=["flashlight"]]
+polygon = PackedVector2Array(18, -9, 135, -236, -84, -236)
+active = true
