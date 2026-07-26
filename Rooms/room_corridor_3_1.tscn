@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://da1j4m485ktha" path="res://Rooms/room_data.gd" id="1_rn56r"]
 [ext_resource type="TileSet" uid="uid://crlyl1ooicq2e" path="res://Assets/Sprites/floor_plan_1.tres" id="2_g8s4g"]
+[ext_resource type="TileSet" uid="uid://c7rimg0jfwjok" path="res://Assets/Furniture_Office_Equipment_Set/furniture.tres" id="3_furniture"]
 
 [node name="room_corridor_3_1" type="Node2D" unique_id=1463528751]
 script = ExtResource("1_rn56r")
@@ -9,6 +10,10 @@ script = ExtResource("1_rn56r")
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1060477885]
 tile_map_data = PackedByteArray("AAAFAAUAAAACAAIAAAAFAAQAAAACAAEAAAAFAAMAAAACAAEAAAAFAAIAAAACAAEAAAAEAAUAAAABAAIAAAAEAAQAAAABAAEAAAAEAAMAAAABAAEAAAAEAAIAAAABAAEAAAADAAUAAAABAAIAAAADAAQAAAABAAEAAAADAAMAAAABAAEAAAADAAIAAAABAAEAAAACAAUAAAABAAIAAAACAAQAAAABAAEAAAACAAMAAAABAAEAAAACAAIAAAAFAAEAAAABAAMAAAABAAEAAAABAAQAAAABAAEAAAAAAAMAAAABAAEAAAAAAAQAAAABAAEAAAAAAAUAAAABAAIAAAABAAUAAAABAAIAAAABAAIAAAABAAAAAAAAAAIAAAABAAAAAAAEAAEAAAABAAEAAAAEAAAAAAABAAEAAAADAAEAAAABAAEAAAADAAAAAAABAAEAAAACAAEAAAAAAAEAAAACAAAAAAAAAAEAAAAFAAAAAAACAAEAAAAFAAEAAAACAAEAAAA=")
 tile_set = ExtResource("2_g8s4g")
+
+[node name="PropLayer" type="TileMapLayer" parent="." unique_id=1060477886]
+z_index = 1
+tile_set = ExtResource("3_furniture")
 
 [node name="door_N" type="Marker2D" parent="." unique_id=433236812]
 position = Vector2(64, 0)

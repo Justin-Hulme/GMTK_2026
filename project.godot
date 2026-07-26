@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 TileRegistry="*res://Level/tile_registry.gd"
 LevelManager="*res://Level/level_manager.gd"
 McpInteractionServer="*res://mcp_interaction_server.gd"
+AudioManager="*uid://5y2md8mdyda7"
 
 [display]
 
@@ -83,3 +84,6 @@ toggle_phone={
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/canvas_textures/default_texture_filter=0
+2d/snap/snap_2d_transforms_to_pixel=true
+2d/snap/snap_2d_vertices_to_pixel=true

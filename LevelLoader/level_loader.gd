@@ -4,6 +4,7 @@ const FloorGenerator = preload("res://Level/floor_generator.gd")
 const COIN_GOLD = preload("res://Coin/coin_gold.tscn")
 const COIN_SILVER = preload("res://Coin/coin_silver.tscn")
 const COIN_COPPER = preload("res://Coin/coin_copper.tscn")
+const PropPlacerScript = preload("res://Prop/prop_placer.gd")
 
 const CELL_SIZE := 384.0
 const COIN_MARGIN := 48.0
@@ -18,7 +19,9 @@ var floor_container: Node2D
 var _coin_rng := RandomNumberGenerator.new()
 @export var level_config: LevelConfig
 var _is_transitioning_floor := false
-
+var _current_exit_room: Node2D
+var _current_exit_area: Area2D
+var played_unlock
 
 func _ready() -> void:
 	_coin_rng.randomize()
@@ -29,6 +32,7 @@ func _ready() -> void:
 
 
 func generate_floor(reset_floor_state: bool = false) -> void:
+	played_unlock = false
 	var config := _get_level_config()
 	var level_manager = get_node_or_null("/root/LevelManager")
 	if reset_floor_state and level_manager:
@@ -50,6 +54,8 @@ func generate_floor(reset_floor_state: bool = false) -> void:
 	result.scene.name = "generated_rooms"
 	floor_container.add_child(result.scene)
 	add_child(floor_container)
+	PropGridBuilder.build_for_generated_rooms(result.scene)
+	PropPlacerScript.populate_generated_rooms(result.scene)
 	_build_light_occluders(result.scene)
 	_spawn_map_coins.call_deferred(result.scene, _get_target_coin_count(config))
 	
@@ -64,6 +70,9 @@ func generate_floor(reset_floor_state: bool = false) -> void:
 		var hud = player_node.get_node_or_null("HUD") if player_node else null
 		if hud and hud.has_method("refresh_floor_indicators"):
 			hud.refresh_floor_indicators(level_manager.max_floors_per_level, level_manager.current_floor_in_level)
+	if player_node and player_node.has_signal("coin_picked_up"):
+		if not player_node.coin_picked_up.is_connected(_on_player_coin_total_changed):
+			player_node.coin_picked_up.connect(_on_player_coin_total_changed)
 
 	# Position player at spawn grid position using actual room cell size (384x384)
 	var spawn_grid_pos := Vector2i(0, 0)
@@ -77,6 +86,7 @@ func generate_floor(reset_floor_state: bool = false) -> void:
 		player_node.position = Vector2(player_world_x, player_world_y)
 
 	connect_exit_signals()
+	_update_exit_unlock_state()
 	_is_transitioning_floor = false
 
 	# Camera2D already follows the player as a child node.
@@ -323,6 +333,8 @@ func _find_exit_areas(node: Node) -> Array[Area2D]:
 
 
 func connect_exit_signals() -> void:
+	_current_exit_area = null
+	_current_exit_room = null
 	if not floor_container:
 		push_error("No floor container!")
 		return
@@ -334,5 +346,54 @@ func connect_exit_signals() -> void:
 	var exit_areas = _find_exit_areas(generated)
 	
 	for area in exit_areas:
+		_current_exit_area = area
+		_current_exit_room = area.get_parent() as Node2D
 		if not area.body_entered.is_connected(_on_exit_body_entered):
 			area.body_entered.connect(_on_exit_body_entered)
+
+
+func _on_player_coin_total_changed(_amount: int) -> void:
+	_update_exit_unlock_state()
+
+
+func _update_exit_unlock_state() -> void:
+	if not is_instance_valid(_current_exit_room):
+		return
+	var player_node = get_node_or_null("Player")
+	if player_node == null:
+		return
+	var unlocked: bool = player_node.get_coin_total() >= _get_required_coins_for_exit(player_node)
+	var vault_node = _find_vault_door_node(_current_exit_room)
+	if vault_node:
+		_set_vault_door_enabled(vault_node, not unlocked)
+	if unlocked and not played_unlock:
+		played_unlock = true
+		$"AudioStreamPlayer".playing = true
+	if is_instance_valid(_current_exit_area):
+		_current_exit_area.set_deferred("monitoring", unlocked)
+		_current_exit_area.set_deferred("monitorable", unlocked)
+
+
+func _find_vault_door_node(root_node: Node) -> Node:
+	for child in root_node.get_children():
+		if child.name == "Vault Door" or child.name == "VaultDoor" or child.name == "TileMapLayer2":
+			return child
+		var found = _find_vault_door_node(child)
+		if found:
+			return found
+	return null
+
+
+func _set_vault_door_enabled(node: Node, enabled: bool) -> void:
+	if node is CanvasItem:
+		(node as CanvasItem).visible = enabled
+	if node is TileMapLayer:
+		node.set("enabled", enabled)
+	for child in node.get_children():
+		if child is CollisionShape2D:
+			(child as CollisionShape2D).disabled = not enabled
+		elif child is TileMapLayer:
+			child.set("enabled", enabled)
+		if child is CanvasItem:
+			(child as CanvasItem).visible = enabled
+		_set_vault_door_enabled(child, enabled)
