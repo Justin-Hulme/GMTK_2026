@@ -205,3 +205,4 @@ floor_number = 0
 
 [node name="FlashlightArea" type="CollisionPolygon2D" parent="Area2D2" unique_id=70352983 groups=["flashlight"]]
 polygon = PackedVector2Array(18, -9, 135, -236, -84, -236)
+active = true
