@@ -10,15 +10,18 @@ const FLOOR_INDICATOR_SPACING := 44.0
 @onready var coin_total_value: Label = $Control/coin_to_debt/PanelContainer/MarginContainer/HBoxContainer/Coin_H/coin_total_value
 @onready var coin_to_debt_ratio: ProgressBar = $Control/coin_to_debt/PanelContainer/MarginContainer/HBoxContainer/MarginContainer/coin_to_debt_ratio
 @onready var floor_stack: VBoxContainer = $Control/floor_indicator/floor_stack
+@onready var spray_paint_bar: ProgressBar = $Control/spray_can/PanelContainer/MarginContainer/VBoxContainer/ProgressBar
 
 var _fill_style: StyleBoxFlat
 var _level_manager: Node
 
 func _ready() -> void:
 	player.coin_picked_up.connect(update_ratio)
+	player.spray_paint_changed.connect(_update_spray_paint)
 	_fill_style = StyleBoxFlat.new()
 	_fill_style.set_corner_radius_all(5)
 	update_ratio(0)
+	_update_spray_paint(player.spray_paint_remaining, player.spray_paint_max)
 	_level_manager = get_node_or_null("/root/LevelManager")
 	if _level_manager:
 		_level_manager.floor_changed.connect(_on_floor_changed)
@@ -62,3 +65,8 @@ func _on_floor_changed(_old_floor: int, new_floor: int, total_floors: int) -> vo
 func _on_level_changed(_old_level: int, _new_level: int) -> void:
 	if _level_manager:
 		refresh_floor_indicators(_level_manager.max_floors_per_level, _level_manager.current_floor_in_level)
+
+
+func _update_spray_paint(current: int, maximum: int) -> void:
+	spray_paint_bar.max_value = maximum
+	spray_paint_bar.value = current

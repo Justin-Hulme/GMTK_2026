@@ -7,8 +7,10 @@ extends CharacterBody2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var phone_screen: Control = $HUD/Control/PhoneIcon/PhoneScreen
 @onready var flashlight: PointLight2D = $Flashlight
+@onready var spray_bar: ProgressBar = $HUD/Control/spray_can/PanelContainer/MarginContainer/VBoxContainer/ProgressBar
 
 var score := 0
+signal spray_paint_changed(current, maximum)
 
 # HUD Vars
 signal coin_picked_up(amount)
@@ -18,12 +20,17 @@ var debt_value = 5000
 var powerup_dict = {"magnet": 0}
 
 var _coin_total := 0
+var spray_paint_max := 100
+var spray_paint_remaining := 100
+const SPRAY_PAINT_COLOR := Color8(0x73, 0x96, 0xE8, 0xB8)
+const SPRAY_PAINT_INTERVAL := 0.08
 
 var mouse_movement_enabled := true
 
 var lockpick_speed = 0;
 
 var _has_switched := false
+var _spray_paint_timer := 0.0
 
 const DIRECTIONS := ["east", "north_east", "north_west", "south", "south_east", "south_west", "west", "north"]
 
@@ -34,6 +41,7 @@ func _ready():
 	phone_icon.phone_opened.connect(disable_movement)
 	phone_icon.phone_closed.connect(enable_movement)
 	_build_sprite_frames("res://Assets/evilperson/no_money/animations/Walk/")
+	spray_paint_changed.emit(spray_paint_remaining, spray_paint_max)
 	
 func set_coin_total(value: int) -> void:
 	score = value
@@ -90,6 +98,13 @@ func _physics_process(delta: float) -> void:
 	else:
 		animated_sprite.play("idle_" + facing)
 
+	if mouse_movement_enabled and Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+		_spray_paint_timer -= delta
+		if _spray_paint_timer <= 0.0:
+			_try_spray_paint()
+	else:
+		_spray_paint_timer = 0.0
+
 func add_score(amount: int) -> void:
 	score += amount
 	set_coin_total(score)
@@ -99,6 +114,18 @@ func remove_score(amount: int) -> void:
 	if amount <= 0:
 		return
 	set_coin_total(maxi(score - amount, 0))
+
+
+func _try_spray_paint() -> void:
+	if spray_paint_remaining <= 0:
+		return
+	var level_loader := get_parent()
+	if level_loader == null or not level_loader.has_method("try_spray_paint"):
+		return
+	if level_loader.try_spray_paint(global_position, SPRAY_PAINT_COLOR):
+		spray_paint_remaining -= 1
+		_spray_paint_timer = SPRAY_PAINT_INTERVAL
+		spray_paint_changed.emit(spray_paint_remaining, spray_paint_max)
 	
 func get_score() -> int:
 	return score
