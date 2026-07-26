@@ -1,14 +1,32 @@
 extends Node
 
+const ROOM_SCENE_PATHS := [
+	"res://Rooms/deadends/room_bathroom.tscn",
+	"res://Rooms/deadends/room_office.tscn",
+	"res://Rooms/deadends/room_office_2.tscn",
+	"res://Rooms/deadends/room_printers.tscn",
+	"res://Rooms/fancy/room_spawn_1.tscn",
+	"res://Rooms/fancy/room_exit_1.tscn",
+	"res://Rooms/room_corridor_1.tscn",
+	"res://Rooms/room_corridor_2.tscn",
+	"res://Rooms/room_corridor_3_1.tscn",
+	"res://Rooms/room_corridor_3_2.tscn",
+	"res://Rooms/room_corridor_3_3.tscn",
+	"res://Rooms/room_corridor_3_4.tscn",
+	"res://Rooms/room_corridor_4_1.tscn",
+	"res://Rooms/room_corridor_4_2.tscn",
+	"res://Rooms/room_corridor_4_3.tscn",
+	"res://Rooms/room_corridor_4_4.tscn",
+	"res://Rooms/room_corridor_5.tscn",
+]
+
 var _tiles_by_path: Dictionary = {}
 var _all_tiles: Array[TileDefinition] = []
 
 
 func _enter_tree() -> void:
-	var door_regex := RegEx.new()
-	door_regex.compile('name\\s*=\\s*"door_([NSEW])"')
-	
-	_scan_path("res://Rooms/", door_regex)
+	for scene_path in ROOM_SCENE_PATHS:
+		_parse_scene(scene_path)
 	
 	if _all_tiles.is_empty():
 		push_error("[TileRegistry] No room tiles discovered in res://Rooms/")
@@ -56,32 +74,19 @@ func get_all_door_directions(tile: TileDefinition) -> Array[StringName]:
 	return directions
 
 
-func _scan_path(path: String, door_regex: RegEx) -> void:
-	var dir := DirAccess.open(path)
-	if not dir:
-		push_warning("[TileRegistry] Cannot open directory: " + path)
+func _parse_scene(scene_path: String) -> void:
+	var scene := load(scene_path) as PackedScene
+	if scene == null:
+		push_error("[TileRegistry] Failed to load scene: " + scene_path)
+		return
+
+	var instance := scene.instantiate()
+	if instance == null:
+		push_error("[TileRegistry] Failed to instantiate scene: " + scene_path)
 		return
 	
-	for file in dir.get_files():
-		if not file.ends_with(".tscn"):
-			continue
-		
-		var full_path = path.path_join(file)
-		_parse_scene(full_path, door_regex)
-	
-	for subdir in dir.get_directories():
-		var sub_dir_path := path.path_join(subdir)
-		_scan_path(sub_dir_path, door_regex)
-
-
-func _parse_scene(scene_path: String, door_regex: RegEx) -> void:
-	var text := FileAccess.get_file_as_string(scene_path)
-	if not text or text.is_empty():
-		push_error("[TileRegistry] Failed to read scene: " + scene_path)
-		return
-	
-	var result := door_regex.search(text)
-	if not result:
+	var doors := _extract_door_directions(instance)
+	if doors.is_empty():
 		push_warning("[TileRegistry] No door nodes found in: " + scene_path)
 		return
 	
@@ -89,8 +94,8 @@ func _parse_scene(scene_path: String, door_regex: RegEx) -> void:
 	tile.scene_path = scene_path
 	tile.name = _name_from_scene(scene_path)
 	
-	for m in door_regex.search_all(text):
-		match m.strings[1]:
+	for direction in doors:
+		match direction:
 			"N": tile.door_mask_n = 1
 			"E": tile.door_mask_e = 1
 			"S": tile.door_mask_s = 1
@@ -102,6 +107,22 @@ func _parse_scene(scene_path: String, door_regex: RegEx) -> void:
 	
 	_tiles_by_path[scene_path] = tile
 	_all_tiles.append(tile)
+
+
+func _extract_door_directions(root: Node) -> Array[String]:
+	var doors: Array[String] = []
+	_collect_door_directions(root, doors)
+	return doors
+
+
+func _collect_door_directions(node: Node, doors: Array[String]) -> void:
+	var node_name := node.name.to_upper()
+	if node_name.begins_with("DOOR_"):
+		var direction := node_name.trim_prefix("DOOR_").substr(0, 1)
+		if direction in ["N", "S", "E", "W"] and not doors.has(direction):
+			doors.append(direction)
+	for child in node.get_children():
+		_collect_door_directions(child, doors)
 
 
 func _name_from_scene(scene_path: String) -> StringName:

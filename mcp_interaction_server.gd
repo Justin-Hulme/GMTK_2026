@@ -18,6 +18,8 @@ var _held_keys: Dictionary = {}
 func _ready() -> void:
 	# Ensure MCP server keeps processing even when game is paused
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	if OS.has_feature("web"):
+		return
 	_init_key_map()
 	_server = TCPServer.new()
 	var err: int = _server.listen(PORT, "127.0.0.1")

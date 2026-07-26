@@ -4,6 +4,33 @@ const GRID_WIDTH := 10
 const GRID_HEIGHT := 6
 const MAX_ATTEMPTS := 50
 const MIN_EXIT_DISTANCE := 6
+const DEADEND_SCENE_PATHS := [
+	"res://Rooms/deadends/room_bathroom.tscn",
+	"res://Rooms/deadends/room_office.tscn",
+	"res://Rooms/deadends/room_office_2.tscn",
+	"res://Rooms/deadends/room_printers.tscn",
+]
+const SPAWN_SCENE_PATHS := [
+	"res://Rooms/fancy/room_spawn_1.tscn",
+	"res://Rooms/room_spawn_1.tscn",
+]
+const EXIT_SCENE_PATHS := [
+	"res://Rooms/fancy/room_exit_1.tscn",
+	"res://Rooms/room_exit_1.tscn",
+]
+const CORRIDOR_SCENE_PATHS := [
+	"res://Rooms/room_corridor_1.tscn",
+	"res://Rooms/room_corridor_2.tscn",
+	"res://Rooms/room_corridor_3_1.tscn",
+	"res://Rooms/room_corridor_3_2.tscn",
+	"res://Rooms/room_corridor_3_3.tscn",
+	"res://Rooms/room_corridor_3_4.tscn",
+	"res://Rooms/room_corridor_4_1.tscn",
+	"res://Rooms/room_corridor_4_2.tscn",
+	"res://Rooms/room_corridor_4_3.tscn",
+	"res://Rooms/room_corridor_4_4.tscn",
+	"res://Rooms/room_corridor_5.tscn",
+]
 
 var rng: RandomNumberGenerator
 var grid: Array[Array] = []
@@ -122,48 +149,25 @@ func _init_rng(seed_val: int) -> void:
 # ===================== Read Room Files =====================
 
 func _read_room_files() -> void:
-	var dir := DirAccess.open("res://Rooms/deadends/")
-	if not dir:
-		print("[FloorGenerator] ERROR: Cannot open res://Rooms/deadends/")
-		return
-	
-	dir.list_dir_begin()
-	var file_name = dir.get_next()
-	
-	while file_name != "":
-		if file_name.ends_with(".tscn"):
-			var room_info = _parse_room_scene("res://Rooms/deadends/" + file_name)
-			if room_info.file_path != "":
-				room_definitions.append(room_info)
-		
-		file_name = dir.get_next()
+	for scene_path in DEADEND_SCENE_PATHS:
+		var room_info = _parse_room_scene(scene_path)
+		if room_info.file_path != "":
+			room_definitions.append(room_info)
 
 
 func _read_spawn_exit() -> void:
-	# Read spawn tile from known locations
-	var spawn_paths := [
-		"res://Rooms/fancy/room_spawn_1.tscn",
-		"res://Rooms/room_spawn_1.tscn"
-	]
-	
-	for path in spawn_paths:
-		if FileAccess.file_exists(path):
-			spawn_def = _parse_room_scene(path)
+	for path in SPAWN_SCENE_PATHS:
+		spawn_def = _parse_room_scene(path)
+		if spawn_def.file_path != "":
 			break
 	
 	if spawn_def.is_empty() or ("file_path" in spawn_def and spawn_def.file_path == ""):
 		print("[FloorGenerator] ERROR: Spawn tile not found")
 		return
 	
-	# Read exit tile from known locations
-	var exit_paths := [
-		"res://Rooms/fancy/room_exit_1.tscn",
-		"res://Rooms/room_exit_1.tscn"
-	]
-	
-	for path in exit_paths:
-		if FileAccess.file_exists(path):
-			exit_def = _parse_room_scene(path)
+	for path in EXIT_SCENE_PATHS:
+		exit_def = _parse_room_scene(path)
+		if exit_def.file_path != "":
 			break
 	
 	if exit_def.is_empty() or ("file_path" in exit_def and exit_def.file_path == ""):
@@ -181,23 +185,18 @@ func _parse_room_scene(scene_path: String) -> Dictionary:
 		"door_mask_w": 0
 	}
 	
-	if not FileAccess.file_exists(scene_path):
+	var scene := load(scene_path) as PackedScene
+	if scene == null:
 		return info
-	
-	var text := FileAccess.get_file_as_string(scene_path)
-	if not text or text.is_empty():
+
+	var instance := scene.instantiate()
+	if instance == null:
 		return info
 	
 	info.file_path = scene_path
 	info.name = scene_path.get_file().trim_suffix(".tscn")
-	
-	# Dynamically extract door directions from node names like "door_W", "door_North"
-	var regex := RegEx.new()
-	regex.compile('name="door_([A-Za-z]+)"')
-	var results := regex.search_all(text)
-	
-	for result in results:
-		var direction = result.strings[1].to_upper().substr(0, 1)
+
+	for direction in _extract_door_directions(instance):
 		if direction in ["N", "S", "E", "W"]:
 			info.doors.append(direction)
 			match direction:
@@ -207,6 +206,22 @@ func _parse_room_scene(scene_path: String) -> Dictionary:
 				"W": info.door_mask_w = 1
 	
 	return info
+
+
+func _extract_door_directions(root: Node) -> Array[String]:
+	var doors: Array[String] = []
+	_collect_door_directions(root, doors)
+	return doors
+
+
+func _collect_door_directions(node: Node, doors: Array[String]) -> void:
+	var node_name := node.name.to_upper()
+	if node_name.begins_with("DOOR_"):
+		var direction := node_name.trim_prefix("DOOR_").substr(0, 1)
+		if direction in ["N", "S", "E", "W"] and not doors.has(direction):
+			doors.append(direction)
+	for child in node.get_children():
+		_collect_door_directions(child, doors)
 
 
 # ===================== Place Rooms =====================
@@ -492,20 +507,11 @@ func _instantiate_visuals() -> Node2D:
 	
 	# Load corridor scenes based on door configurations
 	var corridor_scenes := {}
-	var corridor_dir := DirAccess.open("res://Rooms/")
-	if corridor_dir:
-		corridor_dir.list_dir_begin()
-		var file_name = corridor_dir.get_next()
-		while file_name != "":
-			if file_name.begins_with("room_corridor_") and file_name.ends_with(".tscn"):
-				var scene_path = "res://Rooms/" + file_name
-				var loaded_scene = load(scene_path) as PackedScene
-				if loaded_scene:
-					# Extract door directions from the scene
-					var doors := _extract_doors_from_scene(loaded_scene, scene_path)
-					corridor_scenes[doors] = loaded_scene
-			
-			file_name = corridor_dir.get_next()
+	for scene_path in CORRIDOR_SCENE_PATHS:
+		var loaded_scene = load(scene_path) as PackedScene
+		if loaded_scene:
+			var doors := _extract_doors_from_scene(loaded_scene)
+			corridor_scenes[doors] = loaded_scene
 	
 	# Instantiate rooms
 	for x in range(GRID_WIDTH):
@@ -552,20 +558,12 @@ func _instantiate_visuals() -> Node2D:
 	return root
 
 
-func _extract_doors_from_scene(_scene: PackedScene, scene_path: String) -> String:
-	var text := FileAccess.get_file_as_string(scene_path)
-	if not text or text.is_empty():
+func _extract_doors_from_scene(scene: PackedScene) -> String:
+	var instance := scene.instantiate()
+	if instance == null:
 		return ""
-	
-	var regex := RegEx.new()
-	regex.compile('name="door_([A-Za-z]+)"')
-	var results := regex.search_all(text)
-	
-	var doors := []
-	for result in results:
-		var direction = result.strings[1].to_upper().substr(0, 1)
-		if direction in ["N", "S", "E", "W"]:
-			doors.append(direction)
+
+	var doors := _extract_door_directions(instance)
 	
 	# Sort directions alphabetically for consistent key generation
 	doors.sort()
