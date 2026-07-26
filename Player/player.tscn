@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://2c1gesmmik6q"]
 
 [ext_resource type="Script" uid="uid://cqgyq0ahsig01" path="res://Player/player.gd" id="1_fhl08"]
-[ext_resource type="Texture2D" uid="uid://caftd01t3musl" path="res://Assets/Flashlight(1).png" id="2_5htga"]
+[ext_resource type="Texture2D" uid="uid://67styg0gyepx" path="res://Assets/Flashlight(1).png" id="2_5htga"]
 [ext_resource type="Texture2D" uid="uid://che6jqmkaod7p" path="res://Player/Character/Walking_3.png" id="2_vtle1"]
 [ext_resource type="Texture2D" uid="uid://bebbly6tpndvy" path="res://Player/Character/Walking_1.png" id="3_od3ui"]
 [ext_resource type="Texture2D" uid="uid://b6hl4f2oxgd1n" path="res://Player/Character/Walking_2.png" id="4_00tjw"]
@@ -9,8 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://cfjjw5bxnixok" path="res://Player/Character/Walking_5.png" id="6_apopc"]
 [ext_resource type="Script" uid="uid://7logwprssfvo" path="res://Player/HUD/HUD.gd" id="7_od3ui"]
 [ext_resource type="Theme" uid="uid://bledfm0mcnnu4" path="res://Assets/main_theme.tres" id="8_od3ui"]
-[ext_resource type="Texture2D" uid="uid://rjrp7edpnvgw" path="res://Assets/Money/Coin_HUD.png" id="8_x3vf3"]
-[ext_resource type="Texture2D" uid="uid://bng5ybr0gvvex" path="res://Assets/Money/Debt_HUD.png" id="10_apopc"]
+[ext_resource type="Texture2D" uid="uid://dxkph3152qen" path="res://Assets/Money/Coin_HUD.png" id="8_x3vf3"]
+[ext_resource type="Texture2D" uid="uid://ci5f88onsf0dh" path="res://Assets/Money/Debt_HUD.png" id="10_apopc"]
 [ext_resource type="PackedScene" uid="uid://drgikraumu8sr" path="res://Player/HUD/floor_indicator.tscn" id="11_apopc"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ab854"]
@@ -54,11 +54,11 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_47aoe"]
-radius = 22.0
-height = 56.0
+radius = 8.8
+height = 29.9
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_e76su"]
-radius = 80.0
+radius = 35.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_od3ui"]
 bg_color = Color(0.1593911, 0.1593911, 0.1593911, 0.8784314)
@@ -83,13 +83,12 @@ offset = Vector2(20.265, -281.54)
 position = Vector2(0, -1)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=728315925]
-scale = Vector2(0.4, 0.4)
+scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_ab854")
 animation = &"walking"
 frame_progress = 0.39065647
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1967341823]
-position = Vector2(0, -3)
 rotation = 1.5707964
 scale = Vector2(0.99999994, 0.99999994)
 shape = SubResource("CapsuleShape2D_47aoe")

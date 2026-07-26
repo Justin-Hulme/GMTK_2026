@@ -102,21 +102,21 @@ func _find_default_spawn(config: LevelConfig) -> Vector2i:
 func _generate_critical_path_bfs(start: Vector2i, max_depth: int) -> void:
 	grid[start.x][start.y] = Cell.START
 	
-	var queue := [[start, 0]]
+	var queue: Array[Array] = [[start, 0]]
 	
 	while not queue.is_empty():
-		var current_data = queue.pop_front()
-		var current_pos = current_data[0]
-		var depth = current_data[1]
+		var current_data := queue.pop_front() as Array
+		var current_pos := current_data[0] as Vector2i
+		var depth := int(current_data[1])
 		
 		if depth >= max_depth:
 			continue
 		
-		var neighbors := _get_valid_empty_neighbors(current_pos)
+		var neighbors: Array[Vector2i] = _get_valid_empty_neighbors(current_pos)
 		if neighbors.is_empty():
 			continue
 		
-		var next_pos = pick_random(neighbors)
+		var next_pos := pick_random(neighbors) as Vector2i
 		connect_rooms(current_pos, next_pos)
 		grid[next_pos.x][next_pos.y] = Cell.CRITICAL
 		
@@ -124,9 +124,9 @@ func _generate_critical_path_bfs(start: Vector2i, max_depth: int) -> void:
 
 
 func _get_valid_empty_neighbors(pos: Vector2i) -> Array[Vector2i]:
-	var neighbors := []
-	for dir in DIR_TO_DOOR.keys():
-		var next = pos + dir
+	var neighbors: Array[Vector2i] = []
+	for dir: Vector2i in DIR_TO_DOOR.keys():
+		var next: Vector2i = pos + dir
 		if _is_in_bounds(next) and grid[next.x][next.y] == Cell.EMPTY:
 			neighbors.push_back(next)
 	return neighbors
@@ -148,9 +148,9 @@ func _generate_branches(branch_ratio: float) -> void:
 		if placed >= target_branches:
 			break
 		
-		var neighbors := _get_valid_empty_neighbors(cell)
+		var neighbors: Array[Vector2i] = _get_valid_empty_neighbors(cell)
 		if not neighbors.is_empty():
-			var branch_pos = pick_random(neighbors)
+			var branch_pos := pick_random(neighbors) as Vector2i
 			connect_rooms(cell, branch_pos)
 			grid[branch_pos.x][branch_pos.y] = Cell.BRANCH
 			placed += 1
@@ -165,12 +165,12 @@ func mark_exit_room() -> void:
 	# Run BFS to compute distances from spawn
 	var dist := {}
 	dist[start] = 0
-	var queue := [start]
+	var queue: Array[Variant] = [start]
 	
 	while not queue.is_empty():
-		var pos = queue.pop_front()
-		for dir in DIR_TO_DOOR.keys():
-			var n = pos + dir
+		var pos := queue.pop_front() as Vector2i
+		for dir: Vector2i in DIR_TO_DOOR.keys():
+			var n: Vector2i = pos + dir
 			if _is_in_bounds(n) and grid[n.x][n.y] != Cell.EMPTY and not (n in dist):
 				dist[n] = dist[pos] + 1
 				queue.push_back(n)
@@ -183,9 +183,9 @@ func mark_exit_room() -> void:
 	
 	# Pick randomly from all CRITICAL cells at max depth (Option B)
 	var candidates := []
-	for pos in dist:
+	for pos in dist.keys():
 		if grid[pos.x][pos.y] == Cell.CRITICAL and dist[pos] == max_depth:
-			candidates.push_back(pos)
+			candidates.push_back(pos as Vector2i)
 	
 	if not candidates.is_empty():
 		var exit_cell = pick_random(candidates)
@@ -199,17 +199,17 @@ func _validate_connectivity() -> bool:
 		return false
 	
 	var visited := {}
-	var queue := [start]
+	var queue: Array[Variant] = [start]
 	
 	while not queue.is_empty():
-		var pos = queue.pop_front()
+		var pos := queue.pop_front() as Vector2i
 		if pos in visited:
 			continue
 		visited[pos] = true
 		
-		for dir in DIR_TO_DOOR.keys():
+		for dir: Vector2i in DIR_TO_DOOR.keys():
 			if doors[pos.x][pos.y] & DIR_TO_DOOR[dir]:
-				var neighbor := pos + dir
+				var neighbor: Vector2i = pos + dir
 				if _is_in_bounds(neighbor) and grid[neighbor.x][neighbor.y] != Cell.EMPTY:
 					queue.push_back(neighbor)
 	
@@ -223,39 +223,73 @@ func _validate_connectivity() -> bool:
 
 
 func _select_prefab(cell_type: Cell, pos: Vector2i) -> StringName:
-	"""Maps cell type to prefab template with exclusion rules."""
 	match cell_type:
 		Cell.START:
-			return &"room_spawn_1"
+			return &"Rooms/room_spawn_1"
 		
 		Cell.END:
-			return &"room_exit_1"
+			return &"Rooms/room_exit_1"
 		
-		Cell.CRITICAL:
-			var crit_neighbors := _count_critical_neighbors(pos)
-			if crit_neighbors >= 4:
-				return &"room_hub"
+		_:
+			var door_mask := int(doors[pos.x][pos.y])
+			if door_mask == Doors.NONE:
+				return &"Rooms/room_corridor_1"
 			
-			if crit_neighbors == 3:
-				return pick_random([&"room_crossroads_1", &"room_corridor_1"])
-			
-			return pick_random([&"room_corridor_1", &"room_corridor_2"])
-		
-		Cell.BRANCH:
-			var edge_dist := _distance_to_edge(pos)
-			if edge_dist <= 1:
-				return pick_random([&"deadends/room_printers", &"deadends/room_bathroom"])
-			
-			return pick_random([&"deadends/room_office", &"deadends/room_office_2"])
+			var name = _bitmask_to_prefab(door_mask)
+			if name != "":
+				return ("Rooms/" + name) as StringName
 	
 	# Fallback
-	return &"room_corridor_1"
+	return &"Rooms/room_corridor_1"
+
+
+func _bitmask_to_prefab(mask: int) -> String:
+	match mask:
+		# 4-way intersection
+		Doors.UP | Doors.LEFT | Doors.DOWN | Doors.RIGHT:
+			return "room_hub_1"
+		
+		# 3-way junctions (T-shape) — any 3 directions = crossroads
+		Doors.UP | Doors.LEFT | Doors.RIGHT, \
+		Doors.DOWN | Doors.LEFT | Doors.RIGHT, \
+		Doors.UP | Doors.LEFT | Doors.DOWN, \
+		Doors.UP | Doors.RIGHT | Doors.DOWN:
+			return "room_crossroads_1"
+		
+		# 2-way opposite connections (straight corridor)
+		Doors.UP | Doors.DOWN:
+			return "room_corridor_2"
+		
+		Doors.LEFT | Doors.RIGHT:
+			return "room_corridor_1"
+		
+		# 2-way adjacent connections (L-shaped junction — use crossroads)
+		Doors.UP | Doors.LEFT, \
+		Doors.UP | Doors.RIGHT, \
+		Doors.DOWN | Doors.LEFT, \
+		Doors.DOWN | Doors.RIGHT:
+			return "room_crossroads_1"
+		
+		# 1-way dead ends — pick based on direction so the door faces correctly
+		Doors.UP:
+			return "deadends/room_bathroom"
+		
+		Doors.DOWN:
+			return pick_random(["deadends/room_office", "deadends/room_office_2"])
+		
+		Doors.LEFT:
+			return "deadends/room_printers"
+		
+		Doors.RIGHT:
+			return "deadends/room_office"
+	
+	return ""
 
 
 func _count_critical_neighbors(pos: Vector2i) -> int:
 	var count := 0
-	for dir in DIR_TO_DOOR.keys():
-		var n = pos + dir
+	for dir: Vector2i in DIR_TO_DOOR.keys():
+		var n: Vector2i = pos + dir
 		if _is_in_bounds(n) and grid[n.x][n.y] == Cell.CRITICAL:
 			count += 1
 	return count
@@ -269,6 +303,7 @@ func _distance_to_edge(pos: Vector2i) -> int:
 
 
 func _instantiate_visuals(config: LevelConfig) -> Node2D:
+	const SCALE := 3.0
 	var root := Node2D.new()
 	
 	for x in range(grid.size()):
@@ -286,11 +321,14 @@ func _instantiate_visuals(config: LevelConfig) -> Node2D:
 			
 			var room_instance = room_scene.instantiate()
 			
-			# Convert grid position to world position (each cell = 8 tiles * 16px = 128px)
+			# Convert grid position to world position (each cell = 8 tiles * 16px = 128px), scaled up
 			var room_data = room_instance.get_node_or_null("RoomData")
-			var cell_w = 1 if not room_data else room_data.cell_width
-			var cell_h = 1 if not room_data else room_data.cell_height
-			room_instance.position = Vector2(x * cell_w * 128, y * cell_h * 128)
+			var cell_w: float = room_data.cell_width if room_data else 1.0
+			var cell_h: float = room_data.cell_height if room_data else 1.0
+			room_instance.position = Vector2(x * cell_w * 128.0 * SCALE, y * cell_h * 128.0 * SCALE)
+			
+			# Scale up for visibility
+			room_instance.scale = Vector2(SCALE, SCALE)
 			
 			root.add_child(room_instance)
 			
@@ -300,6 +338,16 @@ func _instantiate_visuals(config: LevelConfig) -> Node2D:
 				tile_map.add_to_group("wall")
 	
 	return root
+
+
+func _cell_name(cell_type: Cell) -> String:
+	match cell_type:
+		Cell.EMPTY: return "EMPTY"
+		Cell.START: return "START"
+		Cell.CRITICAL: return "CRITICAL"
+		Cell.BRANCH: return "BRANCH"
+		Cell.END: return "END"
+	return "?"
 
 
 func _find_start_cell() -> Vector2i:
