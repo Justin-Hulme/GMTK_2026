@@ -9,17 +9,17 @@ extends CharacterBody2D
 @onready var flashlight: PointLight2D = $Flashlight
 @onready var spray_bar: ProgressBar = $HUD/Control/spray_can/PanelContainer/MarginContainer/VBoxContainer/ProgressBar
 
-var score := 50000
+var score := 0
 signal spray_paint_changed(current, maximum)
 
 # HUD Vars
 signal coin_picked_up(amount)
 
-var debt_value = 5000
+var debt_value = 50000
 
 var powerup_dict = {"magnet": 0}
 
-var _coin_total := 50000
+var _coin_total := 0
 var spray_paint_max := 100
 var spray_paint_remaining := 100
 const SPRAY_PAINT_COLOR := Color8(0x73, 0x96, 0xE8, 0xB8)

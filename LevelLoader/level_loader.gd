@@ -20,9 +20,9 @@ const COIN_COPPER_WEIGHT := 60.0
 const MAX_NUM_SAFES := 4
 const SAFE_MARGIN := 25
 const SAFE_TARGETS := {
-	"easy": 20,
-	"medium": 20,
-	"hard": 40,
+	"easy": 1,
+	"medium": 1,
+	"hard": 2,
 }
 
 var floor_container: Node2D
@@ -31,7 +31,7 @@ var _coin_rng := RandomNumberGenerator.new()
 var _is_transitioning_floor := false
 var _current_exit_room: Node2D
 var _current_exit_area: Area2D
-var played_unlock
+var played_unlock := false
 
 func _ready() -> void:
 	_coin_rng.randomize()
@@ -55,7 +55,7 @@ func generate_floor(reset_floor_state: bool = false) -> void:
 
 	if is_instance_valid(floor_container):
 		floor_container.queue_free()
-
+	
 	floor_container = Node2D.new()
 	var floor_number := 1
 	if level_manager:
@@ -100,7 +100,6 @@ func generate_floor(reset_floor_state: bool = false) -> void:
 	connect_exit_signals()
 	_update_exit_unlock_state()
 	_is_transitioning_floor = false
-
 	# Camera2D already follows the player as a child node.
 	# Avoid overriding its global position here, which offsets the player off-center.
 

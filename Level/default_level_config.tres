@@ -9,5 +9,5 @@ grid_height = 6
 target_room_count = 16
 random_seed = 0
 total_floors = 3
-debt = 5000
+debt = 50000
 difficulty = "medium"
