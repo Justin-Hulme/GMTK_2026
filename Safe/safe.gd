@@ -13,6 +13,10 @@ var open = false
 var paid = false
 var timer_time = 0
 
+const SAFE_LOW_VALUE := 2000
+const SAFE_MID_VALUE := 4000
+const SAFE_HIGH_VALUE := 6000
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	detection_area.body_entered.connect(_on_body_entered)
@@ -56,13 +60,19 @@ func _on_timer_timeout():
 		
 		var score = 0
 		if roll < 0.6:
-			score = 200
+			score = SAFE_LOW_VALUE
 		elif roll < 0.9:
-			score = 400
+			score = SAFE_MID_VALUE
 		else:
-			score = 600
+			score = SAFE_HIGH_VALUE
 		
 		player_node.add_score(score)
+
+
+func get_remaining_value(can_open: bool = true) -> int:
+	if paid or not can_open:
+		return 0
+	return SAFE_LOW_VALUE
 
 func _on_body_entered(body):
 	if body.is_in_group("player"):
