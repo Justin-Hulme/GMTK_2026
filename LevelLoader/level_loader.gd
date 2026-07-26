@@ -15,8 +15,13 @@ const COIN_COPPER_VALUE := 10.0
 const COIN_GOLD_WEIGHT := 10.0
 const COIN_SILVER_WEIGHT := 30.0
 const COIN_COPPER_WEIGHT := 60.0
-const MAX_NUM_SAFES := 4
+const MAX_NUM_SAFES := 2
 const SAFE_MARGIN := 25
+const SAFE_TARGETS := {
+	"easy": 1,
+	"medium": 1,
+	"hard": 2,
+}
 
 var floor_container: Node2D
 var _coin_rng := RandomNumberGenerator.new()
@@ -59,8 +64,9 @@ func generate_floor(reset_floor_state: bool = false) -> void:
 	add_child(floor_container)
 	PropGridBuilder.build_for_generated_rooms(result.scene)
 	PropPlacerScript.populate_generated_rooms(result.scene)
+	SecurityCameraSpawner.populate_generated_rooms(result.scene, config)
 	_build_light_occluders(result.scene)
-	_spawn_map_coins.call_deferred(result.scene, _get_target_coin_count(config))
+	_spawn_map_coins.call_deferred(result.scene, _get_target_coin_count(config), config)
 	
 	# Move player to render on top of rooms (last child = drawn last)
 	var player_node = get_node_or_null("Player")
@@ -114,7 +120,7 @@ func _get_level_config() -> LevelConfig:
 	return LevelConfig.new()
 
 
-func _spawn_map_coins(generated_rooms: Node, target_coin_count: int) -> void:
+func _spawn_map_coins(generated_rooms: Node, target_coin_count: int, config: LevelConfig) -> void:
 	if not is_instance_valid(generated_rooms):
 		return
 	var candidates := _get_coin_spawn_candidates(generated_rooms)
@@ -131,26 +137,6 @@ func _spawn_map_coins(generated_rooms: Node, target_coin_count: int) -> void:
 			var pos: Vector2 = candidate
 			if _is_coin_spawn_blocked(pos, coin_shape):
 				continue
-			var coin = SAFE.instantiate()
-			coin.global_position = pos
-			coin.z_index = 10
-			generated_rooms.add_child(coin)
-			spawned += 1
-			spawned_here = true
-			break
-		if not spawned_here:
-			continue
-	coin_shape.radius = SAFE_MARGIN
-	spawned = 0
-	print("[LevelLoader] Spawned %d coins (target=%d)" % [spawned, target_coin_count])
-	
-	for _i in range(_coin_rng.randi_range(1, MAX_NUM_SAFES)):
-		var candidate = candidates[_coin_rng.randi_range(0, candidates.size() - 1)]
-		var spawned_here := false
-		for _attempt in range(20):
-			var pos: Vector2 = candidate
-			if _is_coin_spawn_blocked(pos, coin_shape):
-				continue
 			var coin = _pick_random_coin().instantiate()
 			coin.global_position = pos
 			coin.z_index = 0
@@ -160,7 +146,110 @@ func _spawn_map_coins(generated_rooms: Node, target_coin_count: int) -> void:
 			break
 		if not spawned_here:
 			continue
+	print("[LevelLoader] Spawned %d coins (target=%d)" % [spawned, target_coin_count])
+	_spawn_safes(generated_rooms, config)
+
+
+func _spawn_safes(generated_rooms: Node, config: LevelConfig) -> void:
+	var candidates := _get_safe_spawn_candidates(generated_rooms)
+	if candidates.is_empty():
+		print("[LevelLoader] Spawned 0 safes (target=%d)" % MAX_NUM_SAFES)
+		return
+	var safe_shape := CircleShape2D.new()
+	safe_shape.radius = SAFE_MARGIN
+	var target_safes := mini(MAX_NUM_SAFES, _get_target_safe_count(config, candidates.size()))
+	var spawned := 0
+	for candidate in candidates:
+		if spawned >= target_safes:
+			break
+		var spawned_here := false
+		for _attempt in range(20):
+			var pos: Vector2 = candidate.position
+			if _is_coin_spawn_blocked(pos, safe_shape):
+				continue
+			var safe = SAFE.instantiate()
+			safe.global_position = pos
+			safe.z_index = 10
+			generated_rooms.add_child(safe)
+			spawned += 1
+			spawned_here = true
+			break
+		if not spawned_here:
+			continue
 	print("[LevelLoader] Spawned %d safes (target=%d)" % [spawned, MAX_NUM_SAFES])
+
+
+func _get_target_safe_count(config: LevelConfig, candidate_count: int) -> int:
+	var target := int(SAFE_TARGETS.get(config.difficulty, SAFE_TARGETS["medium"]))
+	return clampi(target, 0, mini(MAX_NUM_SAFES, candidate_count))
+
+
+func _get_safe_spawn_candidates(generated_rooms: Node) -> Array:
+	var candidates := []
+	for child in generated_rooms.get_children():
+		if not (child is Node2D):
+			continue
+		var node2d := child as Node2D
+		if not node2d.name.begins_with("room_"):
+			continue
+		if node2d.name.begins_with("room_spawn") or node2d.name.begins_with("room_exit"):
+			continue
+		var prop_layer := node2d.get_node_or_null("PropLayer") as TileMapLayer
+		var floor_layer := node2d.get_node_or_null("TileMapLayer") as TileMapLayer
+		if floor_layer == null:
+			continue
+		candidates.append_array(_get_safe_points_from_tilemap(floor_layer, prop_layer))
+	candidates.shuffle()
+	return candidates
+
+
+func _get_safe_points_from_tilemap(tilemap: TileMapLayer, prop_layer: TileMapLayer) -> Array:
+	var points := []
+	var used_cells: Array[Vector2i] = tilemap.get_used_cells()
+	if used_cells.is_empty():
+		return points
+	var min_x := used_cells[0].x
+	var max_x := used_cells[0].x
+	var min_y := used_cells[0].y
+	var max_y := used_cells[0].y
+	for cell in used_cells:
+		min_x = mini(min_x, cell.x)
+		max_x = maxi(max_x, cell.x)
+		min_y = mini(min_y, cell.y)
+		max_y = maxi(max_y, cell.y)
+	for cell in used_cells:
+		if cell.x <= min_x or cell.x >= max_x or cell.y <= min_y or cell.y >= max_y:
+			continue
+		if not _tile_is_open_floor(tilemap, cell):
+			continue
+		if not _safe_footprint_is_clear(tilemap, prop_layer, cell):
+			continue
+		points.append({"position": tilemap.to_global(tilemap.map_to_local(cell)), "cell": cell})
+	return points
+
+
+func _safe_footprint_is_clear(tilemap: TileMapLayer, prop_layer: TileMapLayer, origin: Vector2i) -> bool:
+	for y in range(origin.y, origin.y + 2):
+		for x in range(origin.x, origin.x + 2):
+			var cell := Vector2i(x, y)
+			if not _tile_is_open_floor(tilemap, cell):
+				return false
+			if prop_layer != null and prop_layer.get_cell_source_id(cell) != -1:
+				return false
+	return true
+
+
+func _tile_is_open_floor(tilemap: TileMapLayer, cell: Vector2i) -> bool:
+	var source_id := tilemap.get_cell_source_id(cell)
+	if source_id == -1:
+		return false
+	var source := tilemap.tile_set.get_source(source_id)
+	if source == null or not source.has_method("get_tile_data"):
+		return false
+	var tile_data = source.get_tile_data(tilemap.get_cell_atlas_coords(cell), tilemap.get_cell_alternative_tile(cell))
+	if tile_data == null:
+		return false
+	return tile_data.get_collision_polygons_count(0) == 0
 
 
 func _build_light_occluders(root_node: Node) -> void:

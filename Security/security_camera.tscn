@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cv3gnttlu6id5" path="res://Security/security_camera.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://67styg0gyepx" path="res://Assets/Flashlight(1).png" id="2_beam"]
-[ext_resource type="Texture2D" uid="uid://dq6jmyn0orhsa" path="res://Assets/Sprites/floor_plan_1.png" id="3_hqhnk"]
+[ext_resource type="SpriteFrames" uid="uid://dpj34rfi81t5l" path="res://Security/camera_animations.tres" id="3_hqhnk"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_body"]
 polygon = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
@@ -13,11 +13,13 @@ script = ExtResource("1_script")
 [node name="BodyOccluder" type="LightOccluder2D" parent="." unique_id=142121546]
 occluder = SubResource("OccluderPolygon2D_body")
 
-[node name="BeamPolygon" type="Polygon2D" parent="." unique_id=2018338003]
-color = Color(0.35, 0.7, 1, 0.22)
-polygon = PackedVector2Array(0, 0, 110, -240, -70, -240)
+[node name="BeamRig" type="Node2D" parent="." unique_id=566100001]
 
-[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1205886457]
+[node name="BeamPolygon" type="Polygon2D" parent="BeamRig" unique_id=2018338003]
+color = Color(0.35, 0.7, 1, 0.22)
+polygon = PackedVector2Array(0, 0, 28, -36, 58, -92, 82, -148, 92, -202, 84, -220, 0, -232, -84, -220, -92, -202, -82, -148, -58, -92, -28, -36)
+
+[node name="PointLight2D" type="PointLight2D" parent="BeamRig" unique_id=1205886457]
 scale = Vector2(0.504, 0.25)
 color = Color(0.35, 0.7, 1, 1)
 energy = 1.35
@@ -26,7 +28,6 @@ shadow_enabled = true
 texture = ExtResource("2_beam")
 offset = Vector2(5.265, -281.54)
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=819069807]
-texture = ExtResource("3_hqhnk")
-region_enabled = true
-region_rect = Rect2(0, 48, 16, 16)
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1896533843]
+sprite_frames = ExtResource("3_hqhnk")
+animation = &"north"
