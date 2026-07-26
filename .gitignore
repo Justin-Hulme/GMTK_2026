@@ -9,6 +9,7 @@ export_presets.cfg
 export_credentials.cfg
 android/
 Build/
+build/
 
 # Godot 4.2+ specific ignores
 ~*.dll
