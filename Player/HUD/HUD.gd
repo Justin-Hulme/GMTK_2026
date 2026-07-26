@@ -3,6 +3,7 @@ extends CanvasLayer
 const FloorIndicatorScene = preload("res://Player/HUD/floor_indicator.tscn")
 const FLOOR_INDICATOR_SPACING := 44.0
 
+
 @onready var player: CharacterBody2D = $".."
 
 @onready var debt_amount_value: Label = $Control/coin_to_debt/PanelContainer/MarginContainer/HBoxContainer/Debt_H/debt_amount_value

@@ -41,7 +41,7 @@ func generate_floor(reset_floor_state: bool = false) -> void:
 
 	if is_instance_valid(floor_container):
 		floor_container.queue_free()
-	
+
 	floor_container = Node2D.new()
 	var floor_number := 1
 	if level_manager:
@@ -64,7 +64,7 @@ func generate_floor(reset_floor_state: bool = false) -> void:
 		var hud = player_node.get_node_or_null("HUD") if player_node else null
 		if hud and hud.has_method("refresh_floor_indicators"):
 			hud.refresh_floor_indicators(level_manager.max_floors_per_level, level_manager.current_floor_in_level)
-	
+
 	# Position player at spawn grid position using actual room cell size (384x384)
 	var spawn_grid_pos := Vector2i(0, 0)
 	if "spawn_grid" in result:
@@ -78,7 +78,7 @@ func generate_floor(reset_floor_state: bool = false) -> void:
 
 	connect_exit_signals()
 	_is_transitioning_floor = false
-	
+
 	# Camera2D already follows the player as a child node.
 	# Avoid overriding its global position here, which offsets the player off-center.
 
@@ -336,3 +336,8 @@ func connect_exit_signals() -> void:
 	for area in exit_areas:
 		if not area.body_entered.is_connected(_on_exit_body_entered):
 			area.body_entered.connect(_on_exit_body_entered)
+
+
+
+
+

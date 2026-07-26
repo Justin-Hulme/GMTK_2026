@@ -19,7 +19,7 @@ func _ready():
 	player.coin_picked_up.connect(_on_money_changed)
 	button.pressed.connect(_on_button_pressed)
 	_on_money_changed(player.get_coin_total())
-	
+
 func _on_button_pressed():
 	if not player.can_afford_upgrade(upgrades[upgrade_pointer]):
 		button.disabled = true
