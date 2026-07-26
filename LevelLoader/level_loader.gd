@@ -4,6 +4,7 @@ const FloorGenerator = preload("res://Level/floor_generator.gd")
 const COIN_GOLD = preload("res://Coin/coin_gold.tscn")
 const COIN_SILVER = preload("res://Coin/coin_silver.tscn")
 const COIN_COPPER = preload("res://Coin/coin_copper.tscn")
+const SAFE = preload("res://Safe/safe.tscn")
 const PropPlacerScript = preload("res://Prop/prop_placer.gd")
 
 const CELL_SIZE := 384.0
@@ -14,6 +15,8 @@ const COIN_COPPER_VALUE := 10.0
 const COIN_GOLD_WEIGHT := 10.0
 const COIN_SILVER_WEIGHT := 30.0
 const COIN_COPPER_WEIGHT := 60.0
+const MAX_NUM_SAFES := 4
+const SAFE_MARGIN := 25
 
 var floor_container: Node2D
 var _coin_rng := RandomNumberGenerator.new()
@@ -128,7 +131,7 @@ func _spawn_map_coins(generated_rooms: Node, target_coin_count: int) -> void:
 			var pos: Vector2 = candidate
 			if _is_coin_spawn_blocked(pos, coin_shape):
 				continue
-			var coin = _pick_random_coin().instantiate()
+			var coin = SAFE.instantiate()
 			coin.global_position = pos
 			coin.z_index = 10
 			generated_rooms.add_child(coin)
@@ -137,7 +140,27 @@ func _spawn_map_coins(generated_rooms: Node, target_coin_count: int) -> void:
 			break
 		if not spawned_here:
 			continue
+	coin_shape.radius = SAFE_MARGIN
+	spawned = 0
 	print("[LevelLoader] Spawned %d coins (target=%d)" % [spawned, target_coin_count])
+	
+	for _i in range(_coin_rng.randi_range(1, MAX_NUM_SAFES)):
+		var candidate = candidates[_coin_rng.randi_range(0, candidates.size() - 1)]
+		var spawned_here := false
+		for _attempt in range(20):
+			var pos: Vector2 = candidate
+			if _is_coin_spawn_blocked(pos, coin_shape):
+				continue
+			var coin = _pick_random_coin().instantiate()
+			coin.global_position = pos
+			coin.z_index = 0
+			generated_rooms.add_child(coin)
+			spawned += 1
+			spawned_here = true
+			break
+		if not spawned_here:
+			continue
+	print("[LevelLoader] Spawned %d safes (target=%d)" % [spawned, MAX_NUM_SAFES])
 
 
 func _build_light_occluders(root_node: Node) -> void:

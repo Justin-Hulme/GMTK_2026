@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://bfpblry3e6y1i"]
+
+[ext_resource type="Script" uid="uid://kdqcl4uyxwhe" path="res://Safe/safe.gd" id="1_lfkv6"]
+[ext_resource type="Texture2D" uid="uid://cbltlmddqhjk" path="res://Assets/Furniture_Office_Equipment_Set/safe_closed.png" id="2_1o67c"]
+[ext_resource type="Texture2D" uid="uid://dbae03ebuopyv" path="res://Assets/Furniture_Office_Equipment_Set/safe_open.png" id="2_bgj2f"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e76su"]
+size = Vector2(23, 9)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uvjlu"]
+size = Vector2(17, 19)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_h8ivj"]
+polygon = PackedVector2Array(-48.99999, 324, -48.99999, 318, -48.99999, 305, -65.999985, 305, -65.999985, 324)
+
+[node name="Safe" type="Node2D" unique_id=791682041]
+scale = Vector2(2, 2)
+script = ExtResource("1_lfkv6")
+open_sprite = ExtResource("2_bgj2f")
+close_sprite = ExtResource("2_1o67c")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=761476663]
+texture = ExtResource("2_1o67c")
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=1023387581]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=519688060]
+position = Vector2(-2, 8)
+shape = SubResource("RectangleShape2D_e76su")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1079648324]
+position = Vector2(55, -320)
+scale = Vector2(1.0000001, 1)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D" unique_id=1762939047]
+position = Vector2(-56.999992, 315)
+shape = SubResource("RectangleShape2D_uvjlu")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="StaticBody2D" unique_id=1918847329]
+scale = Vector2(1.0000001, 1)
+occluder = SubResource("OccluderPolygon2D_h8ivj")
