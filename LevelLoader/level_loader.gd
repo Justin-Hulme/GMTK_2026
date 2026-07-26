@@ -4,6 +4,7 @@ const FloorGenerator = preload("res://Level/floor_generator.gd")
 const COIN_GOLD = preload("res://Coin/coin_gold.tscn")
 const COIN_SILVER = preload("res://Coin/coin_silver.tscn")
 const COIN_COPPER = preload("res://Coin/coin_copper.tscn")
+const PropPlacerScript = preload("res://Prop/prop_placer.gd")
 
 const CELL_SIZE := 384.0
 const COIN_MARGIN := 48.0
@@ -53,6 +54,8 @@ func generate_floor(reset_floor_state: bool = false) -> void:
 	result.scene.name = "generated_rooms"
 	floor_container.add_child(result.scene)
 	add_child(floor_container)
+	PropGridBuilder.build_for_generated_rooms(result.scene)
+	PropPlacerScript.populate_generated_rooms(result.scene)
 	_build_light_occluders(result.scene)
 	_spawn_map_coins.call_deferred(result.scene, _get_target_coin_count(config))
 	
