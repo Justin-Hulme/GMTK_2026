@@ -2,11 +2,6 @@
 
 [ext_resource type="Script" uid="uid://cqgyq0ahsig01" path="res://Player/player.gd" id="1_fhl08"]
 [ext_resource type="Texture2D" uid="uid://67styg0gyepx" path="res://Assets/Flashlight(1).png" id="2_5htga"]
-[ext_resource type="Texture2D" uid="uid://che6jqmkaod7p" path="res://Player/Character/Walking_3.png" id="2_vtle1"]
-[ext_resource type="Texture2D" uid="uid://bebbly6tpndvy" path="res://Player/Character/Walking_1.png" id="3_od3ui"]
-[ext_resource type="Texture2D" uid="uid://b6hl4f2oxgd1n" path="res://Player/Character/Walking_2.png" id="4_00tjw"]
-[ext_resource type="Texture2D" uid="uid://by5y37xu3umjh" path="res://Player/Character/Walking_4.png" id="5_x3vf3"]
-[ext_resource type="Texture2D" uid="uid://cfjjw5bxnixok" path="res://Player/Character/Walking_5.png" id="6_apopc"]
 [ext_resource type="Script" uid="uid://7logwprssfvo" path="res://Player/HUD/HUD.gd" id="7_od3ui"]
 [ext_resource type="Theme" uid="uid://bledfm0mcnnu4" path="res://Assets/main_theme.tres" id="8_od3ui"]
 [ext_resource type="Texture2D" uid="uid://dxkph3152qen" path="res://Assets/Money/Coin_HUD.png" id="8_x3vf3"]
@@ -14,45 +9,151 @@
 [ext_resource type="PackedScene" uid="uid://drgikraumu8sr" path="res://Player/HUD/floor_indicator.tscn" id="11_apopc"]
 [ext_resource type="PackedScene" path="res://Player/HUD/phone_screen.tscn" id="12_phone"]
 [ext_resource type="PackedScene" path="res://Player/HUD/phone_icon.tscn" id="13_phone"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/north/frame_000.png" id="walk_north_0"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/north/frame_001.png" id="walk_north_1"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/north/frame_002.png" id="walk_north_2"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/north/frame_003.png" id="walk_north_3"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/north/frame_004.png" id="walk_north_4"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/north/frame_005.png" id="walk_north_5"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/south/frame_000.png" id="walk_south_0"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/south/frame_001.png" id="walk_south_1"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/south/frame_002.png" id="walk_south_2"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/south/frame_003.png" id="walk_south_3"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/south/frame_004.png" id="walk_south_4"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/south/frame_005.png" id="walk_south_5"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/east/frame_000.png" id="walk_east_0"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/east/frame_001.png" id="walk_east_1"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/east/frame_002.png" id="walk_east_2"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/east/frame_003.png" id="walk_east_3"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/east/frame_004.png" id="walk_east_4"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/east/frame_005.png" id="walk_east_5"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/west/frame_000.png" id="walk_west_0"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/west/frame_001.png" id="walk_west_1"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/west/frame_002.png" id="walk_west_2"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/west/frame_003.png" id="walk_west_3"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/west/frame_004.png" id="walk_west_4"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/west/frame_005.png" id="walk_west_5"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/north-east/frame_000.png" id="walk_north_east_0"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/north-east/frame_001.png" id="walk_north_east_1"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/north-east/frame_002.png" id="walk_north_east_2"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/north-east/frame_003.png" id="walk_north_east_3"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/north-east/frame_004.png" id="walk_north_east_4"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/north-east/frame_005.png" id="walk_north_east_5"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/north-west/frame_000.png" id="walk_north_west_0"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/north-west/frame_001.png" id="walk_north_west_1"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/north-west/frame_002.png" id="walk_north_west_2"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/north-west/frame_003.png" id="walk_north_west_3"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/north-west/frame_004.png" id="walk_north_west_4"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/north-west/frame_005.png" id="walk_north_west_5"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/south-east/frame_000.png" id="walk_south_east_0"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/south-east/frame_001.png" id="walk_south_east_1"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/south-east/frame_002.png" id="walk_south_east_2"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/south-east/frame_003.png" id="walk_south_east_3"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/south-east/frame_004.png" id="walk_south_east_4"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/south-east/frame_005.png" id="walk_south_east_5"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/south-west/frame_000.png" id="walk_south_west_0"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/south-west/frame_001.png" id="walk_south_west_1"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/south-west/frame_002.png" id="walk_south_west_2"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/south-west/frame_003.png" id="walk_south_west_3"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/south-west/frame_004.png" id="walk_south_west_4"]
+[ext_resource type="Texture2D" path="res://PeronYuh/personYUH/animations/Walk/south-west/frame_005.png" id="walk_south_west_5"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ab854"]
 animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("2_vtle1")
-}],
+"frames": [{"duration": 1.0, "texture": ExtResource("walk_north_0")}],
 "loop": 1,
-"name": &"idle",
+"name": &"idle_north",
 "speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("3_od3ui")
-}, {
-"duration": 1.0,
-"texture": ExtResource("4_00tjw")
-}, {
-"duration": 1.0,
-"texture": ExtResource("2_vtle1")
-}, {
-"duration": 1.0,
-"texture": ExtResource("5_x3vf3")
-}, {
-"duration": 1.0,
-"texture": ExtResource("6_apopc")
-}, {
-"duration": 1.0,
-"texture": ExtResource("5_x3vf3")
-}, {
-"duration": 1.0,
-"texture": ExtResource("2_vtle1")
-}, {
-"duration": 1.0,
-"texture": ExtResource("4_00tjw")
-}],
+},
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("walk_south_0")}],
 "loop": 1,
-"name": &"walking",
-"speed": 15.0
+"name": &"idle_south",
+"speed": 5.0
+},
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("walk_east_0")}],
+"loop": 1,
+"name": &"idle_east",
+"speed": 5.0
+},
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("walk_west_0")}],
+"loop": 1,
+"name": &"idle_west",
+"speed": 5.0
+},
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("walk_north_east_0")}],
+"loop": 1,
+"name": &"idle_north_east",
+"speed": 5.0
+},
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("walk_north_west_0")}],
+"loop": 1,
+"name": &"idle_north_west",
+"speed": 5.0
+},
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("walk_south_east_0")}],
+"loop": 1,
+"name": &"idle_south_east",
+"speed": 5.0
+},
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("walk_south_west_0")}],
+"loop": 1,
+"name": &"idle_south_west",
+"speed": 5.0
+},
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("walk_north_0")}, {"duration": 1.0, "texture": ExtResource("walk_north_1")}, {"duration": 1.0, "texture": ExtResource("walk_north_2")}, {"duration": 1.0, "texture": ExtResource("walk_north_3")}, {"duration": 1.0, "texture": ExtResource("walk_north_4")}, {"duration": 1.0, "texture": ExtResource("walk_north_5")}],
+"loop": 1,
+"name": &"walk_north",
+"speed": 12.0
+},
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("walk_south_0")}, {"duration": 1.0, "texture": ExtResource("walk_south_1")}, {"duration": 1.0, "texture": ExtResource("walk_south_2")}, {"duration": 1.0, "texture": ExtResource("walk_south_3")}, {"duration": 1.0, "texture": ExtResource("walk_south_4")}, {"duration": 1.0, "texture": ExtResource("walk_south_5")}],
+"loop": 1,
+"name": &"walk_south",
+"speed": 12.0
+},
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("walk_east_0")}, {"duration": 1.0, "texture": ExtResource("walk_east_1")}, {"duration": 1.0, "texture": ExtResource("walk_east_2")}, {"duration": 1.0, "texture": ExtResource("walk_east_3")}, {"duration": 1.0, "texture": ExtResource("walk_east_4")}, {"duration": 1.0, "texture": ExtResource("walk_east_5")}],
+"loop": 1,
+"name": &"walk_east",
+"speed": 12.0
+},
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("walk_west_0")}, {"duration": 1.0, "texture": ExtResource("walk_west_1")}, {"duration": 1.0, "texture": ExtResource("walk_west_2")}, {"duration": 1.0, "texture": ExtResource("walk_west_3")}, {"duration": 1.0, "texture": ExtResource("walk_west_4")}, {"duration": 1.0, "texture": ExtResource("walk_west_5")}],
+"loop": 1,
+"name": &"walk_west",
+"speed": 12.0
+},
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("walk_north_east_0")}, {"duration": 1.0, "texture": ExtResource("walk_north_east_1")}, {"duration": 1.0, "texture": ExtResource("walk_north_east_2")}, {"duration": 1.0, "texture": ExtResource("walk_north_east_3")}, {"duration": 1.0, "texture": ExtResource("walk_north_east_4")}, {"duration": 1.0, "texture": ExtResource("walk_north_east_5")}],
+"loop": 1,
+"name": &"walk_north_east",
+"speed": 12.0
+},
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("walk_north_west_0")}, {"duration": 1.0, "texture": ExtResource("walk_north_west_1")}, {"duration": 1.0, "texture": ExtResource("walk_north_west_2")}, {"duration": 1.0, "texture": ExtResource("walk_north_west_3")}, {"duration": 1.0, "texture": ExtResource("walk_north_west_4")}, {"duration": 1.0, "texture": ExtResource("walk_north_west_5")}],
+"loop": 1,
+"name": &"walk_north_west",
+"speed": 12.0
+},
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("walk_south_east_0")}, {"duration": 1.0, "texture": ExtResource("walk_south_east_1")}, {"duration": 1.0, "texture": ExtResource("walk_south_east_2")}, {"duration": 1.0, "texture": ExtResource("walk_south_east_3")}, {"duration": 1.0, "texture": ExtResource("walk_south_east_4")}, {"duration": 1.0, "texture": ExtResource("walk_south_east_5")}],
+"loop": 1,
+"name": &"walk_south_east",
+"speed": 12.0
+},
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("walk_south_west_0")}, {"duration": 1.0, "texture": ExtResource("walk_south_west_1")}, {"duration": 1.0, "texture": ExtResource("walk_south_west_2")}, {"duration": 1.0, "texture": ExtResource("walk_south_west_3")}, {"duration": 1.0, "texture": ExtResource("walk_south_west_4")}, {"duration": 1.0, "texture": ExtResource("walk_south_west_5")}],
+"loop": 1,
+"name": &"walk_south_west",
+"speed": 12.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_47aoe"]
@@ -85,10 +186,9 @@ offset = Vector2(20.265, -281.54)
 position = Vector2(0, -1)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=728315925]
-scale = Vector2(0.2, 0.2)
+scale = Vector2(1.4, 1.4)
 sprite_frames = SubResource("SpriteFrames_ab854")
-animation = &"walking"
-frame_progress = 0.39065647
+animation = &"idle_south"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1967341823]
 rotation = 1.5707964
@@ -129,7 +229,7 @@ layout_mode = 2
 size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_od3ui")
 
-[node name="MarginContainer" type="MarginContainer" parent="HUD/Control/coin_to_debt/PanelContainer" unique_id=958554934]
+[node name="MarginContainer" type="MarginContainer" parent="HUD/Control/coin_to_debt/PanelContainer" unique_id=958554134]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 5
