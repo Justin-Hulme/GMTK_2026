@@ -2563,22 +2563,22 @@ func _cmd_ui_theme(params: Dictionary) -> void:
 
 	# Color overrides
 	var colors: Dictionary = overrides.get("colors", {})
-	for name in colors:
-		var c: Dictionary = colors[name]
-		ctrl.add_theme_color_override(name, Color(float(c.get("r", 0)), float(c.get("g", 0)), float(c.get("b", 0)), float(c.get("a", 1))))
-		applied.append("color:" + name)
+	for temp_name in colors:
+		var c: Dictionary = colors[temp_name]
+		ctrl.add_theme_color_override(temp_name, Color(float(c.get("r", 0)), float(c.get("g", 0)), float(c.get("b", 0)), float(c.get("a", 1))))
+		applied.append("color:" + temp_name)
 
 	# Constant overrides
 	var constants: Dictionary = overrides.get("constants", {})
-	for name in constants:
-		ctrl.add_theme_constant_override(name, int(constants[name]))
-		applied.append("constant:" + name)
+	for temp_name in constants:
+		ctrl.add_theme_constant_override(temp_name, int(constants[temp_name]))
+		applied.append("constant:" + temp_name)
 
 	# Font size overrides
 	var font_sizes: Dictionary = overrides.get("fontSizes", overrides.get("font_sizes", {}))
-	for name in font_sizes:
-		ctrl.add_theme_font_size_override(name, int(font_sizes[name]))
-		applied.append("font_size:" + name)
+	for temp_name in font_sizes:
+		ctrl.add_theme_font_size_override(temp_name, int(font_sizes[temp_name]))
+		applied.append("font_size:" + temp_name)
 
 	_send_response({"success": true, "node_path": node_path, "applied": applied})
 
