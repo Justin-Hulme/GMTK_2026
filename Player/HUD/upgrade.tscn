@@ -1,9 +1,15 @@
 [gd_scene format=3 uid="uid://b2s7qnkclpbcq"]
 
 [ext_resource type="Script" uid="uid://vo1lro3o0aot" path="res://Player/HUD/upgrade.gd" id="1_cwdgf"]
-[ext_resource type="Texture2D" path="res://Assets/max_icon.png" id="1_jdxk5"]
 [ext_resource type="Texture2D" uid="uid://b04lcvm58kkas" path="res://Assets/max_icon.png" id="2_55dnm"]
 [ext_resource type="Theme" uid="uid://bledfm0mcnnu4" path="res://Assets/main_theme.tres" id="2_cwdgf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e76su"]
+bg_color = Color(0.20152655, 0.20152661, 0.20152646, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button"]
 content_margin_left = 8.0
@@ -25,10 +31,22 @@ corner_radius_bottom_left = 4
 script = ExtResource("1_cwdgf")
 max_icon = ExtResource("2_55dnm")
 
-[node name="Icon" type="TextureRect" parent="." unique_id=268508840]
+[node name="IconControl" type="Control" parent="." unique_id=1062128207]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
-texture = ExtResource("1_jdxk5")
+
+[node name="Panel" type="Panel" parent="IconControl" unique_id=1913100237]
+layout_mode = 0
+offset_right = 50.0
+offset_bottom = 50.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_e76su")
+
+[node name="Icon" type="TextureRect" parent="IconControl" unique_id=268508840]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 0
+offset_right = 50.0
+offset_bottom = 50.0
+texture = ExtResource("2_55dnm")
 expand_mode = 2
 
 [node name="Label" type="Label" parent="." unique_id=2033726719]

@@ -7,7 +7,7 @@ signal purchased(upgrade)
 
 @onready var player = find_parent("Player")
 
-@onready var icon_rect: TextureRect = $Icon
+@onready var icon_rect: TextureRect = $IconControl/Icon
 @onready var label: Label = $Label
 @onready var button: Button = $Button
 

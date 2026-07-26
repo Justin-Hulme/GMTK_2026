@@ -3,6 +3,7 @@
 .godot/
 .import/
 *.import
+*.zip
 export.cfg
 export_presets.cfg
 export_credentials.cfg
