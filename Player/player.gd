@@ -93,6 +93,12 @@ func _physics_process(delta: float) -> void:
 func add_score(amount: int) -> void:
 	score += amount
 	set_coin_total(score)
+
+
+func remove_score(amount: int) -> void:
+	if amount <= 0:
+		return
+	set_coin_total(maxi(score - amount, 0))
 	
 func get_score() -> int:
 	return score
