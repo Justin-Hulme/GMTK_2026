@@ -1,0 +1,207 @@
+{
+  "group_id": "1109ed64-13f7-47d1-bcef-620eacecb595",
+  "states": [
+    {
+      "character": {
+        "id": "65964e36-82ed-40f6-948f-f012e5e23045",
+        "name": "Character Clothing and Style DescriptionCore",
+        "prompt": "Character Clothing and Style DescriptionCore Concept: Classic cartoon cat burglar or bank robber costume.Top: Long-sleeved crewneck shirt with horizontal black and white stripes. The stripes are thin and evenly spaced.Bottoms: Fitted, solid black pants or dark denim jeans with a slim silhouette.Footwear: Black lace-up leather combat boots with low heels.Headwear and Accessories:A black domino eye mask that covers the eyes and ties behind the head.Short, fingerless black gloves on both hands.A plain brown or tan canvas sack of money slung over his shoulder with no text or labels on it.A black handheld flashlight held out forward in his right hand, ",
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-07-26T02:53:01.600353+00:00"
+      },
+      "folder": "Character_Clothing_and_Style_DescriptionCore",
+      "frames": {
+        "rotations": {
+          "south": "Character_Clothing_and_Style_DescriptionCore/rotations/south.png",
+          "south-east": "Character_Clothing_and_Style_DescriptionCore/rotations/south-east.png",
+          "east": "Character_Clothing_and_Style_DescriptionCore/rotations/east.png",
+          "north-east": "Character_Clothing_and_Style_DescriptionCore/rotations/north-east.png",
+          "north": "Character_Clothing_and_Style_DescriptionCore/rotations/north.png",
+          "north-west": "Character_Clothing_and_Style_DescriptionCore/rotations/north-west.png",
+          "west": "Character_Clothing_and_Style_DescriptionCore/rotations/west.png",
+          "south-west": "Character_Clothing_and_Style_DescriptionCore/rotations/south-west.png"
+        },
+        "animations": {
+          "Walk": {
+            "north-east": [
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/north-east/frame_000.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/north-east/frame_001.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/north-east/frame_002.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/north-east/frame_003.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/north-east/frame_004.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/north-east/frame_005.png"
+            ],
+            "east": [
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/east/frame_000.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/east/frame_001.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/east/frame_002.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/east/frame_003.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/east/frame_004.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/east/frame_005.png"
+            ],
+            "north-west": [
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/north-west/frame_000.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/north-west/frame_001.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/north-west/frame_002.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/north-west/frame_003.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/north-west/frame_004.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/north-west/frame_005.png"
+            ],
+            "south-east": [
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/south-east/frame_000.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/south-east/frame_001.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/south-east/frame_002.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/south-east/frame_003.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/south-east/frame_004.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/south-east/frame_005.png"
+            ],
+            "west": [
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/west/frame_000.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/west/frame_001.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/west/frame_002.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/west/frame_003.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/west/frame_004.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/west/frame_005.png"
+            ],
+            "north": [
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/north/frame_000.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/north/frame_001.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/north/frame_002.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/north/frame_003.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/north/frame_004.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/north/frame_005.png"
+            ],
+            "south": [
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/south/frame_000.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/south/frame_001.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/south/frame_002.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/south/frame_003.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/south/frame_004.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/south/frame_005.png"
+            ],
+            "south-west": [
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/south-west/frame_000.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/south-west/frame_001.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/south-west/frame_002.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/south-west/frame_003.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/south-west/frame_004.png",
+              "Character_Clothing_and_Style_DescriptionCore/animations/Walk/south-west/frame_005.png"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "character": {
+        "id": "153de7dd-6b5d-4bbe-8865-24d7453db0fa",
+        "name": "the money bag is emp",
+        "prompt": "Character Clothing and Style DescriptionCore Concept: Classic cartoon cat burglar or bank robber costume.Top: Long-sleeved crewneck shirt with horizontal black and white stripes. The stripes are thin and evenly spaced.Bottoms: Fitted, solid black pants or dark denim jeans with a slim silhouette.Footwear: Black lace-up leather combat boots with low heels.Headwear and Accessories:A black domino eye mask that covers the eyes and ties behind the head.Short, fingerless black gloves on both hands.A plain brown or tan canvas sack of money slung over his shoulder with no text or labels on it.A black handheld flashlight held out forward in his right hand, ",
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-07-26T07:42:54.296412+00:00"
+      },
+      "folder": "the_money_bag_is_emp",
+      "frames": {
+        "rotations": {
+          "south": "the_money_bag_is_emp/rotations/south.png",
+          "south-east": "the_money_bag_is_emp/rotations/south-east.png",
+          "east": "the_money_bag_is_emp/rotations/east.png",
+          "north-east": "the_money_bag_is_emp/rotations/north-east.png",
+          "north": "the_money_bag_is_emp/rotations/north.png",
+          "north-west": "the_money_bag_is_emp/rotations/north-west.png",
+          "west": "the_money_bag_is_emp/rotations/west.png",
+          "south-west": "the_money_bag_is_emp/rotations/south-west.png"
+        },
+        "animations": {
+          "Walk": {
+            "north-east": [
+              "the_money_bag_is_emp/animations/Walk/north-east/frame_000.png",
+              "the_money_bag_is_emp/animations/Walk/north-east/frame_001.png",
+              "the_money_bag_is_emp/animations/Walk/north-east/frame_002.png",
+              "the_money_bag_is_emp/animations/Walk/north-east/frame_003.png",
+              "the_money_bag_is_emp/animations/Walk/north-east/frame_004.png",
+              "the_money_bag_is_emp/animations/Walk/north-east/frame_005.png"
+            ],
+            "west": [
+              "the_money_bag_is_emp/animations/Walk/west/frame_000.png",
+              "the_money_bag_is_emp/animations/Walk/west/frame_001.png",
+              "the_money_bag_is_emp/animations/Walk/west/frame_002.png",
+              "the_money_bag_is_emp/animations/Walk/west/frame_003.png",
+              "the_money_bag_is_emp/animations/Walk/west/frame_004.png",
+              "the_money_bag_is_emp/animations/Walk/west/frame_005.png"
+            ],
+            "north-71a95b8e": [
+              "the_money_bag_is_emp/animations/Walk/north-71a95b8e/frame_000.png",
+              "the_money_bag_is_emp/animations/Walk/north-71a95b8e/frame_001.png",
+              "the_money_bag_is_emp/animations/Walk/north-71a95b8e/frame_002.png",
+              "the_money_bag_is_emp/animations/Walk/north-71a95b8e/frame_003.png",
+              "the_money_bag_is_emp/animations/Walk/north-71a95b8e/frame_004.png",
+              "the_money_bag_is_emp/animations/Walk/north-71a95b8e/frame_005.png"
+            ],
+            "east": [
+              "the_money_bag_is_emp/animations/Walk/east/frame_000.png",
+              "the_money_bag_is_emp/animations/Walk/east/frame_001.png",
+              "the_money_bag_is_emp/animations/Walk/east/frame_002.png",
+              "the_money_bag_is_emp/animations/Walk/east/frame_003.png",
+              "the_money_bag_is_emp/animations/Walk/east/frame_004.png",
+              "the_money_bag_is_emp/animations/Walk/east/frame_005.png"
+            ],
+            "north-west": [
+              "the_money_bag_is_emp/animations/Walk/north-west/frame_000.png",
+              "the_money_bag_is_emp/animations/Walk/north-west/frame_001.png",
+              "the_money_bag_is_emp/animations/Walk/north-west/frame_002.png",
+              "the_money_bag_is_emp/animations/Walk/north-west/frame_003.png",
+              "the_money_bag_is_emp/animations/Walk/north-west/frame_004.png",
+              "the_money_bag_is_emp/animations/Walk/north-west/frame_005.png"
+            ],
+            "south": [
+              "the_money_bag_is_emp/animations/Walk/south/frame_000.png",
+              "the_money_bag_is_emp/animations/Walk/south/frame_001.png",
+              "the_money_bag_is_emp/animations/Walk/south/frame_002.png",
+              "the_money_bag_is_emp/animations/Walk/south/frame_003.png",
+              "the_money_bag_is_emp/animations/Walk/south/frame_004.png",
+              "the_money_bag_is_emp/animations/Walk/south/frame_005.png"
+            ],
+            "south-west": [
+              "the_money_bag_is_emp/animations/Walk/south-west/frame_000.png",
+              "the_money_bag_is_emp/animations/Walk/south-west/frame_001.png",
+              "the_money_bag_is_emp/animations/Walk/south-west/frame_002.png",
+              "the_money_bag_is_emp/animations/Walk/south-west/frame_003.png",
+              "the_money_bag_is_emp/animations/Walk/south-west/frame_004.png",
+              "the_money_bag_is_emp/animations/Walk/south-west/frame_005.png"
+            ],
+            "north-d3b87eca": [
+              "the_money_bag_is_emp/animations/Walk/north-d3b87eca/frame_000.png",
+              "the_money_bag_is_emp/animations/Walk/north-d3b87eca/frame_001.png",
+              "the_money_bag_is_emp/animations/Walk/north-d3b87eca/frame_002.png",
+              "the_money_bag_is_emp/animations/Walk/north-d3b87eca/frame_003.png",
+              "the_money_bag_is_emp/animations/Walk/north-d3b87eca/frame_004.png",
+              "the_money_bag_is_emp/animations/Walk/north-d3b87eca/frame_005.png"
+            ],
+            "south-east": [
+              "the_money_bag_is_emp/animations/Walk/south-east/frame_000.png",
+              "the_money_bag_is_emp/animations/Walk/south-east/frame_001.png",
+              "the_money_bag_is_emp/animations/Walk/south-east/frame_002.png",
+              "the_money_bag_is_emp/animations/Walk/south-east/frame_003.png",
+              "the_money_bag_is_emp/animations/Walk/south-east/frame_004.png",
+              "the_money_bag_is_emp/animations/Walk/south-east/frame_005.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.1",
+  "export_date": "2026-07-26T09:16:51.506440"
+}

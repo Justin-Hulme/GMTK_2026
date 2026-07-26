@@ -23,17 +23,23 @@ var mouse_movement_enabled := true
 
 var lockpick_speed = 0;
 
+var _has_switched := false
+
+const DIRECTIONS := ["east", "north_east", "north_west", "south", "south_east", "south_west", "west", "north"]
+
 @onready var phone_icon = $HUD/Control/PhoneIcon
 
 func _ready():
 	add_to_group("player")
 	phone_icon.phone_opened.connect(disable_movement)
 	phone_icon.phone_closed.connect(enable_movement)
+	_build_sprite_frames("res://Assets/evilperson1/the_money_bag_is_emp/animations/Walk/")
 	
 func set_coin_total(value: int) -> void:
 	score = value
 	_coin_total = value
 	coin_picked_up.emit(_coin_total)
+	_check_character_evolution()
 
 func get_coin_total() -> int:
 	return _coin_total
@@ -125,3 +131,40 @@ func buy_upgrade(upgrade: UpgradeData):
 		"Flashlight2": $"Flashlight".scale *= 1.5
 		"Flashlight3": $"Flashlight".scale *= 1.5
 	return true
+
+
+func _check_character_evolution() -> void:
+	if _has_switched:
+		return
+	if debt_value <= 0:
+		return
+	var ratio := float(_coin_total) / float(debt_value)
+	if ratio >= 0.33:
+		_has_switched = true
+		_build_sprite_frames("res://Assets/evilperson2/the_money_bag_is_emp/animations/Walk/")
+		animated_sprite.play("idle_south")
+
+
+func _build_sprite_frames(base_path: String) -> void:
+	var sf := SpriteFrames.new()
+	for direction in DIRECTIONS:
+		var walk_anim: String = "walk_%s" % direction
+		var idle_anim: String = "idle_%s" % direction
+		var folder: String = direction.replace("_", "-")
+		sf.add_animation(walk_anim)
+		sf.set_animation_speed(walk_anim, 12.0)
+		sf.set_animation_loop(walk_anim, true)
+		var first_tex = null
+		for i in range(6):
+			var tex_path: String = "%s%s/frame_%03d.png" % [base_path, folder, i]
+			var tex = ResourceLoader.load(tex_path, "Texture2D", ResourceLoader.CACHE_MODE_REUSE)
+			if tex:
+				if first_tex == null:
+					first_tex = tex
+				sf.add_frame(walk_anim, tex)
+		if first_tex:
+			sf.add_animation(idle_anim)
+			sf.set_animation_speed(idle_anim, 5.0)
+			sf.set_animation_loop(idle_anim, true)
+			sf.add_frame(idle_anim, first_tex)
+	animated_sprite.sprite_frames = sf
