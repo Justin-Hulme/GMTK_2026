@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://b2s7qnkclpbcq"]
+
+[ext_resource type="Script" uid="uid://vo1lro3o0aot" path="res://Player/HUD/upgrade.gd" id="1_cwdgf"]
+[ext_resource type="Texture2D" uid="uid://bbbe3aumuoxrx" path="res://Build/GMTK_2026.icon.png" id="1_jdxk5"]
+[ext_resource type="Texture2D" uid="uid://b04lcvm58kkas" path="res://Assets/max_icon.png" id="2_55dnm"]
+[ext_resource type="Theme" uid="uid://bledfm0mcnnu4" path="res://Assets/main_theme.tres" id="2_cwdgf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.25, 0.22, 0.22, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.55, 0.49, 0.48, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="Upgrade" type="HBoxContainer" unique_id=200402383]
+script = ExtResource("1_cwdgf")
+max_icon = ExtResource("2_55dnm")
+
+[node name="Icon" type="TextureRect" parent="." unique_id=268508840]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = ExtResource("1_jdxk5")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="." unique_id=2033726719]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "$1000"
+
+[node name="Button" type="Button" parent="." unique_id=1764641044]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("2_cwdgf")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button")
+disabled = true
+text = "Buy"
+
+[node name="Control" type="Control" parent="." unique_id=905654613]
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2

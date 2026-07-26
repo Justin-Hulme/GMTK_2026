@@ -1,24 +1,59 @@
 [gd_scene format=3 uid="uid://pd24aj2dcfr4"]
 
-[ext_resource type="Texture2D" uid="uid://lat5ly13eyv7" path="res://Assets/temp/phone_scamazon.png" id="1_phone"]
+[ext_resource type="Texture2D" uid="uid://cpthx7ft0ho5j" path="res://Assets/temp/phone_scamazon.png" id="1_phone"]
 [ext_resource type="Script" uid="uid://boc18gsmp0t1k" path="res://Player/HUD/phone_screen.gd" id="2_script"]
-[ext_resource type="Theme" uid="uid://bledfm0mcnnu4" path="res://Assets/main_theme.tres" id="3_theme"]
+[ext_resource type="PackedScene" uid="uid://b2s7qnkclpbcq" path="res://Player/HUD/upgrade.tscn" id="3_elce8"]
+[ext_resource type="Script" uid="uid://dc78ii1vthtuh" path="res://Upgrades/upgrade_resource.gd" id="4_8f8it"]
+[ext_resource type="Texture2D" uid="uid://c8r48t042apti" path="res://Assets/Money/Coin_silver.png" id="5_238ts"]
+[ext_resource type="Texture2D" path="res://Assets/shoe3.png" id="6_5l76c"]
+[ext_resource type="Texture2D" uid="uid://bng5ybr0gvvex" path="res://Assets/Money/Debt_HUD.png" id="6_8g1fl"]
+[ext_resource type="Texture2D" uid="uid://bbb0nr87co55e" path="res://Assets/Money/Coin_copper.png" id="6_bi2uf"]
+[ext_resource type="Texture2D" uid="uid://b8mxc65u3mt6e" path="res://Assets/Furniture_Office_Equipment_Set/Papers.png" id="8_bi2uf"]
+[ext_resource type="Texture2D" uid="uid://dj4y3ml56dkkb" path="res://icon.svg" id="9_8g1fl"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button"]
-content_margin_left = 8.0
-content_margin_top = 4.0
-content_margin_right = 8.0
-content_margin_bottom = 4.0
-bg_color = Color(0.25, 0.22, 0.22, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.55, 0.49, 0.48, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="Resource" id="Resource_55dnm"]
+script = ExtResource("4_8f8it")
+price = 100
+name = "Shoes1"
+metadata/_custom_type_script = "uid://dc78ii1vthtuh"
+
+[sub_resource type="Resource" id="Resource_cwdgf"]
+script = ExtResource("4_8f8it")
+icon = ExtResource("6_8g1fl")
+price = 200
+name = "Shoes2"
+metadata/_custom_type_script = "uid://dc78ii1vthtuh"
+
+[sub_resource type="Resource" id="Resource_p20uq"]
+script = ExtResource("4_8f8it")
+icon = ExtResource("6_5l76c")
+metadata/_custom_type_script = "uid://dc78ii1vthtuh"
+
+[sub_resource type="Resource" id="Resource_ni25h"]
+script = ExtResource("4_8f8it")
+icon = ExtResource("5_238ts")
+price = 200
+metadata/_custom_type_script = "uid://dc78ii1vthtuh"
+
+[sub_resource type="Resource" id="Resource_5l76c"]
+script = ExtResource("4_8f8it")
+icon = ExtResource("6_bi2uf")
+price = 300
+name = "Lockpick1"
+metadata/_custom_type_script = "uid://dc78ii1vthtuh"
+
+[sub_resource type="Resource" id="Resource_j0omt"]
+script = ExtResource("4_8f8it")
+icon = ExtResource("9_8g1fl")
+price = 100
+name = "Flashlight1"
+metadata/_custom_type_script = "uid://dc78ii1vthtuh"
+
+[sub_resource type="Resource" id="Resource_07sxf"]
+script = ExtResource("4_8f8it")
+icon = ExtResource("8_bi2uf")
+price = 50
+metadata/_custom_type_script = "uid://dc78ii1vthtuh"
 
 [node name="PhoneScreen" type="Control" unique_id=1667806962]
 layout_mode = 3
@@ -78,40 +113,37 @@ offset_top = 51.0
 offset_bottom = 55.0
 grow_horizontal = 2
 
-[node name="Buttons" type="VBoxContainer" parent="ScreenContent" unique_id=1916021473]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="ScrollContainer" type="ScrollContainer" parent="ScreenContent" unique_id=2086202025]
+layout_mode = 0
 offset_top = 61.0
-offset_bottom = 11.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 200.0
+offset_bottom = 281.0
+
+[node name="Upgrades" type="VBoxContainer" parent="ScreenContent/ScrollContainer" unique_id=1916021473]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
-[node name="Button1" type="Button" parent="ScreenContent/Buttons" unique_id=834844828]
+[node name="Shoes" parent="ScreenContent/ScrollContainer/Upgrades" unique_id=200402383 instance=ExtResource("3_elce8")]
 layout_mode = 2
-theme = ExtResource("3_theme")
-theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_button")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_button")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
-text = "Button 1"
+upgrades = Array[ExtResource("4_8f8it")]([SubResource("Resource_55dnm"), SubResource("Resource_cwdgf"), SubResource("Resource_p20uq")])
 
-[node name="Button2" type="Button" parent="ScreenContent/Buttons" unique_id=992789732]
+[node name="Magnet" parent="ScreenContent/ScrollContainer/Upgrades" unique_id=1873601960 instance=ExtResource("3_elce8")]
 layout_mode = 2
-theme = ExtResource("3_theme")
-theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_button")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_button")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
-text = "Button 2"
+upgrades = Array[ExtResource("4_8f8it")]([SubResource("Resource_ni25h")])
 
-[node name="Button3" type="Button" parent="ScreenContent/Buttons" unique_id=826733750]
+[node name="Lockpick" parent="ScreenContent/ScrollContainer/Upgrades" unique_id=1504892561 instance=ExtResource("3_elce8")]
 layout_mode = 2
-theme = ExtResource("3_theme")
-theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_button")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_button")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
-text = "Button 3"
+upgrades = Array[ExtResource("4_8f8it")]([SubResource("Resource_5l76c")])
+
+[node name="Flashlight" parent="ScreenContent/ScrollContainer/Upgrades" unique_id=1249613155 instance=ExtResource("3_elce8")]
+layout_mode = 2
+upgrades = Array[ExtResource("4_8f8it")]([SubResource("Resource_j0omt")])
+
+[node name="Laser" parent="ScreenContent/ScrollContainer/Upgrades" unique_id=1428519972 instance=ExtResource("3_elce8")]
+layout_mode = 2
+upgrades = Array[ExtResource("4_8f8it")]([SubResource("Resource_07sxf")])
+
+[node name="Control" type="Control" parent="ScreenContent/ScrollContainer/Upgrades" unique_id=1046658841]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2

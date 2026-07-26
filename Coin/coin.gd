@@ -19,13 +19,11 @@ func _on_body_entered(body):
 		coin_picked_up.emit(body.get_score())
 		queue_free()
 		
-func _on_area_entered(area):
+func _on_area_entered(area: Area2D):
 	if area.is_in_group("magnet"):
-		var player = area.get_parent()
-		if player.check_powerup("magnet") > 0:
-			magnet_target = area
+		magnet_target = area
 	if area.is_in_group("flashlight"):
-		var player = area.get_parent()
+		var player = area.find_parent("Player")
 		check_flashlight(player)
 
 func _on_area_exited(area):

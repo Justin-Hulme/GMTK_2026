@@ -15,10 +15,20 @@ signal coin_picked_up(amount)
 
 var debt_value = 5000
 
-var powerup_dict = {"magnet": 1}
+var powerup_dict = {"magnet": 0}
 
 var _coin_total := 0
 
+var mouse_movement_enabled := true
+
+var lockpick_speed = 0;
+
+@onready var phone_icon = $HUD/Control/PhoneIcon
+
+func _ready():
+	phone_icon.phone_opened.connect(disable_movement)
+	phone_icon.phone_closed.connect(enable_movement)
+	
 func set_coin_total(value: int) -> void:
 	score = value
 	_coin_total = value
@@ -26,11 +36,6 @@ func set_coin_total(value: int) -> void:
 
 func get_coin_total() -> int:
 	return _coin_total
-
-
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("toggle_phone"):
-		phone_screen.toggle()
 
 func _get_facing_name(angle_rad: float) -> String:
 	var angle := rad_to_deg(angle_rad)
@@ -59,7 +64,7 @@ func _physics_process(delta: float) -> void:
 
 	var target_velocity := Vector2.ZERO
 
-	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and mouse_movement_enabled:
 		target_velocity = direction.normalized() * speed
 
 	if target_velocity.length() > 0:
@@ -84,5 +89,30 @@ func add_score(amount: int) -> void:
 func get_score() -> int:
 	return score
 	
-func check_powerup(powerup_name: String):
-	return powerup_dict.get(powerup_name, 0)
+#func check_powerup(powerup_name: String):
+	#return powerup_dict.get(powerup_name, 0)
+	
+func disable_movement():
+	mouse_movement_enabled = false
+
+func enable_movement():
+	mouse_movement_enabled = true
+
+func buy_upgrade(upgrade: UpgradeData):
+	score -= upgrade.price
+	_coin_total = score
+	coin_picked_up.emit(_coin_total)
+	
+	match upgrade.name:
+		"Shoes1": speed = 350
+		"Shoes2": speed = 400
+		"Shoes3": speed = 450
+		"Magnet1": $"Area2D/Magnet".shape.radius = 50
+		"Magnet2": $"Area2D/Magnet".shape.radius = 75
+		"Magnet3": $"Area2D/Magnet".shape.radius = 100
+		"Lockpick1": lockpick_speed = 1
+		"Lockpick2": lockpick_speed = 0.5
+		"Lockpick3": lockpick_speed = 0.25
+		"Flashlight1": $"Flashlight".scale *= 1.5
+		"Flashlight2": $"Flashlight".scale *= 1.5
+		"Flashlight3": $"Flashlight".scale *= 1.5
