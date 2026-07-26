@@ -16,7 +16,7 @@ func _ready() -> void:
 
 func _on_body_entered(body):
 	if body.is_in_group("player"):
-		body.add_score(value * 10)
+		body.add_score(value)
 		coin_picked_up.emit(body.get_score())
 		visible = false
 		pickup_sound.play()
