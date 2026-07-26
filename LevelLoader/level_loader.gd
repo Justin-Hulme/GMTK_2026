@@ -336,8 +336,3 @@ func connect_exit_signals() -> void:
 	for area in exit_areas:
 		if not area.body_entered.is_connected(_on_exit_body_entered):
 			area.body_entered.connect(_on_exit_body_entered)
-
-
-
-
-
