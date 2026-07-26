@@ -9,7 +9,7 @@ extends CharacterBody2D
 @onready var flashlight: PointLight2D = $Flashlight
 @onready var spray_bar: ProgressBar = $HUD/Control/spray_can/PanelContainer/MarginContainer/VBoxContainer/ProgressBar
 
-var score := 0
+var score := 50000
 signal spray_paint_changed(current, maximum)
 
 # HUD Vars
@@ -19,7 +19,7 @@ var debt_value = 5000
 
 var powerup_dict = {"magnet": 0}
 
-var _coin_total := 0
+var _coin_total := 50000
 var spray_paint_max := 100
 var spray_paint_remaining := 100
 const SPRAY_PAINT_COLOR := Color8(0x73, 0x96, 0xE8, 0xB8)
@@ -41,6 +41,7 @@ func _ready():
 	phone_icon.phone_opened.connect(disable_movement)
 	phone_icon.phone_closed.connect(enable_movement)
 	_build_sprite_frames("res://Assets/evilperson/no_money/animations/Walk/")
+	set_coin_total(score)
 	spray_paint_changed.emit(spray_paint_remaining, spray_paint_max)
 	
 func set_coin_total(value: int) -> void:

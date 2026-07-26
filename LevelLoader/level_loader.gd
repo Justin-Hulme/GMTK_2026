@@ -1,6 +1,7 @@
 extends Node2D
 
 const FloorGenerator = preload("res://Level/floor_generator.gd")
+const LEVEL_COMPLETE_SCENE_PATH := "res://Level/level_complete.tscn"
 const COIN_GOLD = preload("res://Coin/coin_gold.tscn")
 const COIN_SILVER = preload("res://Coin/coin_silver.tscn")
 const COIN_COPPER = preload("res://Coin/coin_copper.tscn")
@@ -470,9 +471,10 @@ func _on_exit_body_entered(body: Node2D) -> void:
 		level_manager.next_floor()
 		generate_floor(false)
 		return
-	level_manager.next_level()
-	level_manager.max_floors_per_level = _get_level_config().total_floors
-	generate_floor(true)
+	level_manager.complete_current_level()
+	var tree := get_tree()
+	if tree != null:
+		tree.change_scene_to_file(LEVEL_COMPLETE_SCENE_PATH)
 
 
 func _get_required_coins_for_exit(player_node: Node2D) -> int:
