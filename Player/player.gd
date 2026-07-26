@@ -33,7 +33,7 @@ func _ready():
 	add_to_group("player")
 	phone_icon.phone_opened.connect(disable_movement)
 	phone_icon.phone_closed.connect(enable_movement)
-	_build_sprite_frames("res://Assets/evilperson1/the_money_bag_is_emp/animations/Walk/")
+	_build_sprite_frames("res://Assets/evilperson/no_money/animations/Walk/")
 	
 func set_coin_total(value: int) -> void:
 	score = value
@@ -142,7 +142,7 @@ func _check_character_evolution() -> void:
 	var ratio := float(_coin_total) / float(debt_value)
 	if ratio >= 0.33:
 		_has_switched = true
-		_build_sprite_frames("res://Assets/evilperson2/the_money_bag_is_emp/animations/Walk/")
+		_build_sprite_frames("res://Assets/evilperson/money/animations/Walk/")
 		animated_sprite.play("idle_south")
 
 
