@@ -80,6 +80,7 @@ func _physics_process(delta: float) -> void:
 	var facing := _get_facing_name(direction.angle())
 	if velocity.length() > 10:
 		animated_sprite.play("walk_" + facing)
+		
 	else:
 		animated_sprite.play("idle_" + facing)
 

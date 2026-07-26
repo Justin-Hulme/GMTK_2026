@@ -1,11 +1,16 @@
-[gd_scene format=3 uid="uid://d2k8f3yap1q7w" load_steps=4]
+[gd_scene format=3 uid="uid://d2k8f3yap1q7w"]
 
 [ext_resource type="Script" uid="uid://cwknystiomluo" path="res://LevelLoader/level_loader.gd" id="1_loader"]
 [ext_resource type="PackedScene" uid="uid://2c1gesmmik6q" path="res://Player/player.tscn" id="2_player"]
 [ext_resource type="Resource" path="res://Level/default_level_config.tres" id="3_level_config"]
+[ext_resource type="AudioStream" uid="uid://dsri47y8vtfwo" path="res://Assets/u_ys7j2hx6e9-safe-open-close-443345.mp3" id="4_g6s5w"]
 
 [node name="LevelLoader" type="Node2D" unique_id=1877739689]
 script = ExtResource("1_loader")
 level_config = ExtResource("3_level_config")
 
 [node name="Player" parent="." unique_id=9000001 instance=ExtResource("2_player")]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1689945725]
+stream = ExtResource("4_g6s5w")
+volume_db = 1.88

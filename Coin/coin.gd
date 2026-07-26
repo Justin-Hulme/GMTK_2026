@@ -18,6 +18,7 @@ func _on_body_entered(body):
 	if body.is_in_group("player"):
 		body.add_score(value)
 		coin_picked_up.emit(body.get_score())
+		visible = false
 		pickup_sound.play()
 		await pickup_sound.finished
 		queue_free()

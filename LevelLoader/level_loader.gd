@@ -20,7 +20,7 @@ var _coin_rng := RandomNumberGenerator.new()
 var _is_transitioning_floor := false
 var _current_exit_room: Node2D
 var _current_exit_area: Area2D
-
+var played_unlock
 
 func _ready() -> void:
 	_coin_rng.randomize()
@@ -31,6 +31,7 @@ func _ready() -> void:
 
 
 func generate_floor(reset_floor_state: bool = false) -> void:
+	played_unlock = false
 	var config := _get_level_config()
 	var level_manager = get_node_or_null("/root/LevelManager")
 	if reset_floor_state and level_manager:
@@ -362,6 +363,9 @@ func _update_exit_unlock_state() -> void:
 	var vault_node = _find_vault_door_node(_current_exit_room)
 	if vault_node:
 		_set_vault_door_enabled(vault_node, not unlocked)
+	if unlocked and not played_unlock:
+		played_unlock = true
+		$"AudioStreamPlayer".playing = true
 	if is_instance_valid(_current_exit_area):
 		_current_exit_area.monitoring = unlocked
 		_current_exit_area.monitorable = unlocked
