@@ -1,76 +1,113 @@
-class_name FloorGenerator extends RefCounted
+extends RefCounted
 
-# Cell types for grid cells
-enum Cell { EMPTY = 0, START = 1, CRITICAL = 2, BRANCH = 3, END = 4 }
-
-# Door bitmasking constants (powers of 2 for bitwise operations)
-enum Doors { NONE = 0, RIGHT = 1, UP = 2, LEFT = 4, DOWN = 8 }
-
-const DIR_TO_DOOR := {
-	Vector2i(1, 0): Doors.RIGHT,
-	Vector2i(0, -1): Doors.UP,
-	Vector2i(-1, 0): Doors.LEFT,
-	Vector2i(0, 1): Doors.DOWN
-}
-
-const OPPOSITE_DOOR := {
-	Doors.RIGHT: Doors.LEFT,
-	Doors.LEFT: Doors.RIGHT,
-	Doors.UP: Doors.DOWN,
-	Doors.DOWN: Doors.UP
-}
-
-# Direction names for door markers (matching Marker2D naming convention)
-const DOOR_NAMES := [
-	&"door_E",  # RIGHT
-	&"door_N",  # UP  
-	&"door_W",  # LEFT
-	&"door_S"   # DOWN
-]
+const GRID_WIDTH := 14
+const GRID_HEIGHT := 8
+const MAX_ATTEMPTS := 50
 
 var rng: RandomNumberGenerator
-var grid: Array           # Cell type per cell [x][y]
-var doors: Array          # Bitmask per cell [x][y]
-var room_map: Dictionary  # Vector2i → prefab template_id (for instantiation)
+var grid: Array[Array] = []
+var room_definitions: Array[Dictionary] = []
+var spawn_def: Dictionary = {}
+var exit_def: Dictionary = {}
+var spawn_grid_pos := Vector2i(-1, -1)
+var exit_grid_pos := Vector2i(-1, -1)
+# Parallel arrays storing cell data for each grid position
+var cell_doors: Array[Array] = []  # {n, e, s, w} or null if empty
+var cell_file_paths: Array[Array] = []  # room file path or "" if empty
+var corridor_cells: Array[Array] = []  # true if this cell is a corridor
+var corridor_connections: Array[Array] = []  # {n, e, s, w} for each corridor cell
 
 
-func generate(config: LevelConfig, spawn_override: Variant = null) -> Dictionary:
-	"""
-	Main entry point. Generates a floor layout and returns the scene + metadata.
-	
-	Returns dictionary with keys:
-		- "scene": Node2D containing instantiated rooms
-		- "spawn_grid": Vector2i grid position of spawn room
-		- "exit_grid": Vector2i grid position of exit room
-	"""
+func generate(config: LevelConfig) -> Dictionary:
 	_init_rng(config.seed)
-	_init_grid(config.grid_width, config.grid_height)
 	
-	var spawn_pos = spawn_override if spawn_override is Vector2i else _find_default_spawn(config)
-	_generate_critical_path_bfs(spawn_pos, config.max_depth_from_spawn)
-	_generate_branches(config.branch_ratio)
-	mark_exit_room()
+	var attempts := 0
 	
-	# Validate connectivity before instantiating visuals
-	if not _validate_connectivity():
-		push_warning("Generated floor has disconnected rooms!")
-	
-	var exit_cell = _find_exit_cell()
-	var spawn_grid_pos = _find_start_cell()
-	
-	return {
-		"scene": _instantiate_visuals(config),
-		"spawn_grid": spawn_grid_pos,
-		"exit_grid": exit_cell if exit_cell != Vector2i(-1, -1) else spawn_grid_pos
+	while attempts < MAX_ATTEMPTS:
+		attempts += 1
+		
+		# Reset state for each attempt
+		grid.clear()
+		cell_doors.clear()
+		cell_file_paths.clear()
+		for x in range(GRID_WIDTH):
+			var col := []
+			var doors_col := []
+			var paths_col := []
+			for y in range(GRID_HEIGHT):
+				col.append(0)
+				doors_col.append(null)
+				paths_col.append("")
+			grid.append(col)
+			cell_doors.append(doors_col)
+			cell_file_paths.append(paths_col)
+			var corridor_col := []
+			for y in range(GRID_HEIGHT):
+				corridor_col.append(false)
+			corridor_cells.append(corridor_col)
+			var conn_col := []
+			for y in range(GRID_HEIGHT):
+				conn_col.append({ "n": false, "e": false, "s": false, "w": false })
+			corridor_connections.append(conn_col)
+		
+		spawn_def = {}
+		exit_def = {}
+		room_definitions.clear()
+		
+		# Read rooms from deadends folder and extract door directions
+		_read_room_files()
+		
+		if room_definitions.is_empty():
+			print("[FloorGenerator] ERROR: No rooms found in res://Rooms/deadends/")
+			return {"scene": null, "spawn_grid": Vector2i(0, 0)}
+		
+		# Read spawn and exit tiles
+		_read_spawn_exit()
+		
+		if spawn_def.is_empty():
+			print("[FloorGenerator] ERROR: No spawn tile found")
+			return {"scene": null, "spawn_grid": Vector2i(0, 0)}
+		
+		if exit_def.is_empty():
+			print("[FloorGenerator] ERROR: No exit tile found")
+			return {"scene": null, "spawn_grid": Vector2i(0, 0)}
+		
+		# Place deadend rooms (two less than target to leave room for spawn/exit)
+		var placed_count = _place_rooms(config.target_room_count - 2)
+		
+		if placed_count < config.target_room_count - 2:
+			continue
+		
+		# Find positions for spawn and exit with matching doors
+		spawn_grid_pos = Vector2i(-1, -1)
+		exit_grid_pos = Vector2i(-1, -1)
+		
+		placed_count = _place_spawn_exit(placed_count, config.target_room_count)
+		
+		if placed_count < config.target_room_count:
+			continue
+		
+		_print_grid()
+		
+		if not _validate_doors():
+			continue
+		
+		print("[FloorGenerator] Validation passed after %d attempt(s)" % attempts)
+		
+		# Generate corridors connecting all rooms
+		if not _generate_corridors():
+			continue
+		
+		var root = _instantiate_visuals()
+		
+		return {
+			"scene": root,
+			"spawn_grid": spawn_grid_pos,
+			"exit_grid": exit_grid_pos
 	}
-
-
-func connect_rooms(a: Vector2i, b: Vector2i) -> void:
-	"""Connect two adjacent grid cells with doors (bitmask synchronization)."""
-	var dir := b - a
-	assert(DIR_TO_DOOR.has(dir), "Invalid adjacent direction %s" % str(dir))
-	doors[a.x][a.y] |= DIR_TO_DOOR[dir]
-	doors[b.x][b.y] |= OPPOSITE_DOOR[DIR_TO_DOOR[dir]]
+	
+	print("[FloorGenerator] ERROR: Failed to generate valid floor after %d attempts" % MAX_ATTEMPTS)
+	return {"scene": null, "spawn_grid": Vector2i(0, 0)}
 
 
 func _init_rng(seed_val: int) -> void:
@@ -81,295 +118,722 @@ func _init_rng(seed_val: int) -> void:
 		rng.seed = seed_val
 
 
-func _init_grid(width: int, height: int) -> void:
-	grid.clear()
-	doors.clear()
-	
-	for x in range(width):
-		var col_cells := []
-		var col_doors := []
-		for y in range(height):
-			col_cells.append(Cell.EMPTY)
-			col_doors.append(Doors.NONE)
-		grid.append(col_cells)
-		doors.append(col_doors)
+# ===================== Read Room Files =====================
 
-
-func _find_default_spawn(config: LevelConfig) -> Vector2i:
-	return Vector2i(config.grid_width / 2, 0)
-
-
-func _generate_critical_path_bfs(start: Vector2i, max_depth: int) -> void:
-	grid[start.x][start.y] = Cell.START
-	
-	var queue: Array[Array] = [[start, 0]]
-	
-	while not queue.is_empty():
-		var current_data := queue.pop_front() as Array
-		var current_pos := current_data[0] as Vector2i
-		var depth := int(current_data[1])
-		
-		if depth >= max_depth:
-			continue
-		
-		var neighbors: Array[Vector2i] = _get_valid_empty_neighbors(current_pos)
-		if neighbors.is_empty():
-			continue
-		
-		var next_pos := pick_random(neighbors) as Vector2i
-		connect_rooms(current_pos, next_pos)
-		grid[next_pos.x][next_pos.y] = Cell.CRITICAL
-		
-		queue.push_back([next_pos, depth + 1])
-
-
-func _get_valid_empty_neighbors(pos: Vector2i) -> Array[Vector2i]:
-	var neighbors: Array[Vector2i] = []
-	for dir: Vector2i in DIR_TO_DOOR.keys():
-		var next: Vector2i = pos + dir
-		if _is_in_bounds(next) and grid[next.x][next.y] == Cell.EMPTY:
-			neighbors.push_back(next)
-	return neighbors
-
-
-func _generate_branches(branch_ratio: float) -> void:
-	var critical_cells := []
-	
-	for x in range(grid.size()):
-		for y in range(grid[x].size()):
-			if grid[x][y] == Cell.CRITICAL:
-				critical_cells.push_back(Vector2i(x, y))
-	
-	critical_cells.shuffle()
-	var target_branches = int(critical_cells.size() * branch_ratio)
-	var placed := 0
-	
-	for cell in critical_cells:
-		if placed >= target_branches:
-			break
-		
-		var neighbors: Array[Vector2i] = _get_valid_empty_neighbors(cell)
-		if not neighbors.is_empty():
-			var branch_pos := pick_random(neighbors) as Vector2i
-			connect_rooms(cell, branch_pos)
-			grid[branch_pos.x][branch_pos.y] = Cell.BRANCH
-			placed += 1
-
-
-func mark_exit_room() -> void:
-	"""Find CRITICAL cell with max BFS distance from spawn (≥1 room away), pick randomly from deepest tier."""
-	var start = _find_start_cell()
-	if not start or start.x < 0:
+func _read_room_files() -> void:
+	var dir := DirAccess.open("res://Rooms/deadends/")
+	if not dir:
+		print("[FloorGenerator] ERROR: Cannot open res://Rooms/deadends/")
 		return
 	
-	# Run BFS to compute distances from spawn
-	var dist := {}
-	dist[start] = 0
-	var queue: Array[Variant] = [start]
+	dir.list_dir_begin()
+	var file_name = dir.get_next()
 	
-	while not queue.is_empty():
-		var pos := queue.pop_front() as Vector2i
-		for dir: Vector2i in DIR_TO_DOOR.keys():
-			var n: Vector2i = pos + dir
-			if _is_in_bounds(n) and grid[n.x][n.y] != Cell.EMPTY and not (n in dist):
-				dist[n] = dist[pos] + 1
-				queue.push_back(n)
-	
-	# Find max depth among CRITICAL cells that are ≥1 room from spawn
-	var max_depth := -1
-	for pos in dist:
-		if grid[pos.x][pos.y] == Cell.CRITICAL and dist[pos] >= 1:
-			max_depth = max(max_depth, dist[pos])
-	
-	# Pick randomly from all CRITICAL cells at max depth (Option B)
-	var candidates := []
-	for pos in dist.keys():
-		if grid[pos.x][pos.y] == Cell.CRITICAL and dist[pos] == max_depth:
-			candidates.push_back(pos as Vector2i)
-	
-	if not candidates.is_empty():
-		var exit_cell = pick_random(candidates)
-		grid[exit_cell.x][exit_cell.y] = Cell.END
+	while file_name != "":
+		if file_name.ends_with(".tscn"):
+			var room_info = _parse_room_scene("res://Rooms/deadends/" + file_name)
+			if room_info.file_path != "":
+				room_definitions.append(room_info)
+		
+		file_name = dir.get_next()
 
 
-func _validate_connectivity() -> bool:
-	"""Flood fill from START — all non-EMPTY cells must be reachable."""
-	var start = _find_start_cell()
-	if not start or start.x < 0:
+func _read_spawn_exit() -> void:
+	# Read spawn tile from known locations
+	var spawn_paths := [
+		"res://Rooms/fancy/room_spawn_1.tscn",
+		"res://Rooms/room_spawn_1.tscn"
+	]
+	
+	for path in spawn_paths:
+		if FileAccess.file_exists(path):
+			spawn_def = _parse_room_scene(path)
+			break
+	
+	if spawn_def.is_empty() or ("file_path" in spawn_def and spawn_def.file_path == ""):
+		print("[FloorGenerator] ERROR: Spawn tile not found")
+		return
+	
+	# Read exit tile from known locations
+	var exit_paths := [
+		"res://Rooms/fancy/room_exit_1.tscn",
+		"res://Rooms/room_exit_1.tscn"
+	]
+	
+	for path in exit_paths:
+		if FileAccess.file_exists(path):
+			exit_def = _parse_room_scene(path)
+			break
+	
+	if exit_def.is_empty() or ("file_path" in exit_def and exit_def.file_path == ""):
+		print("[FloorGenerator] ERROR: Exit tile not found")
+
+
+func _parse_room_scene(scene_path: String) -> Dictionary:
+	var info := {
+		"file_path": "",
+		"name": "",
+		"doors": [],  # Array of direction strings: "N", "S", "E", "W"
+		"door_mask_n": 0,
+		"door_mask_e": 0,
+		"door_mask_s": 0,
+		"door_mask_w": 0
+	}
+	
+	if not FileAccess.file_exists(scene_path):
+		return info
+	
+	var text := FileAccess.get_file_as_string(scene_path)
+	if not text or text.is_empty():
+		return info
+	
+	info.file_path = scene_path
+	info.name = scene_path.get_file().trim_suffix(".tscn")
+	
+	# Dynamically extract door directions from node names like "door_W", "door_North"
+	var regex := RegEx.new()
+	regex.compile('name="door_([A-Za-z]+)"')
+	var results := regex.search_all(text)
+	
+	for result in results:
+		var direction = result.strings[1].to_upper().substr(0, 1)
+		if direction in ["N", "S", "E", "W"]:
+			info.doors.append(direction)
+			match direction:
+				"N": info.door_mask_n = 1
+				"E": info.door_mask_e = 1
+				"S": info.door_mask_s = 1
+				"W": info.door_mask_w = 1
+	
+	return info
+
+
+# ===================== Place Rooms =====================
+
+func _place_rooms(target_count: int) -> int:
+	var placed_count := 0
+	
+	# Collect all positions as flat arrays (x and y in parallel)
+	var cx_list := []
+	var cy_list := []
+	
+	for x in range(GRID_WIDTH):
+		for y in range(GRID_HEIGHT):
+			if grid[x][y] == 0:
+				cx_list.append(x)
+				cy_list.append(y)
+	
+	var total = cx_list.size()
+	
+	# Shuffle indices for variety
+	for i in range(total - 1, 0, -1):
+		var j = rng.randi_range(0, i)
+		var temp_x = cx_list[i]
+		cx_list[i] = cx_list[j]
+		cx_list[j] = temp_x
+		var temp_y = cy_list[i]
+		cy_list[i] = cy_list[j]
+		cy_list[j] = temp_y
+	
+	# Place rooms greedily from shuffled candidates
+	for i in range(total):
+		if placed_count >= target_count:
+			break
+		
+		var cx_val = cx_list[i]
+		var cy_val = cy_list[i]
+		
+		# Pick a random room type (rooms can be reused)
+		var room_def = room_definitions[rng.randi_range(0, room_definitions.size() - 1)]
+		
+		if _can_place_room(cx_val, cy_val, room_def):
+			grid[cx_val][cy_val] = placed_count + 1
+			cell_file_paths[cx_val][cy_val] = room_def.file_path
+			
+			# Store door masks for validation
+			cell_doors[cx_val][cy_val] = {
+				"n": room_def.door_mask_n,
+				"e": room_def.door_mask_e,
+				"s": room_def.door_mask_s,
+				"w": room_def.door_mask_w
+			}
+			
+			# Store placement info for instantiation
+			room_def.grid_x = cx_val
+			room_def.grid_y = cy_val
+			room_def.placed_id = placed_count + 1
+			
+			print("[FloorGenerator] Placed '%s' at (%d,%d) doors=%s" % [room_def.name, cx_val, cy_val, str(room_def.doors)])
+			
+			placed_count += 1
+	
+	return placed_count
+
+
+func _can_place_room(x: int, y: int, room_def: Dictionary) -> bool:
+	# Cell must be empty (0)
+	if grid[x][y] != 0:
 		return false
 	
-	var visited := {}
-	var queue: Array[Variant] = [start]
-	
-	while not queue.is_empty():
-		var pos := queue.pop_front() as Vector2i
-		if pos in visited:
-			continue
-		visited[pos] = true
+	# All doors must face toward 0s ONLY (not borders, not other rooms)
+	for door_dir in room_def.doors:
+		var door_x = x
+		var door_y = y
 		
-		for dir: Vector2i in DIR_TO_DOOR.keys():
-			if doors[pos.x][pos.y] & DIR_TO_DOOR[dir]:
-				var neighbor: Vector2i = pos + dir
-				if _is_in_bounds(neighbor) and grid[neighbor.x][neighbor.y] != Cell.EMPTY:
-					queue.push_back(neighbor)
+		match door_dir:
+			"N": door_y -= 1
+			"S": door_y += 1
+			"W": door_x -= 1
+			"E": door_x += 1
+		
+		if not _is_in_bounds(door_x, door_y):
+			return false  # Door faces border
+		
+		if grid[door_x][door_y] != 0:
+			return false  # Door faces a room (must face empty space only)
 	
-	# Every non-EMPTY cell must be visited
-	for x in range(grid.size()):
-		for y in range(grid[x].size()):
-			if grid[x][y] != Cell.EMPTY and not (Vector2i(x, y) in visited):
+	# Also check that no neighbor has a door facing toward this new position
+	var neighbor_dirs = {
+		"north": {"dx": 0, "dy": -1, "door": "n"},
+		"south": {"dx": 0, "dy": 1, "door": "s"},
+		"west": {"dx": -1, "dy": 0, "door": "e"},
+		"east": {"dx": 1, "dy": 0, "door": "w"}
+	}
+	
+	for dir_key in neighbor_dirs:
+		var d = neighbor_dirs[dir_key]
+		var nx = x + d["dx"]
+		var ny = y + d["dy"]
+		
+		if not _is_in_bounds(nx, ny):
+			continue
+		
+		var neighbor_doors = cell_doors[nx][ny]
+		if neighbor_doors == null:
+			continue
+		
+		# Check if this neighbor has a door facing toward us
+		match dir_key:
+			"north":  # neighbor above → check its south door (s)
+				if neighbor_doors.s > 0:
+					return false
+			"south":  # neighbor below → check its north door (n)
+				if neighbor_doors.n > 0:
+					return false
+			"west":   # neighbor left → check its east door (e)
+				if neighbor_doors.e > 0:
+					return false
+			"east":   # neighbor right → check its west door (w)
+				if neighbor_doors.w > 0:
+					return false
+	
+	return true
+
+
+func _place_spawn_exit(placed_count: int, target_count: int) -> int:
+	# Find positions for spawn and exit where doors face ONLY empty cells (0).
+	
+	var spawn_pos = _find_position_for_tile(spawn_def, placed_count + 1)
+	if spawn_pos != null:
+		grid[spawn_pos["x"]][spawn_pos["y"]] = placed_count + 1
+		cell_file_paths[spawn_pos["x"]][spawn_pos["y"]] = spawn_def.file_path
+		cell_doors[spawn_pos["x"]][spawn_pos["y"]] = {
+			"n": spawn_def.door_mask_n,
+			"e": spawn_def.door_mask_e,
+			"s": spawn_def.door_mask_s,
+			"w": spawn_def.door_mask_w
+		}
+		spawn_grid_pos.x = spawn_pos["x"]
+		spawn_grid_pos.y = spawn_pos["y"]
+		placed_count += 1
+	
+	var exit_pos = _find_position_for_tile(exit_def, placed_count + 1)
+	if exit_pos != null:
+		grid[exit_pos["x"]][exit_pos["y"]] = placed_count + 1
+		cell_file_paths[exit_pos["x"]][exit_pos["y"]] = exit_def.file_path
+		cell_doors[exit_pos["x"]][exit_pos["y"]] = {
+			"n": exit_def.door_mask_n,
+			"e": exit_def.door_mask_e,
+			"s": exit_def.door_mask_s,
+			"w": exit_def.door_mask_w
+		}
+		exit_grid_pos.x = exit_pos["x"]
+		exit_grid_pos.y = exit_pos["y"]
+		placed_count += 1
+	
+	return placed_count
+
+
+func _find_position_for_tile(tile_def: Dictionary, next_id: int) -> Variant:
+	# Find a position where this tile's doors face ONLY empty cells (0).
+	# Also ensure no neighbor has a door facing THIS position.
+	
+	for x in range(GRID_WIDTH):
+		for y in range(GRID_HEIGHT):
+			if grid[x][y] != 0:
+				continue
+			
+			var valid = true
+			
+			# Check that this tile's doors face only empty cells
+			for door_dir in tile_def.doors:
+				var neighbor_x = x
+				var neighbor_y = y
+				
+				match door_dir:
+					"N": neighbor_y -= 1
+					"S": neighbor_y += 1
+					"W": neighbor_x -= 1
+					"E": neighbor_x += 1
+				
+				if not _is_in_bounds(neighbor_x, neighbor_y):
+					valid = false
+					break
+				
+				if grid[neighbor_x][neighbor_y] != 0:
+					valid = false
+					break
+			
+			if not valid:
+				continue
+			
+			# Check that no neighbor has a door facing this position (using cell_doors)
+			for d in _dirs:
+				var nx = x + d.x
+				var ny = y + d.y
+				if not _is_in_bounds(nx, ny):
+					continue
+				
+				var neighbor_doors = cell_doors[nx][ny]
+				if neighbor_doors == null:
+					continue
+				
+				# Check if this neighbor has a door facing us
+				match Vector2i(d.x, d.y):
+					Vector2i(0, -1):  # neighbor above → check its south door
+						if neighbor_doors.s > 0:
+							valid = false
+							break
+					Vector2i(0, 1):   # neighbor below → check its north door
+						if neighbor_doors.n > 0:
+							valid = false
+							break
+					Vector2i(-1, 0):  # neighbor left → check its east door
+						if neighbor_doors.e > 0:
+							valid = false
+							break
+					Vector2i(1, 0):   # neighbor right → check its west door
+						if neighbor_doors.w > 0:
+							valid = false
+							break
+			
+			if valid:
+				return {"x": x, "y": y}
+	
+	return null
+
+
+const _dirs := [Vector2i(0, -1), Vector2i(0, 1), Vector2i(-1, 0), Vector2i(1, 0)]
+
+
+func _is_in_bounds(x: int, y: int) -> bool:
+	return x >= 0 and y >= 0 and x < GRID_WIDTH and y < GRID_HEIGHT
+
+
+# ===================== Validation =====================
+
+func _validate_doors() -> bool:
+	for x in range(GRID_WIDTH):
+		for y in range(GRID_HEIGHT):
+			var doors = cell_doors[x][y]
+			if doors == null:
+				continue
+			
+			# Check each door direction faces only empty space (0) or is within bounds with no room facing it
+			if doors.n and y - 1 < 0:
+				print("[FloorGenerator] VALIDATION FAIL: (%d,%d) door_N faces border" % [x, y])
+				return false
+			if doors.s and y + 1 >= GRID_HEIGHT:
+				print("[FloorGenerator] VALIDATION FAIL: (%d,%d) door_S faces border" % [x, y])
+				return false
+			if doors.w and x - 1 < 0:
+				print("[FloorGenerator] VALIDATION FAIL: (%d,%d) door_W faces border" % [x, y])
+				return false
+			if doors.e and x + 1 >= GRID_WIDTH:
+				print("[FloorGenerator] VALIDATION FAIL: (%d,%d) door_E faces border" % [x, y])
+				return false
+			
+			# Doors must face empty space only (not other rooms)
+			if doors.n and y - 1 >= 0 and grid[x][y - 1] != 0:
+				print("[FloorGenerator] VALIDATION FAIL: (%d,%d) door_N faces room" % [x, y])
+				return false
+			if doors.s and y + 1 < GRID_HEIGHT and grid[x][y + 1] != 0:
+				print("[FloorGenerator] VALIDATION FAIL: (%d,%d) door_S faces room" % [x, y])
+				return false
+			if doors.w and x - 1 >= 0 and grid[x - 1][y] != 0:
+				print("[FloorGenerator] VALIDATION FAIL: (%d,%d) door_W faces room" % [x, y])
+				return false
+			if doors.e and x + 1 < GRID_WIDTH and grid[x + 1][y] != 0:
+				print("[FloorGenerator] VALIDATION FAIL: (%d,%d) door_E faces room" % [x, y])
 				return false
 	
 	return true
 
 
-func _select_prefab(cell_type: Cell, pos: Vector2i) -> StringName:
-	match cell_type:
-		Cell.START:
-			return &"Rooms/room_spawn_1"
-		
-		Cell.END:
-			return &"Rooms/room_exit_1"
-		
-		_:
-			var door_mask := int(doors[pos.x][pos.y])
-			if door_mask == Doors.NONE:
-				return &"Rooms/room_corridor_1"
-			
-			var name = _bitmask_to_prefab(door_mask)
-			if name != "":
-				return ("Rooms/" + name) as StringName
-	
-	# Fallback
-	return &"Rooms/room_corridor_1"
+# ===================== Visualization =====================
 
-
-func _bitmask_to_prefab(mask: int) -> String:
-	match mask:
-		# 4-way intersection
-		Doors.UP | Doors.LEFT | Doors.DOWN | Doors.RIGHT:
-			return "room_hub_1"
-		
-		# 3-way junctions (T-shape) — any 3 directions = crossroads
-		Doors.UP | Doors.LEFT | Doors.RIGHT, \
-		Doors.DOWN | Doors.LEFT | Doors.RIGHT, \
-		Doors.UP | Doors.LEFT | Doors.DOWN, \
-		Doors.UP | Doors.RIGHT | Doors.DOWN:
-			return "room_crossroads_1"
-		
-		# 2-way opposite connections (straight corridor)
-		Doors.UP | Doors.DOWN:
-			return "room_corridor_2"
-		
-		Doors.LEFT | Doors.RIGHT:
-			return "room_corridor_1"
-		
-		# 2-way adjacent connections (L-shaped junction — use crossroads)
-		Doors.UP | Doors.LEFT, \
-		Doors.UP | Doors.RIGHT, \
-		Doors.DOWN | Doors.LEFT, \
-		Doors.DOWN | Doors.RIGHT:
-			return "room_crossroads_1"
-		
-		# 1-way dead ends — pick based on direction so the door faces correctly
-		Doors.UP:
-			return "deadends/room_bathroom"
-		
-		Doors.DOWN:
-			return pick_random(["deadends/room_office", "deadends/room_office_2"])
-		
-		Doors.LEFT:
-			return "deadends/room_printers"
-		
-		Doors.RIGHT:
-			return "deadends/room_office"
-	
-	return ""
-
-
-func _count_critical_neighbors(pos: Vector2i) -> int:
-	var count := 0
-	for dir: Vector2i in DIR_TO_DOOR.keys():
-		var n: Vector2i = pos + dir
-		if _is_in_bounds(n) and grid[n.x][n.y] == Cell.CRITICAL:
-			count += 1
-	return count
-
-
-func _distance_to_edge(pos: Vector2i) -> int:
-	return min(
-		min(pos.x, pos.y),
-		min(grid.size() - 1 - pos.x, (grid[0].size() if grid.size() > 0 else 0) - 1 - pos.y)
-	)
-
-
-func _instantiate_visuals(config: LevelConfig) -> Node2D:
-	const SCALE := 3.0
+func _instantiate_visuals() -> Node2D:
 	var root := Node2D.new()
 	
-	for x in range(grid.size()):
-		for y in range(grid[x].size()):
-			if grid[x][y] == Cell.EMPTY:
+	# Load corridor scenes based on door configurations
+	var corridor_scenes := {}
+	var corridor_dir := DirAccess.open("res://Rooms/")
+	if corridor_dir:
+		corridor_dir.list_dir_begin()
+		var file_name = corridor_dir.get_next()
+		while file_name != "":
+			if file_name.begins_with("room_corridor_") and file_name.ends_with(".tscn"):
+				var scene_path = "res://Rooms/" + file_name
+				var loaded_scene = load(scene_path) as PackedScene
+				if loaded_scene:
+					# Extract door directions from the scene
+					var doors := _extract_doors_from_scene(loaded_scene, scene_path)
+					corridor_scenes[doors] = loaded_scene
+			
+			file_name = corridor_dir.get_next()
+	
+	# Instantiate rooms
+	for x in range(GRID_WIDTH):
+		for y in range(GRID_HEIGHT):
+			var file_path = cell_file_paths[x][y]
+			if file_path.is_empty():
 				continue
 			
-			var prefab_name = _select_prefab(grid[x][y], Vector2i(x, y))
-			room_map[Vector2i(x, y)] = prefab_name
-			
-			var room_scene := load("res://" + prefab_name + ".tscn") as PackedScene
-			if not room_scene:
-				push_error("Missing prefab: res://%s.tscn" % prefab_name)
+			var scene = load(file_path) as PackedScene
+			if not scene:
+				print("[FloorGenerator] Failed to load: " + file_path)
 				continue
 			
-			var room_instance = room_scene.instantiate()
+			var instance = scene.instantiate()
+			instance.name = file_path.get_file().trim_suffix(".tscn") + "_%d_%d" % [x, y]
+			instance.scale = Vector2(3, 3)
+			instance.position = Vector2(x * 384.0, y * 384.0)
+			root.add_child(instance)
+	
+	# Instantiate corridor scenes for cells marked as corridors
+	for x in range(GRID_WIDTH):
+		for y in range(GRID_HEIGHT):
+			if not corridor_cells[x][y]:
+				continue
 			
-			# Convert grid position to world position (each cell = 8 tiles * 16px = 128px), scaled up
-			var room_data = room_instance.get_node_or_null("RoomData")
-			var cell_w: float = room_data.cell_width if room_data else 1.0
-			var cell_h: float = room_data.cell_height if room_data else 1.0
-			room_instance.position = Vector2(x * cell_w * 128.0 * SCALE, y * cell_h * 128.0 * SCALE)
+			var file_path = cell_file_paths[x][y]
+			if not file_path.is_empty():
+				continue  # Skip room cells
 			
-			# Scale up for visibility
-			room_instance.scale = Vector2(SCALE, SCALE)
+			var doors_key := _get_corridor_doors_key(x, y)
+			var scene = corridor_scenes.get(doors_key)
 			
-			root.add_child(room_instance)
+			if not scene:
+				print("[FloorGenerator] Missing corridor scene for key '%s' at (%d,%d)" % [doors_key, x, y])
+				continue
 			
-			# Add TileMapLayer to "wall" group for coin_spawner collision detection
-			var tile_map = room_instance.get_node_or_null("TileMapLayer")
-			if tile_map:
-				tile_map.add_to_group("wall")
+			if scene:
+				var instance = scene.instantiate()
+				instance.name = "corridor_%d_%d" % [x, y]
+				instance.scale = Vector2(3, 3)
+				instance.position = Vector2(x * 384.0, y * 384.0)
+				root.add_child(instance)
 	
 	return root
 
 
-func _cell_name(cell_type: Cell) -> String:
-	match cell_type:
-		Cell.EMPTY: return "EMPTY"
-		Cell.START: return "START"
-		Cell.CRITICAL: return "CRITICAL"
-		Cell.BRANCH: return "BRANCH"
-		Cell.END: return "END"
-	return "?"
+func _extract_doors_from_scene(scene: PackedScene, scene_path: String) -> String:
+	var text := FileAccess.get_file_as_string(scene_path)
+	if not text or text.is_empty():
+		return ""
+	
+	var regex := RegEx.new()
+	regex.compile('name="door_([A-Za-z]+)"')
+	var results := regex.search_all(text)
+	
+	var doors := []
+	for result in results:
+		var direction = result.strings[1].to_upper().substr(0, 1)
+		if direction in ["N", "S", "E", "W"]:
+			doors.append(direction)
+	
+	# Sort directions alphabetically for consistent key generation
+	doors.sort()
+	return ",".join(doors)
 
 
-func _find_start_cell() -> Vector2i:
-	for x in range(grid.size()):
-		for y in range(grid[x].size()):
-			if grid[x][y] == Cell.START:
-				return Vector2i(x, y)
-	return Vector2i(-1, -1)
+func _get_corridor_doors_key(x: int, y: int) -> String:
+	var conn = corridor_connections[x][y]
+	if conn == null:
+		return ""
+	var doors := []
+	if conn.get("n", false):
+		doors.append("N")
+	if conn.get("e", false):
+		doors.append("E")
+	if conn.get("s", false):
+		doors.append("S")
+	if conn.get("w", false):
+		doors.append("W")
+	if doors.size() < 2:
+		return ""
+	doors.sort()
+	return ",".join(doors)
 
 
-func _find_exit_cell() -> Vector2i:
-	for x in range(grid.size()):
-		for y in range(grid[x].size()):
-			if grid[x][y] == Cell.END:
-				return Vector2i(x, y)
-	return Vector2i(-1, -1)
+func _print_grid() -> void:
+	for y in range(GRID_HEIGHT):
+		var line := ""
+		for x in range(GRID_WIDTH):
+			if grid[x][y] == 0 and corridor_cells[x][y]:
+				line += " - ;"
+			elif grid[x][y] == 0:
+				line += " . ;"
+			else:
+				var idx = grid[x][y] - 1
+				var name = "R%02d" % grid[x][y]
+				if idx >= 0 and idx < room_definitions.size():
+					name = room_definitions[idx].name.substr(0, 5) + "     ".substr(maxi(room_definitions[idx].name.length() - 4, 1))
+				line += name + ";"
+		print("[FloorGenerator] ", line)
 
 
-func _is_in_bounds(pos: Vector2i) -> bool:
-	return pos.x >= 0 and pos.y >= 0 and \
-		   pos.x < grid.size() and pos.y < (grid[0].size() if grid.size() > 0 else 0)
+# ===================== Corridor Generation =====================
+
+func _generate_corridors() -> bool:
+	print("[FloorGenerator] Starting corridor generation...")
+	for x in range(GRID_WIDTH):
+		for y in range(GRID_HEIGHT):
+			corridor_cells[x][y] = false
+			corridor_connections[x][y] = {"n": false, "e": false, "s": false, "w": false}
+
+	var rooms := {}
+	for x in range(GRID_WIDTH):
+		for y in range(GRID_HEIGHT):
+			if grid[x][y] != 0:
+				rooms["%d,%d" % [x, y]] = Vector2i(x, y)
+	
+	print("[FloorGenerator] Found %d rooms" % rooms.size())
+	
+	var spawn_key := "%d,%d" % [spawn_grid_pos.x, spawn_grid_pos.y]
+	var exit_key := "%d,%d" % [exit_grid_pos.x, exit_grid_pos.y]
+	if not rooms.has(spawn_key) or not rooms.has(exit_key):
+		print("[FloorGenerator] ERROR: Could not find spawn/exit positions")
+		return false
+
+	var other_keys := []
+	for rkey in rooms:
+		if rkey != spawn_key and rkey != exit_key:
+			other_keys.append(rkey)
+
+	var tour_keys: Array = _solve_tsp_nearest_neighbor(spawn_key, other_keys, exit_key, rooms)
+	print("[FloorGenerator] TSP tour length: %d" % tour_keys.size())
+	for i in range(tour_keys.size()):
+		var pos = rooms[tour_keys[i]]
+		print("[FloorGenerator]   Step %d: (%d,%d)" % [i, pos.x, pos.y])
+
+	for i in range(tour_keys.size()):
+		var room_pos = rooms[tour_keys[i]] as Vector2i
+		var access_pos = _get_room_access_cell(room_pos)
+		if access_pos == Vector2i(-1, -1):
+			print("[FloorGenerator] ERROR: No access cell for room at (%d,%d)" % [room_pos.x, room_pos.y])
+			return false
+		_add_connection_between(room_pos, access_pos)
+
+	for i in range(tour_keys.size() - 1):
+		var from_room = rooms[tour_keys[i]] as Vector2i
+		var to_room = rooms[tour_keys[i + 1]] as Vector2i
+		var from_access = _get_room_access_cell(from_room)
+		var to_access = _get_room_access_cell(to_room)
+		print("[FloorGenerator] Generating path: (%d,%d) -> (%d,%d)" % [from_room.x, from_room.y, to_room.x, to_room.y])
+		var path_cells: Array = _generate_path_bfs(from_access, to_access)
+		if path_cells.is_empty():
+			print("[FloorGenerator] ERROR: No corridor path between access cells (%d,%d) and (%d,%d)" % [from_access.x, from_access.y, to_access.x, to_access.y])
+			return false
+		for j in range(path_cells.size() - 1):
+			_add_connection_between(path_cells[j] as Vector2i, path_cells[j + 1] as Vector2i)
+
+	_mark_corridor_doors()
+	if not _validate_corridor_travel():
+		print("[FloorGenerator] ERROR: Corridor travel validation failed")
+		return false
+	print("[FloorGenerator] Corridors generated")
+	return true
 
 
-func pick_random(arr: Array):
-	return arr[rng.randi_range(0, arr.size() - 1)]
+func _get_direction(from: Vector2i, to: Vector2i) -> String:
+	if to.x > from.x:
+		return "e"
+	elif to.x < from.x:
+		return "w"
+	elif to.y > from.y:
+		return "s"
+	else:
+		return "n"
+
+
+func _get_room_access_cell(room_pos: Vector2i) -> Vector2i:
+	var doors = cell_doors[room_pos.x][room_pos.y]
+	if doors == null:
+		return Vector2i(-1, -1)
+	var access := Vector2i(-1, -1)
+	if doors.get("n", false):
+		access = Vector2i(room_pos.x, room_pos.y - 1)
+	elif doors.get("e", false):
+		access = Vector2i(room_pos.x + 1, room_pos.y)
+	elif doors.get("s", false):
+		access = Vector2i(room_pos.x, room_pos.y + 1)
+	elif doors.get("w", false):
+		access = Vector2i(room_pos.x - 1, room_pos.y)
+	if access == Vector2i(-1, -1):
+		return access
+	if not _is_in_bounds(access.x, access.y):
+		return Vector2i(-1, -1)
+	if grid[access.x][access.y] != 0:
+		return Vector2i(-1, -1)
+	return access
+
+
+func _add_connection_between(a: Vector2i, b: Vector2i) -> void:
+	var dir_ab = _get_direction(a, b)
+	var dir_ba = _get_direction(b, a)
+	if grid[a.x][a.y] == 0:
+		corridor_cells[a.x][a.y] = true
+		corridor_connections[a.x][a.y][dir_ab] = true
+	if grid[b.x][b.y] == 0:
+		corridor_cells[b.x][b.y] = true
+		corridor_connections[b.x][b.y][dir_ba] = true
+
+
+func _solve_tsp_nearest_neighbor(start_key: String, other_keys: Array, end_key: String, rooms: Dictionary) -> Array[String]:
+	var path := [start_key]
+	var remaining = other_keys.duplicate()
+	
+	while not remaining.is_empty():
+		var current_pos = rooms[path.back()] as Vector2i
+		var nearest_dist := INF
+		var nearest_idx := 0
+		
+		for i in range(remaining.size()):
+			var neighbor_pos = rooms[remaining[i]] as Vector2i
+			var dist = abs(current_pos.x - neighbor_pos.x) + abs(current_pos.y - neighbor_pos.y)
+			if dist < nearest_dist:
+				nearest_dist = dist
+				nearest_idx = i
+		
+		path.append(remaining[nearest_idx])
+		remaining.remove_at(nearest_idx)
+	
+	path.append(end_key)
+	return path
+
+
+func _generate_path_bfs(from_pos: Vector2i, to_pos: Vector2i):
+	if from_pos == to_pos:
+		return [from_pos]
+	
+	var queue := [[from_pos]]  # Array of paths (each path is array of Vector2i)
+	var visited_keys: Dictionary = {}
+	visited_keys["%d,%d" % [from_pos.x, from_pos.y]] = true
+	
+	while not queue.is_empty():
+		var current_path = queue.pop_front()
+		var current = current_path.back() as Vector2i
+		
+		if current == to_pos:
+			return current_path  # Return the complete path
+		
+		# Explore neighbors (up, down, left, right)
+		var dirs := [Vector2i(0, -1), Vector2i(0, 1), Vector2i(-1, 0), Vector2i(1, 0)]
+		for dir in dirs:
+			var neighbor = current + dir
+			if _is_in_bounds_gd(neighbor):
+				var nkey = "%d,%d" % [neighbor.x, neighbor.y]
+				if not visited_keys.has(nkey):
+					# Can pass through empty cells or the target position
+					if grid[neighbor.x][neighbor.y] == 0 or neighbor == to_pos:
+						visited_keys[nkey] = true
+						var new_path = current_path.duplicate()
+						new_path.append(neighbor)
+						queue.append(new_path)
+	
+	return []  # No path found
+
+
+func _is_in_bounds_gd(pos: Vector2i) -> bool:
+	return pos.x >= 0 and pos.y >= 0 and pos.x < GRID_WIDTH and pos.y < GRID_HEIGHT
+
+
+func _mark_corridor_doors() -> void:
+	for x in range(GRID_WIDTH):
+		for y in range(GRID_HEIGHT):
+			if corridor_cells[x][y]:
+				cell_doors[x][y] = corridor_connections[x][y].duplicate()
+	
+	print("[FloorGenerator] Marked %d corridor cells" % _count_corridor_cells())
+
+
+func _validate_corridor_travel() -> bool:
+	var dirs = {
+		"n": Vector2i(0, -1),
+		"e": Vector2i(1, 0),
+		"s": Vector2i(0, 1),
+		"w": Vector2i(-1, 0)
+	}
+	var opposite = {"n": "s", "e": "w", "s": "n", "w": "e"}
+	for x in range(GRID_WIDTH):
+		for y in range(GRID_HEIGHT):
+			var doors = cell_doors[x][y]
+			if doors == null:
+				continue
+			for dir_key in dirs:
+				if not doors.get(dir_key, false):
+					continue
+				var neighbor = Vector2i(x, y) + dirs[dir_key]
+				if not _is_in_bounds(neighbor.x, neighbor.y):
+					print("[FloorGenerator] Unmatched door %s at (%d,%d) facing out of bounds" % [dir_key, x, y])
+					return false
+				var neighbor_doors = cell_doors[neighbor.x][neighbor.y]
+				if neighbor_doors == null or not neighbor_doors.get(opposite[dir_key], false):
+					print("[FloorGenerator] Unmatched door %s at (%d,%d); neighbor (%d,%d) missing %s" % [dir_key, x, y, neighbor.x, neighbor.y, opposite[dir_key]])
+					return false
+
+	var visited := {}
+	var queue := [spawn_grid_pos]
+	visited["%d,%d" % [spawn_grid_pos.x, spawn_grid_pos.y]] = true
+	while not queue.is_empty():
+		var current = queue.pop_front() as Vector2i
+		var current_doors = cell_doors[current.x][current.y]
+		if current_doors == null:
+			continue
+		for dir_key in dirs:
+			if not current_doors.get(dir_key, false):
+				continue
+			var neighbor = current + dirs[dir_key]
+			var nkey = "%d,%d" % [neighbor.x, neighbor.y]
+			if not visited.has(nkey):
+				visited[nkey] = true
+				queue.append(neighbor)
+
+	for x in range(GRID_WIDTH):
+		for y in range(GRID_HEIGHT):
+			if grid[x][y] != 0:
+				var rkey = "%d,%d" % [x, y]
+				if not visited.has(rkey):
+					print("[FloorGenerator] Unreachable room at (%d,%d)" % [x, y])
+					return false
+	return true
+
+
+func _count_corridor_cells() -> int:
+	var count := 0
+	for x in range(GRID_WIDTH):
+		for y in range(GRID_HEIGHT):
+			if corridor_cells[x][y]:
+				count += 1
+	return count

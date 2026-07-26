@@ -17,7 +17,9 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+TileRegistry="*res://Level/tile_registry.gd"
 LevelManager="*res://Level/level_manager.gd"
+McpInteractionServer="*res://mcp_interaction_server.gd"
 
 [display]
 
