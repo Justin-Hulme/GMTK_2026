@@ -1,0 +1,36 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "4930f20a-9068-49ff-be2c-17dd37ef5538",
+        "name": "Mob Boss Image Prompt Subject:",
+        "prompt": "Mob Boss Image Prompt Subject: Cinematic portrait of an authoritative mob boss outdoors at dusk.  Clothing & Style:  Suit: Charcoal grey double-breasted pinstripe suit with wide peak lapels, a matching vest, and a neat white pocket square.  Shirt & Tie: Crisp white collared shirt secured with a gold collar bar, paired with a rich burgundy silk tie and matching gold tie clip.  Outerwear: Heavy dark wool overcoat draped power-style over the shoulders without using the sleeves.  Accessories: Brown fedora hat with a wide silk band tilted forward, a gold signet ring, cuff links, and a lit cigar in hand emitting soft blue smoke.  Setting & Environment:  Standing on a brick building balcony overlooking a 1940s city street.  Vintage cars with glowing headlights parked below alongside old brick storefronts under a moody twilight sky.  Lighting & Composition:  Cinematic low-key lighting with soft, dramatic shadows.  Shallow depth of field focusing sharply on the character while softly blurring the street background.",
+        "size": {
+          "width": 92,
+          "height": 92
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-07-26T11:41:19.130357+00:00"
+      },
+      "folder": "Mob_Boss_Image_Prompt_Subject",
+      "frames": {
+        "rotations": {
+          "south": "Mob_Boss_Image_Prompt_Subject/rotations/south.png",
+          "south-east": "Mob_Boss_Image_Prompt_Subject/rotations/south-east.png",
+          "east": "Mob_Boss_Image_Prompt_Subject/rotations/east.png",
+          "north-east": "Mob_Boss_Image_Prompt_Subject/rotations/north-east.png",
+          "north": "Mob_Boss_Image_Prompt_Subject/rotations/north.png",
+          "north-west": "Mob_Boss_Image_Prompt_Subject/rotations/north-west.png",
+          "west": "Mob_Boss_Image_Prompt_Subject/rotations/west.png",
+          "south-west": "Mob_Boss_Image_Prompt_Subject/rotations/south-west.png"
+        },
+        "animations": {}
+      }
+    }
+  ],
+  "export_version": "3.1",
+  "export_date": "2026-07-26T11:48:04.319877"
+}
