@@ -1,13 +1,7 @@
-[gd_resource type="Resource" script_class="LevelConfig" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="LevelConfig" format=3 uid="uid://bttf81070peuo"]
 
-[ext_resource type="Script" path="res://Level/level_config.gd" id="1_lcfg"]
+[ext_resource type="Script" uid="uid://8ujj87klmjer" path="res://Level/level_config.gd" id="1_lcfg"]
 
 [resource]
 script = ExtResource("1_lcfg")
-grid_width = 10
-grid_height = 6
-target_room_count = 16
-random_seed = 0
-total_floors = 3
 debt = 50000
-difficulty = "medium"

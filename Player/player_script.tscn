@@ -87,7 +87,6 @@ shape = SubResource("RectangleShape2D_e76su")
 debug_color = Color(0.6830656, 0.38283992, 0.83194107, 0.41960785)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1518456803]
-visible = false
 color = Color(0.23753911, 0.23753914, 0.23753911, 1)
 
 [node name="Door" parent="." unique_id=2029678344 instance=ExtResource("8_p20uq")]
