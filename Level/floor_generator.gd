@@ -20,7 +20,7 @@ var corridor_connections: Array[Array] = []  # {n, e, s, w} for each corridor ce
 
 
 func generate(config: LevelConfig) -> Dictionary:
-	_init_rng(config.seed)
+	_init_rng(config.random_seed)
 	
 	var attempts := 0
 	
@@ -331,7 +331,7 @@ func _can_place_room(x: int, y: int, room_def: Dictionary) -> bool:
 	return true
 
 
-func _place_spawn_exit(placed_count: int, target_count: int) -> int:
+func _place_spawn_exit(placed_count: int, _target_count: int) -> int:
 	# Find positions for spawn and exit where doors face ONLY empty cells (0).
 	
 	var spawn_pos = _find_position_for_tile(spawn_def, placed_count + 1)
@@ -365,7 +365,7 @@ func _place_spawn_exit(placed_count: int, target_count: int) -> int:
 	return placed_count
 
 
-func _find_position_for_tile(tile_def: Dictionary, next_id: int, origin_pos: Vector2i = Vector2i(-1, -1)) -> Variant:
+func _find_position_for_tile(tile_def: Dictionary, _next_id: int, origin_pos: Vector2i = Vector2i(-1, -1)) -> Variant:
 	# Find a position where this tile's doors face ONLY empty cells (0).
 	# Also ensure no neighbor has a door facing THIS position.
 	
@@ -552,7 +552,7 @@ func _instantiate_visuals() -> Node2D:
 	return root
 
 
-func _extract_doors_from_scene(scene: PackedScene, scene_path: String) -> String:
+func _extract_doors_from_scene(_scene: PackedScene, scene_path: String) -> String:
 	var text := FileAccess.get_file_as_string(scene_path)
 	if not text or text.is_empty():
 		return ""

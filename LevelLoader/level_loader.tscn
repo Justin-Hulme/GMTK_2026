@@ -1,9 +1,11 @@
-[gd_scene format=3 uid="uid://d2k8f3yap1q7w"]
+[gd_scene format=3 uid="uid://d2k8f3yap1q7w" load_steps=4]
 
 [ext_resource type="Script" uid="uid://cwknystiomluo" path="res://LevelLoader/level_loader.gd" id="1_loader"]
 [ext_resource type="PackedScene" uid="uid://2c1gesmmik6q" path="res://Player/player.tscn" id="2_player"]
+[ext_resource type="Resource" path="res://Level/default_level_config.tres" id="3_level_config"]
 
 [node name="LevelLoader" type="Node2D" unique_id=1877739689]
 script = ExtResource("1_loader")
+level_config = ExtResource("3_level_config")
 
 [node name="Player" parent="." unique_id=9000001 instance=ExtResource("2_player")]

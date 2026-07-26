@@ -24,7 +24,7 @@ func next_floor() -> void:
 	var old_floor = current_floor_in_level
 	current_floor_in_level += 1
 	
-	floor_changed.emit(old_floor, current_floor_in_level - 1, max_floors_per_level)
+	floor_changed.emit(old_floor, current_floor_in_level, max_floors_per_level)
 
 func next_level() -> void:
 	var old_level = current_level_number

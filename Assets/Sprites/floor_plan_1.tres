@@ -173,6 +173,10 @@ texture = ExtResource("1_8nybw")
 3:0/1/terrains_peering_bit/bottom_side = 0
 3:0/1/terrains_peering_bit/bottom_left_corner = 0
 3:0/1/terrains_peering_bit/left_side = 0
+6:0/0 = 0
+6:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-2.6666665, 2.666667, 8, 2.666667, 8, 8, -8, 8)
+7:0/0 = 0
+7:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 2.666667, 2.666667, 2.666667, 8, 8, -8, 8)
 
 [resource]
 physics_layer_0/collision_layer = 1

@@ -99,7 +99,14 @@ func disable_movement():
 func enable_movement():
 	mouse_movement_enabled = true
 
+
+func can_afford_upgrade(upgrade: UpgradeData) -> bool:
+	return upgrade != null and score >= upgrade.price
+
+
 func buy_upgrade(upgrade: UpgradeData):
+	if not can_afford_upgrade(upgrade):
+		return false
 	score -= upgrade.price
 	_coin_total = score
 	coin_picked_up.emit(_coin_total)
@@ -117,3 +124,4 @@ func buy_upgrade(upgrade: UpgradeData):
 		"Flashlight1": $"Flashlight".scale *= 1.5
 		"Flashlight2": $"Flashlight".scale *= 1.5
 		"Flashlight3": $"Flashlight".scale *= 1.5
+	return true

@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://2c1gesmmik6q"]
 
 [ext_resource type="Script" uid="uid://cqgyq0ahsig01" path="res://Player/player.gd" id="1_fhl08"]
-[ext_resource type="Texture2D" uid="uid://caftd01t3musl" path="res://Assets/Flashlight(1).png" id="2_5htga"]
+[ext_resource type="Texture2D" uid="uid://67styg0gyepx" path="res://Assets/Flashlight(1).png" id="2_5htga"]
 [ext_resource type="Script" uid="uid://7logwprssfvo" path="res://Player/HUD/HUD.gd" id="7_od3ui"]
 [ext_resource type="Theme" uid="uid://bledfm0mcnnu4" path="res://Assets/main_theme.tres" id="8_od3ui"]
-[ext_resource type="Texture2D" uid="uid://rjrp7edpnvgw" path="res://Assets/Money/Coin_HUD.png" id="8_x3vf3"]
-[ext_resource type="Texture2D" uid="uid://bng5ybr0gvvex" path="res://Assets/Money/Debt_HUD.png" id="10_apopc"]
+[ext_resource type="Texture2D" uid="uid://dxkph3152qen" path="res://Assets/Money/Coin_HUD.png" id="8_x3vf3"]
+[ext_resource type="Texture2D" uid="uid://ci5f88onsf0dh" path="res://Assets/Money/Debt_HUD.png" id="10_apopc"]
 [ext_resource type="PackedScene" uid="uid://drgikraumu8sr" path="res://Player/HUD/floor_indicator.tscn" id="11_apopc"]
 [ext_resource type="PackedScene" uid="uid://pd24aj2dcfr4" path="res://Player/HUD/phone_screen.tscn" id="12_phone"]
 [ext_resource type="PackedScene" path="res://Player/HUD/phone_icon.tscn" id="13_phone"]
@@ -309,10 +309,11 @@ animations = [{
 "speed": 12.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_p20uq"]
-radius = 22.022715
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jw2k5"]
+height = 40.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_e76su"]
+radius = 35.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_od3ui"]
 bg_color = Color(0.1593911, 0.1593911, 0.1593911, 0.8784314)
@@ -349,9 +350,8 @@ sprite_frames = SubResource("SpriteFrames_ab854")
 animation = &"idle_south"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1967341823]
-rotation = 1.5707964
 scale = Vector2(0.99999994, 0.99999994)
-shape = SubResource("CircleShape2D_p20uq")
+shape = SubResource("CapsuleShape2D_jw2k5")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1845861263 groups=["magnet"]]
 

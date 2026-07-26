@@ -46,10 +46,10 @@ func _process(delta: float) -> void:
 		if not is_position_blocked(next_position):
 			global_position = next_position
 			
-func is_position_blocked(position: Vector2) -> bool:
+func is_position_blocked(target_position: Vector2) -> bool:
 	var query = PhysicsShapeQueryParameters2D.new()
 	query.shape = coin_shape
-	query.transform = Transform2D(global_rotation, position)
+	query.transform = Transform2D(global_rotation, target_position)
 	query.collision_mask = 1
 
 	var results = get_world_2d().direct_space_state.intersect_shape(query)
