@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://fwjsq7wtbfb1" path="res://Coin/coin.gd" id="1_04ryc"]
 [ext_resource type="Texture2D" uid="uid://c8r48t042apti" path="res://Assets/Money/Coin_silver.png" id="2_e0qls"]
+[ext_resource type="AudioStream" uid="uid://c4jtv1efydqwr" path="res://Assets/Money/freesound_gamestudio-drop-coin-384921 (mp3cut.net).mp3" id="3_gf1px"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_e76su"]
 
@@ -18,6 +19,9 @@ texture = ExtResource("2_e0qls")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=227931589]
 scale = Vector2(0.99999994, 0.99999994)
 shape = SubResource("CircleShape2D_e76su")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=2108466452]
+stream = ExtResource("3_gf1px")
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="area_exited" from="." to="." method="_on_area_exited"]

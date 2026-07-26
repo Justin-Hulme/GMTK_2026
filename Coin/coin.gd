@@ -6,6 +6,7 @@ var magnet_target: Node2D = null
 @export var magnet_speed := 500
 
 @onready var coin_shape = $CollisionShape2D.shape
+@onready var pickup_sound: AudioStreamPlayer2D = $AudioStreamPlayer2D
 
 signal coin_picked_up(new_amount)
 
@@ -17,6 +18,8 @@ func _on_body_entered(body):
 	if body.is_in_group("player"):
 		body.add_score(value)
 		coin_picked_up.emit(body.get_score())
+		pickup_sound.play()
+		await pickup_sound.finished
 		queue_free()
 		
 func _on_area_entered(area: Area2D):
