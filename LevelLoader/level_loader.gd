@@ -20,9 +20,9 @@ const COIN_COPPER_WEIGHT := 60.0
 const MAX_NUM_SAFES := 4
 const SAFE_MARGIN := 25
 const SAFE_TARGETS := {
-	"easy": 20,
-	"medium": 20,
-	"hard": 40,
+	"easy": 1,
+	"medium": 1,
+	"hard": 2,
 }
 
 var floor_container: Node2D
@@ -31,7 +31,7 @@ var _coin_rng := RandomNumberGenerator.new()
 var _is_transitioning_floor := false
 var _current_exit_room: Node2D
 var _current_exit_area: Area2D
-var played_unlock
+var played_unlock := false
 
 func _ready() -> void:
 	_coin_rng.randomize()
@@ -55,7 +55,7 @@ func generate_floor(reset_floor_state: bool = false) -> void:
 
 	if is_instance_valid(floor_container):
 		floor_container.queue_free()
-
+	
 	floor_container = Node2D.new()
 	var floor_number := 1
 	if level_manager:
@@ -100,7 +100,6 @@ func generate_floor(reset_floor_state: bool = false) -> void:
 	connect_exit_signals()
 	_update_exit_unlock_state()
 	_is_transitioning_floor = false
-
 	# Camera2D already follows the player as a child node.
 	# Avoid overriding its global position here, which offsets the player off-center.
 
@@ -207,6 +206,7 @@ func _spawn_map_coins(generated_rooms: Node, target_coin_count: int, config: Lev
 			continue
 	print("[LevelLoader] Spawned %d coins (target=%d)" % [spawned, target_coin_count])
 	_spawn_safes(generated_rooms, config)
+	_ensure_exit_reachable_value()
 
 
 func _spawn_safes(generated_rooms: Node, config: LevelConfig) -> void:
@@ -452,6 +452,72 @@ func _pick_random_coin() -> PackedScene:
 	return COIN_COPPER
 
 
+func _ensure_exit_reachable_value() -> void:
+	if not is_instance_valid(floor_container):
+		return
+	var generated_rooms := floor_container.get_node_or_null("generated_rooms")
+	var player_node = get_node_or_null("Player")
+	if generated_rooms == null or player_node == null:
+		return
+	var required_value: int = _get_required_coins_for_exit(player_node)
+	var available_value: int = player_node.get_coin_total() + _get_remaining_map_value(generated_rooms, player_node)
+	var shortfall: int = required_value - available_value
+	if shortfall <= 0:
+		return
+	var spawned_value := _spawn_coin_value(generated_rooms, shortfall)
+	if spawned_value > 0:
+		print("[LevelLoader] Spawned %d extra coin value to prevent softlock" % spawned_value)
+
+
+func _get_remaining_map_value(generated_rooms: Node, player_node: Node2D) -> int:
+	var total := 0
+	for child in generated_rooms.get_children():
+		if child.scene_file_path.begins_with("res://Coin/"):
+			total += int(child.get("value"))
+			continue
+		if child.scene_file_path == "res://Safe/safe.tscn" and child.has_method("get_remaining_value"):
+			var can_open_safe: bool = player_node.lockpick_speed >= 0
+			total += int(child.get_remaining_value(can_open_safe))
+	return total
+
+
+func _spawn_coin_value(generated_rooms: Node, target_value: int) -> int:
+	var candidates := _get_coin_spawn_candidates(generated_rooms)
+	if candidates.is_empty():
+		return 0
+	var coin_shape := CircleShape2D.new()
+	coin_shape.radius = 8.0
+	var remaining := target_value
+	var spawned_value := 0
+	var denominations := [
+		{"scene": COIN_GOLD, "value": int(COIN_GOLD_VALUE)},
+		{"scene": COIN_SILVER, "value": int(COIN_SILVER_VALUE)},
+		{"scene": COIN_COPPER, "value": int(COIN_COPPER_VALUE)},
+	]
+	while remaining > 0:
+		var spawned_here := false
+		for coin_data in denominations:
+			if remaining < int(coin_data.value) and coin_data != denominations.back():
+				continue
+			for _attempt in range(30):
+				var pos: Vector2 = candidates[_coin_rng.randi_range(0, candidates.size() - 1)]
+				if _is_coin_spawn_blocked(pos, coin_shape):
+					continue
+				var coin = coin_data.scene.instantiate()
+				coin.global_position = pos
+				coin.z_index = 0
+				generated_rooms.add_child(coin)
+				remaining = maxi(remaining - int(coin_data.value), 0)
+				spawned_value += int(coin_data.value)
+				spawned_here = true
+				break
+			if spawned_here:
+				break
+		if not spawned_here:
+			break
+	return spawned_value
+
+
 func _on_exit_body_entered(body: Node2D) -> void:
 	if not body.is_in_group("player"):
 		return
@@ -526,6 +592,7 @@ func connect_exit_signals() -> void:
 
 func _on_player_coin_total_changed(_amount: int) -> void:
 	_update_exit_unlock_state()
+	call_deferred("_ensure_exit_reachable_value")
 
 
 func _update_exit_unlock_state() -> void:

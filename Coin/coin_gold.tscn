@@ -8,7 +8,7 @@
 
 [node name="Coin_gold" type="Area2D" unique_id=789190111]
 script = ExtResource("1_04ryc")
-value = 100
+value = 1000
 magnet_speed = 100
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1436478721]

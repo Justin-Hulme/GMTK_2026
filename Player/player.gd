@@ -9,7 +9,7 @@ extends CharacterBody2D
 @onready var flashlight: PointLight2D = $Flashlight
 @onready var spray_bar: ProgressBar = $HUD/Control/spray_can/PanelContainer/MarginContainer/VBoxContainer/ProgressBar
 
-var score := 50000
+var score := 0
 signal spray_paint_changed(current, maximum)
 
 # HUD Vars

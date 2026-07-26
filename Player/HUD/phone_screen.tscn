@@ -20,84 +20,84 @@
 [sub_resource type="Resource" id="Resource_55dnm"]
 script = ExtResource("4_8f8it")
 icon = ExtResource("5_8g1fl")
-price = 100
+price = 1000
 name = "Shoes1"
 metadata/_custom_type_script = "uid://dc78ii1vthtuh"
 
 [sub_resource type="Resource" id="Resource_cwdgf"]
 script = ExtResource("4_8f8it")
 icon = ExtResource("6_5l76c")
-price = 200
+price = 2000
 name = "Shoes2"
 metadata/_custom_type_script = "uid://dc78ii1vthtuh"
 
 [sub_resource type="Resource" id="Resource_p20uq"]
 script = ExtResource("4_8f8it")
 icon = ExtResource("7_ni25h")
-price = 300
+price = 3000
 name = "Shoes3"
 metadata/_custom_type_script = "uid://dc78ii1vthtuh"
 
 [sub_resource type="Resource" id="Resource_ni25h"]
 script = ExtResource("4_8f8it")
 icon = ExtResource("8_bkldo")
-price = 200
+price = 2000
 name = "Magnet1"
 metadata/_custom_type_script = "uid://dc78ii1vthtuh"
 
 [sub_resource type="Resource" id="Resource_1n4a3"]
 script = ExtResource("4_8f8it")
 icon = ExtResource("9_mig7p")
-price = 200
+price = 2000
 name = "Magnet2"
 metadata/_custom_type_script = "uid://dc78ii1vthtuh"
 
 [sub_resource type="Resource" id="Resource_5ob37"]
 script = ExtResource("4_8f8it")
 icon = ExtResource("10_1em16")
-price = 300
+price = 3000
 name = "Magnet3"
 metadata/_custom_type_script = "uid://dc78ii1vthtuh"
 
 [sub_resource type="Resource" id="Resource_5l76c"]
 script = ExtResource("4_8f8it")
 icon = ExtResource("11_h8gpm")
-price = 100
+price = 1000
 name = "Lockpick1"
 metadata/_custom_type_script = "uid://dc78ii1vthtuh"
 
 [sub_resource type="Resource" id="Resource_ywcve"]
 script = ExtResource("4_8f8it")
 icon = ExtResource("12_kwpfq")
-price = 200
+price = 2000
 name = "Lockpick2"
 metadata/_custom_type_script = "uid://dc78ii1vthtuh"
 
 [sub_resource type="Resource" id="Resource_qmvhb"]
 script = ExtResource("4_8f8it")
 icon = ExtResource("13_yjrl1")
-price = 300
+price = 3000
 name = "Lockpick3"
 metadata/_custom_type_script = "uid://dc78ii1vthtuh"
 
 [sub_resource type="Resource" id="Resource_j0omt"]
 script = ExtResource("4_8f8it")
 icon = ExtResource("14_2md36")
-price = 100
+price = 1000
 name = "Flashlight1"
 metadata/_custom_type_script = "uid://dc78ii1vthtuh"
 
 [sub_resource type="Resource" id="Resource_0o43b"]
 script = ExtResource("4_8f8it")
 icon = ExtResource("15_cq1mm")
-price = 200
+price = 2000
 name = "Flashlight2"
 metadata/_custom_type_script = "uid://dc78ii1vthtuh"
 
 [sub_resource type="Resource" id="Resource_1fds4"]
 script = ExtResource("4_8f8it")
 icon = ExtResource("16_73hkv")
-price = 300
+price = 3000
 name = "Flashlight3"
 metadata/_custom_type_script = "uid://dc78ii1vthtuh"
 
