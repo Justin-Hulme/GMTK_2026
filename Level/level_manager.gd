@@ -36,5 +36,12 @@ func next_level() -> void:
 	if current_level_number > 999:
 		all_levels_completed.emit()
 
+
+func complete_current_level() -> void:
+	var old_floor := current_floor_in_level
+	current_floor_in_level = 0
+	floor_changed.emit(old_floor, current_floor_in_level, max_floors_per_level)
+	all_levels_completed.emit()
+
 func add_coins(amount: int) -> void:
 	coins_collected += amount

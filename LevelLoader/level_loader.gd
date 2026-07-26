@@ -1,11 +1,13 @@
 extends Node2D
 
 const FloorGenerator = preload("res://Level/floor_generator.gd")
+const LEVEL_COMPLETE_SCENE_PATH := "res://Level/level_complete.tscn"
 const COIN_GOLD = preload("res://Coin/coin_gold.tscn")
 const COIN_SILVER = preload("res://Coin/coin_silver.tscn")
 const COIN_COPPER = preload("res://Coin/coin_copper.tscn")
 const SAFE = preload("res://Safe/safe.tscn")
 const PropPlacerScript = preload("res://Prop/prop_placer.gd")
+const SprayPaintLayerScript = preload("res://Paint/spray_paint_layer.gd")
 
 const CELL_SIZE := 384.0
 const COIN_MARGIN := 48.0
@@ -62,6 +64,7 @@ func generate_floor(reset_floor_state: bool = false) -> void:
 	result.scene.name = "generated_rooms"
 	floor_container.add_child(result.scene)
 	add_child(floor_container)
+	_ensure_spray_layers(result.scene)
 	PropGridBuilder.build_for_generated_rooms(result.scene)
 	PropPlacerScript.populate_generated_rooms(result.scene)
 	SecurityCameraSpawner.populate_generated_rooms(result.scene, config)
@@ -102,6 +105,30 @@ func generate_floor(reset_floor_state: bool = false) -> void:
 	# Avoid overriding its global position here, which offsets the player off-center.
 
 
+func try_spray_paint(world_position: Vector2, color: Color) -> bool:
+	var generated_rooms := floor_container.get_node_or_null("generated_rooms") if is_instance_valid(floor_container) else null
+	if generated_rooms == null:
+		return false
+	var target_room := _find_paint_room(generated_rooms, world_position)
+	if target_room == null:
+		return false
+	var tilemap := target_room.get_node_or_null("TileMapLayer") as TileMapLayer
+	var spray_layer := target_room.get_node_or_null("SprayPaintLayer")
+	if tilemap == null or spray_layer == null:
+		return false
+	var local_position := tilemap.to_local(world_position)
+	var cell := tilemap.local_to_map(local_position)
+	if not _tile_is_open_floor(tilemap, cell):
+		return false
+	var prop_layer := target_room.get_node_or_null("PropLayer") as TileMapLayer
+	if prop_layer != null and prop_layer.get_cell_source_id(cell) != -1:
+		return false
+	if not spray_layer.has_method("add_mark"):
+		return false
+	spray_layer.add_mark(target_room.to_local(world_position), color)
+	return true
+
+
 func _find_camera() -> Camera2D:
 	var player_node = get_node_or_null("Player")
 	if not player_node:
@@ -111,6 +138,38 @@ func _find_camera() -> Camera2D:
 		if child is Camera2D:
 			return child as Camera2D
 	
+	return null
+
+
+func _ensure_spray_layers(root_node: Node) -> void:
+	for child in root_node.get_children():
+		if not (child is Node2D):
+			continue
+		var room_node := child as Node2D
+		if not (room_node.name.begins_with("room_") or room_node.name.begins_with("corridor_")):
+			continue
+		if room_node.get_node_or_null("SprayPaintLayer") != null:
+			continue
+		var spray_layer := Node2D.new()
+		spray_layer.name = "SprayPaintLayer"
+		spray_layer.set_script(SprayPaintLayerScript)
+		room_node.add_child(spray_layer)
+		var prop_layer := room_node.get_node_or_null("PropLayer")
+		if prop_layer != null:
+			room_node.move_child(spray_layer, prop_layer.get_index())
+
+
+func _find_paint_room(generated_rooms: Node, world_position: Vector2) -> Node2D:
+	for child in generated_rooms.get_children():
+		if not (child is Node2D):
+			continue
+		var room_node := child as Node2D
+		if not (room_node.name.begins_with("room_") or room_node.name.begins_with("corridor_")):
+			continue
+		var local_pos := room_node.to_local(world_position)
+		if local_pos.x < 0.0 or local_pos.y < 0.0 or local_pos.x > 128.0 or local_pos.y > 128.0:
+			continue
+		return room_node
 	return null
 
 
@@ -412,9 +471,10 @@ func _on_exit_body_entered(body: Node2D) -> void:
 		level_manager.next_floor()
 		generate_floor(false)
 		return
-	level_manager.next_level()
-	level_manager.max_floors_per_level = _get_level_config().total_floors
-	generate_floor(true)
+	level_manager.complete_current_level()
+	var tree := get_tree()
+	if tree != null:
+		tree.change_scene_to_file(LEVEL_COMPLETE_SCENE_PATH)
 
 
 func _get_required_coins_for_exit(player_node: Node2D) -> int:

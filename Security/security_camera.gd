@@ -13,7 +13,7 @@ signal player_released(player: Node2D)
 @export var idle_sweep_degrees := 35.0
 @export var idle_sweep_speed := 1.4
 @export var coins_per_tick := 50
-@export var drain_interval := 1.0
+@export var drain_interval := 0.5
 @export var beam_color_idle := Color(0.35, 0.7, 1.0, 1.0)
 @export var beam_color_alert := Color(1.0, 0.2, 0.2, 1.0)
 @export var alert_speed_scale := 2.0

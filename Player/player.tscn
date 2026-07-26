@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cqgyq0ahsig01" path="res://Player/player.gd" id="1_fhl08"]
 [ext_resource type="Texture2D" uid="uid://67styg0gyepx" path="res://Assets/Flashlight(1).png" id="2_5htga"]
 [ext_resource type="Script" uid="uid://7logwprssfvo" path="res://Player/HUD/HUD.gd" id="7_od3ui"]
+[ext_resource type="Texture2D" uid="uid://cp5gcrjmwd3g1" path="res://Assets/Furniture_Office_Equipment_Set/spray_can.png" id="8_apopc"]
 [ext_resource type="Theme" uid="uid://bledfm0mcnnu4" path="res://Assets/main_theme.tres" id="8_od3ui"]
 [ext_resource type="Texture2D" uid="uid://dxkph3152qen" path="res://Assets/Money/Coin_HUD.png" id="8_x3vf3"]
 [ext_resource type="Texture2D" uid="uid://ci5f88onsf0dh" path="res://Assets/Money/Debt_HUD.png" id="10_apopc"]
@@ -23,6 +24,16 @@ corner_radius_top_left = 20
 corner_radius_top_right = 20
 corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_srkg7"]
+draw_center = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cg615"]
+bg_color = Color(0.45120293, 0.58898044, 0.9115947, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [node name="Player" type="CharacterBody2D" unique_id=1632784472]
 rotation = 6.2831855
@@ -160,6 +171,49 @@ layout_mode = 2
 
 [node name="FloorIndicator" parent="HUD/Control/floor_indicator/floor_stack" unique_id=189943130 instance=ExtResource("11_apopc")]
 floor_number = 0
+
+[node name="spray_can" type="MarginContainer" parent="HUD/Control" unique_id=2145338232]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="HUD/Control/spray_can" unique_id=1352425296]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_srkg7")
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD/Control/spray_can/PanelContainer" unique_id=150405233]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/Control/spray_can/PanelContainer/MarginContainer" unique_id=1149444107]
+layout_mode = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="HUD/Control/spray_can/PanelContainer/MarginContainer/VBoxContainer" unique_id=791345916]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_styles/fill = SubResource("StyleBoxFlat_cg615")
+value = 64.42
+fill_mode = 3
+show_percentage = false
+
+[node name="TextureRect" type="TextureRect" parent="HUD/Control/spray_can/PanelContainer/MarginContainer/VBoxContainer" unique_id=87426160]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("8_apopc")
+stretch_mode = 2
 
 [node name="PhoneIcon" parent="HUD/Control" unique_id=1773317878 instance=ExtResource("13_phone")]
 

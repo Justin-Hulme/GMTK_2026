@@ -1,0 +1,36 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "2ed77ce7-995d-4d55-8600-c654f9c4fe82",
+        "name": "Here is a much shorter",
+        "prompt": "Here is a much shorter version with clear, direct sentences and basic punctuation.\n\nMob Boss Goons Prompt\nSetting and Lighting\nThree mob enforcers stand in a dark brick alley at twilight. Vintage 1940s cars sit blurred in the background under a streetlamp glow.\n\nCharacter 1 (Center)\nA bossy goon in a charcoal pinstripe double-breasted suit and matching vest. He wears an open white collared shirt with no tie. A heavy dark trench coat drapes over his shoulders. He has slicked-back greasy hair, a pencil mustache, and holds an unlit cigar.\n\nCharacter 2 (Left)\nA clean-shaven goon wearing a dark brown cable-knit cardigan over a black shirt. He wears a brown Homburg hat and checks a gold wrist watch.\n\nCharacter 3 (Right)\nA serious goon wearing a brown and tan plaid wool vest over a beige shirt with dark pleated pants. He wears a small brown fedora and scans the area.",
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-07-26T11:53:40.617493+00:00"
+      },
+      "folder": "Here_is_a_much_shorter",
+      "frames": {
+        "rotations": {
+          "south": "Here_is_a_much_shorter/rotations/south.png",
+          "south-east": "Here_is_a_much_shorter/rotations/south-east.png",
+          "east": "Here_is_a_much_shorter/rotations/east.png",
+          "north-east": "Here_is_a_much_shorter/rotations/north-east.png",
+          "north": "Here_is_a_much_shorter/rotations/north.png",
+          "north-west": "Here_is_a_much_shorter/rotations/north-west.png",
+          "west": "Here_is_a_much_shorter/rotations/west.png",
+          "south-west": "Here_is_a_much_shorter/rotations/south-west.png"
+        },
+        "animations": {}
+      }
+    }
+  ],
+  "export_version": "3.1",
+  "export_date": "2026-07-26T11:56:41.992771"
+}
