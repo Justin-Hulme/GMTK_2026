@@ -370,8 +370,8 @@ func _update_exit_unlock_state() -> void:
 		played_unlock = true
 		$"AudioStreamPlayer".playing = true
 	if is_instance_valid(_current_exit_area):
-		_current_exit_area.monitoring = unlocked
-		_current_exit_area.monitorable = unlocked
+		_current_exit_area.set_deferred("monitoring", unlocked)
+		_current_exit_area.set_deferred("monitorable", unlocked)
 
 
 func _find_vault_door_node(root_node: Node) -> Node:
