@@ -6,6 +6,7 @@ extends CharacterBody2D
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var phone_screen: Control = $HUD/Control/PhoneScreen
+@onready var flashlight: PointLight2D = $Flashlight
 
 var score := 0
 
@@ -67,6 +68,8 @@ func _physics_process(delta: float) -> void:
 		velocity = velocity.move_toward(Vector2.ZERO, deceleration * delta)
 
 	move_and_slide()
+
+	flashlight.rotation = direction.angle() + deg_to_rad(90)
 
 	var facing := _get_facing_name(direction.angle())
 	if velocity.length() > 10:

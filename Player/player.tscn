@@ -174,13 +174,13 @@ corner_radius_bottom_left = 20
 script = ExtResource("1_fhl08")
 
 [node name="Flashlight" type="PointLight2D" parent="." unique_id=879736083]
-position = Vector2(0, -7.5101852e-06)
+position = Vector2(0, 0)
 scale = Vector2(1, 0.49609378)
 energy = 1.5
 blend_mode = 2
 shadow_enabled = true
 texture = ExtResource("2_5htga")
-offset = Vector2(20.265, -281.54)
+offset = Vector2(5.265, -281.54)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1063348825]
 position = Vector2(0, -1)
