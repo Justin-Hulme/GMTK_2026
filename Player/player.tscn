@@ -199,4 +199,4 @@ theme_override_constants/margin_bottom = 20
 layout_mode = 2
 
 [node name="FloorIndicator" parent="HUD/Control/floor_indicator/floor_stack" unique_id=189943130 instance=ExtResource("11_apopc")]
-floor_number = 0
+active = true

@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="GMTK_2026"
-run/main_scene="uid://2hdxwigbbdoi"
+run/main_scene="uid://d2k8f3x9p1q7w"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+LevelManager="*res://Level/level_manager.gd"
 
 [display]
 
