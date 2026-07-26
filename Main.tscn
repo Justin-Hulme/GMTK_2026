@@ -1,0 +1,101 @@
+[gd_scene format=3 uid="uid://xjlgiinvpwng"]
+
+[ext_resource type="Texture2D" uid="uid://bcj2o0et3rfcw" path="res://Assets/cashmeoutside_menu.png" id="1_glv2v"]
+[ext_resource type="Script" uid="uid://cyksahlhl3gur" path="res://main.gd" id="1_uu6xs"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e76su"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_glv2v"]
+bg_color = Color(0.4, 0.7490196, 1, 0.46666667)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uvjlu"]
+bg_color = Color(1, 0.5275126, 0.45316273, 0.5921569)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_r0du0"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ab854"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uu6xs"]
+bg_color = Color(0.51917875, 0.5528777, 0.96303815, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cm0pq"]
+bg_color = Color(0.9459172, 0.049282953, 0.9999998, 1)
+
+[node name="Control" type="Control" unique_id=557040822]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_uu6xs")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1312342258]
+custom_minimum_size = Vector2(640, 480)
+layout_mode = 0
+offset_left = -44.0
+offset_right = 1156.0
+offset_bottom = 962.0
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("1_glv2v")
+
+[node name="Button" type="Button" parent="." unique_id=1748777795]
+layout_mode = 0
+offset_left = 239.0
+offset_top = 240.0
+offset_right = 394.0
+offset_bottom = 281.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_e76su")
+theme_override_styles/hover = SubResource("StyleBoxFlat_glv2v")
+
+[node name="Button2" type="Button" parent="." unique_id=714321932]
+layout_mode = 0
+offset_left = 238.0
+offset_top = 293.0
+offset_right = 393.0
+offset_bottom = 334.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_e76su")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uvjlu")
+
+[node name="Control" type="Control" parent="." unique_id=1704478087]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Panel" type="Panel" parent="Control" unique_id=334304237]
+layout_mode = 0
+offset_left = 567.0
+offset_top = 92.0
+offset_right = 630.0
+offset_bottom = 295.0
+
+[node name="Label" type="Label" parent="Control" unique_id=1503695889]
+layout_mode = 0
+offset_left = 576.0
+offset_top = 267.0
+offset_right = 622.0
+offset_bottom = 290.0
+text = "Music"
+
+[node name="MusicSlider" type="VSlider" parent="Control" unique_id=838077712]
+material = SubResource("CanvasItemMaterial_r0du0")
+layout_mode = 0
+offset_left = 590.0
+offset_top = 99.0
+offset_right = 606.0
+offset_bottom = 262.0
+theme_override_styles/slider = SubResource("StyleBoxFlat_ab854")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_uu6xs")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_cm0pq")
+min_value = -40.0
+max_value = 10.0
+ticks_on_borders = true

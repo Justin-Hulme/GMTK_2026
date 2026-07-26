@@ -11,6 +11,7 @@ func _ready() -> void:
 
 func _on_money_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
+		#if body.get_coin_total() < debpt amount * dificutly / floors
 		$"Label".visible = true
 
 func _on_money_area_body_exited(body: Node2D) -> void:

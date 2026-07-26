@@ -11,9 +11,9 @@ const SprayPaintLayerScript = preload("res://Paint/spray_paint_layer.gd")
 
 const CELL_SIZE := 384.0
 const COIN_MARGIN := 48.0
-const COIN_GOLD_VALUE := 100.0
-const COIN_SILVER_VALUE := 50.0
-const COIN_COPPER_VALUE := 10.0
+const COIN_GOLD_VALUE := 1000.0
+const COIN_SILVER_VALUE := 500.0
+const COIN_COPPER_VALUE := 100.0
 const COIN_GOLD_WEIGHT := 10.0
 const COIN_SILVER_WEIGHT := 30.0
 const COIN_COPPER_WEIGHT := 60.0
