@@ -5,6 +5,7 @@ extends CharacterBody2D
 @export var deceleration := 1500.0
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var phone_screen: Control = $HUD/Control/PhoneScreen
 
 var score := 0
 
@@ -25,6 +26,10 @@ func set_coin_total(value: int) -> void:
 func get_coin_total() -> int:
 	return _coin_total
 
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("toggle_phone"):
+		phone_screen.toggle()
 
 func _physics_process(delta: float) -> void:
 	var mouse_position := get_global_mouse_position()

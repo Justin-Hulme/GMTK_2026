@@ -11,6 +11,8 @@
 [ext_resource type="Texture2D" uid="uid://dxkph3152qen" path="res://Assets/Money/Coin_HUD.png" id="8_x3vf3"]
 [ext_resource type="Texture2D" uid="uid://ci5f88onsf0dh" path="res://Assets/Money/Debt_HUD.png" id="10_apopc"]
 [ext_resource type="PackedScene" uid="uid://drgikraumu8sr" path="res://Player/HUD/floor_indicator.tscn" id="11_apopc"]
+[ext_resource type="PackedScene" path="res://Player/HUD/phone_screen.tscn" id="12_phone"]
+[ext_resource type="PackedScene" path="res://Player/HUD/phone_icon.tscn" id="13_phone"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ab854"]
 animations = [{
@@ -190,3 +192,7 @@ layout_mode = 2
 
 [node name="FloorIndicator" parent="HUD/Control/floor_indicator/floor_stack" unique_id=189943130 instance=ExtResource("11_apopc")]
 floor_number = 0
+
+[node name="PhoneScreen" parent="HUD/Control" instance=ExtResource("12_phone")]
+
+[node name="PhoneIcon" parent="HUD/Control" instance=ExtResource("13_phone")]
